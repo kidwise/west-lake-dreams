@@ -116,6 +116,34 @@ export class ShuangfengClimbScene extends Phaser.Scene {
     const g = this.add.graphics().setDepth(0);
     g.fillGradientStyle(0x6f9a72, 0x6f9a72, 0x3f6a4a, 0x3f6a4a, 1);
     g.fillRect(0, top, W, bottom - top);
+    // the forest floor: patches of moss and shade, ferns, leaf litter and stones
+    const fr = rng(19);
+    for (let i = 0; i < 260; i++) {
+      const x = fr() * W;
+      const y = top + fr() * (bottom - top);
+      g.fillStyle(fr() < 0.5 ? 0x4f7a52 : 0x86ae7a, 0.35);
+      g.fillEllipse(x, y, 60 + fr() * 120, 20 + fr() * 40);
+    }
+    for (let i = 0; i < 520; i++) {
+      const x = fr() * W;
+      const y = top + fr() * (bottom - top);
+      const k = fr();
+      if (k < 0.45) {
+        // a fern
+        g.lineStyle(1.4, 0x3a6a3e, 0.9);
+        for (let a = -2; a <= 2; a++) g.lineBetween(x, y, x + a * 6, y - 10 + Math.abs(a) * 2);
+      } else if (k < 0.8) {
+        g.fillStyle([0xa88a4a, 0x8a6a3a, 0xb89a5a][i % 3], 0.6);
+        g.fillEllipse(x, y, 5, 2.4);
+      } else {
+        g.fillStyle(0x000000, 0.12);
+        g.fillEllipse(x + 2, y + 3, 16, 6);
+        g.fillStyle(0x9a988a, 1);
+        g.fillEllipse(x, y, 14, 8);
+        g.fillStyle(0xc8c6b8, 1);
+        g.fillEllipse(x - 2, y - 2, 7, 3);
+      }
+    }
     // trees, kept clear of the path
     const r = rng(7);
     const near = (x: number, y: number) => {

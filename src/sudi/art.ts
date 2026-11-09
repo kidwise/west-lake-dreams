@@ -92,51 +92,123 @@ export function generateSudiTextures(scene: Phaser.Scene): void {
  */
 export function drawElder(g: G, phase: number): void {
   g.clear();
+  const INK = 0x2a2420;
   const lift = phase;
   const bend = 1 - phase;
   // shadow
   g.fillStyle(0x000000, 0.18);
   g.fillEllipse(0, 2, 70, 10);
-  // robe
   const robe = 0x4a5a6a;
+  const robeDark = 0x37444f;
+  const robeLight = 0x6a7c8c;
   const hipY = -70;
   const shX = 6 + bend * 16;
   const shY = -118 + bend * 22;
+  // cloth shoes peeking out under the robe
+  for (const x of [-16, 10]) {
+    g.fillStyle(INK, 1);
+    g.fillRoundedRect(x - 1, -7, 18, 8, 3);
+    g.fillStyle(0x2e2a26, 1);
+    g.fillRoundedRect(x, -6, 16, 6, 2.6);
+    g.fillStyle(0xe8e0d0, 1);
+    g.fillRect(x, -1.6, 16, 1.4);
+  }
+  // robe: inked outline, then the cloth, shaded on the back, with folds
+  const body = [V(-22, -4), V(24, -4), V(16, hipY), V(shX + 14, shY + 4), V(shX - 18, shY), V(-14, hipY)];
+  g.lineStyle(3, INK, 0.9);
+  g.strokePoints(body, true);
   g.fillStyle(robe, 1);
-  g.fillPoints([V(-22, 0), V(24, 0), V(16, hipY), V(shX + 14, shY + 4), V(shX - 18, shY), V(-14, hipY)], true);
+  g.fillPoints(body, true);
+  g.fillStyle(robeDark, 1);
+  g.fillPoints([V(-22, -4), V(-8, -4), V(-4, hipY), V(shX - 18, shY), V(-14, hipY)], true);
+  g.lineStyle(1.6, robeDark, 1);
+  g.lineBetween(4, -6, 8, hipY + 6);
+  g.lineBetween(14, -6, 14, hipY + 4);
+  g.lineStyle(1.4, robeLight, 0.8);
+  g.lineBetween(-2, -6, 2, hipY + 4);
+  // hem band
   g.fillStyle(0x3a4856, 1);
-  g.fillRect(-22, -6, 46, 6);
-  // sash
-  g.fillStyle(0x8a6a3a, 1);
+  g.fillRect(-22, -10, 46, 6);
+  g.lineStyle(1, robeLight, 0.7);
+  g.lineBetween(-22, -10, 24, -10);
+  // a crossed white under-collar at the neck
+  g.fillStyle(0xe8e0d0, 1);
+  g.fillTriangle(shX - 6, shY + 2, shX + 6, shY + 2, shX + 2, shY + 16);
+  g.lineStyle(1.2, INK, 0.6);
+  g.lineBetween(shX - 6, shY + 2, shX + 2, shY + 16);
+  // rope sash, knotted, with dangling ends
+  g.fillStyle(INK, 0.8);
+  g.fillRect(-15, hipY - 5, 34, 8);
+  g.fillStyle(0x9a7a46, 1);
   g.fillRect(-14, hipY - 4, 32, 6);
+  g.fillStyle(0x7a5a2e, 1);
+  g.fillCircle(10, hipY - 1, 4);
+  g.lineStyle(2.4, 0x9a7a46, 1);
+  g.lineBetween(10, hipY + 2, 8, hipY + 20);
+  g.lineBetween(12, hipY + 2, 14, hipY + 18);
   // head
   const hx = shX + 8 + bend * 8;
   const hy = shY - 18 + bend * 4;
+  g.fillStyle(INK, 0.9);
+  g.fillCircle(hx, hy, 13.4);
   g.fillStyle(0xe9c9a8, 1);
   g.fillCircle(hx, hy, 12);
-  // long beard
-  g.fillStyle(0xd9d6cf, 1);
+  g.fillStyle(0xd8b090, 1);
+  g.slice(hx, hy, 12, Math.PI * 0.55, Math.PI * 1.1, false);
+  g.fillPath();
+  // ear
+  g.fillStyle(INK, 0.8);
+  g.fillCircle(hx - 6, hy + 1, 3.6);
+  g.fillStyle(0xe0b898, 1);
+  g.fillCircle(hx - 6, hy + 1, 2.6);
+  // long white beard and moustache, in strands
+  g.fillStyle(INK, 0.6);
+  g.fillTriangle(hx - 3.5, hy + 5, hx + 13.5, hy + 5, hx + 6, hy + 33);
+  g.fillStyle(0xe8e4dc, 1);
   g.fillTriangle(hx - 2, hy + 6, hx + 12, hy + 6, hx + 6, hy + 30);
-  g.fillStyle(0xbdb9b0, 1);
-  g.fillTriangle(hx + 1, hy + 8, hx + 9, hy + 8, hx + 6, hy + 24);
-  // eye
-  g.fillStyle(0x333333, 1);
-  g.fillRect(hx + 4, hy - 2, 4, 1.5);
-  // tall square hat (东坡巾 style)
-  g.fillStyle(0x1f1f24, 1);
+  g.lineStyle(1, 0xb8b2a8, 1);
+  for (const dx of [1, 4, 7, 10]) g.lineBetween(hx + dx, hy + 8, hx + 6 + (dx - 6) * 0.3, hy + 27);
+  g.fillStyle(0xf4f0e8, 1);
+  g.fillEllipse(hx + 6, hy + 5, 14, 4);
+  // eyebrow (white, bushy), a smiling eye, nose
+  g.fillStyle(0xf0ece4, 1);
+  g.fillEllipse(hx + 5, hy - 5, 8, 3);
+  g.lineStyle(1.6, 0x333333, 1);
+  g.beginPath();
+  g.arc(hx + 6, hy - 0.5, 2.6, Math.PI * 1.1, Math.PI * 1.9, false);
+  g.strokePath();
+  g.fillStyle(0xd8a888, 1);
+  g.fillCircle(hx + 11.5, hy + 2, 2);
+  g.fillStyle(0xf09a8a, 0.4);
+  g.fillCircle(hx + 3, hy + 3, 3);
+  // tall square scholar's hat (东坡巾)
+  g.fillStyle(INK, 1);
+  g.fillRect(hx - 12.4, hy - 33.4, 24.8, 26.8);
+  g.fillRect(hx - 14.4, hy - 13.4, 28.8, 7.8);
+  g.fillStyle(0x24242c, 1);
   g.fillRect(hx - 11, hy - 32, 22, 24);
+  g.fillStyle(0x34343e, 1);
+  g.fillRect(hx - 11, hy - 32, 7, 24);
+  g.fillStyle(0x1a1a20, 1);
   g.fillRect(hx - 13, hy - 12, 26, 5);
   g.fillStyle(0x2e2e36, 1);
   g.fillRect(hx - 7, hy - 36, 14, 6);
-  // arms + shovel
+  g.lineStyle(1, 0x5a5a66, 0.8);
+  g.lineBetween(hx, hy - 32, hx, hy - 12);
+  // arms in wide sleeves, and the shovel
   const hand1 = { x: shX + 30 - bend * 4, y: shY + 22 - lift * 30 + bend * 26 };
   const hand2 = { x: shX + 10, y: shY + 30 - lift * 14 + bend * 20 };
-  g.lineStyle(9, robe, 1);
-  g.lineBetween(shX, shY + 6, hand1.x, hand1.y);
-  g.lineBetween(shX - 6, shY + 10, hand2.x, hand2.y);
-  g.fillStyle(0xe9c9a8, 1);
-  g.fillCircle(hand1.x, hand1.y, 4);
-  g.fillCircle(hand2.x, hand2.y, 4);
+  for (const [sx, sy, h] of [[shX - 6, shY + 10, hand2], [shX, shY + 6, hand1]] as const) {
+    g.lineStyle(13, INK, 0.9);
+    g.lineBetween(sx, sy, h.x, h.y);
+    g.lineStyle(11, robe, 1);
+    g.lineBetween(sx, sy, h.x, h.y);
+    // the sleeve flares at the wrist
+    g.fillStyle(INK, 0.9);
+    g.fillCircle(h.x - (h.x - sx) * 0.12, h.y - (h.y - sy) * 0.12, 8);
+    g.fillStyle(robeLight, 1);
+    g.fillCircle(h.x - (h.x - sx) * 0.12, h.y - (h.y - sy) * 0.12, 6.6);
+  }
   // shovel handle runs through both hands
   const dx = hand1.x - hand2.x;
   const dy = hand1.y - hand2.y;
@@ -145,14 +217,29 @@ export function drawElder(g: G, phase: number): void {
   const uy = dy / len;
   const tipX = hand1.x + ux * 52;
   const tipY = hand1.y + uy * 52;
-  g.lineStyle(4, 0x8a6446, 1);
+  g.lineStyle(6, INK, 0.9);
   g.lineBetween(hand2.x - ux * 14, hand2.y - uy * 14, tipX, tipY);
-  g.fillStyle(0x7d8486, 1);
-  g.fillPoints([V(tipX - uy * 10, tipY + ux * 10), V(tipX + uy * 10, tipY - ux * 10), V(tipX + ux * 22 + uy * 7, tipY + uy * 22 - ux * 7), V(tipX + ux * 22 - uy * 7, tipY + uy * 22 + ux * 7)], true);
+  g.lineStyle(4, 0x9a7050, 1);
+  g.lineBetween(hand2.x - ux * 14, hand2.y - uy * 14, tipX, tipY);
+  const blade = [V(tipX - uy * 10, tipY + ux * 10), V(tipX + uy * 10, tipY - ux * 10), V(tipX + ux * 22 + uy * 7, tipY + uy * 22 - ux * 7), V(tipX + ux * 22 - uy * 7, tipY + uy * 22 + ux * 7)];
+  g.lineStyle(2.4, INK, 0.9);
+  g.strokePoints(blade, true);
+  g.fillStyle(0x8a9294, 1);
+  g.fillPoints(blade, true);
+  g.lineStyle(1.4, 0xc8ced0, 0.8);
+  g.lineBetween(tipX - uy * 8, tipY + ux * 8, tipX + ux * 18 - uy * 5, tipY + uy * 18 + ux * 5);
+  for (const h of [hand1, hand2]) {
+    g.fillStyle(INK, 0.9);
+    g.fillCircle(h.x, h.y, 5.2);
+    g.fillStyle(0xe9c9a8, 1);
+    g.fillCircle(h.x, h.y, 4);
+  }
   if (lift > 0.5) {
     // mud on the shovel
-    g.fillStyle(0x5a4632, 1);
-    g.fillCircle(tipX + ux * 12, tipY + uy * 12 - 3, 7);
+    g.fillStyle(0x4a3a28, 1);
+    g.fillCircle(tipX + ux * 12, tipY + uy * 12 - 3, 7.6);
+    g.fillStyle(0x6a5440, 1);
+    g.fillCircle(tipX + ux * 10, tipY + uy * 10 - 5, 3);
   }
 }
 

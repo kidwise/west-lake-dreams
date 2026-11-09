@@ -5,15 +5,16 @@ import { t } from '../core/i18n';
 import { narrate, tweenP, wait, waitForTap } from '../ui/narrate';
 import { i18nText } from '../ui/text';
 import { makeButton } from '../ui/Button';
-import { run, markVisited, resetRun } from '../core/state';
+import { markVisited } from '../core/state';
+import { qyRun } from './state';
 import { TEN_VIEWS } from '../story/chapters';
 import { rng } from '../art/paint';
 import { sfx } from '../core/sfx';
 
 /** "……然后梦就醒了，我起床上厕所。" Then the dream album and the invitation to Hangzhou. */
-export class WakeScene extends Phaser.Scene {
+export class QuyuanWakeScene extends Phaser.Scene {
   constructor() {
-    super('Wake');
+    super('QuyuanWake');
   }
 
   create(): void {
@@ -41,33 +42,30 @@ export class WakeScene extends Phaser.Scene {
     g.lineStyle(8, 0xfbe9c8, 1);
     g.lineBetween(970, 110, 970, 370);
     g.lineBetween(820, 240, 1120, 240);
-    // curtains
-    g.fillStyle(0x8e6e9c, 1);
-    g.fillRect(780, 90, 60, 320);
-    g.fillRect(1100, 90, 60, 320);
-    // bed
-    g.fillStyle(0x6d4c41, 1);
-    g.fillRect(80, 420, 520, 150);
-    g.fillRect(80, 330, 30, 240);
-    g.fillStyle(0xf3efe6, 1);
-    g.fillRoundedRect(110, 400, 140, 50, 18);
-    g.fillStyle(0x7fb3d5, 1);
-    g.fillRoundedRect(200, 410, 400, 80, 22);
-    g.fillStyle(0x6a9fc4, 1);
-    for (let x = 230; x < 590; x += 60) g.fillCircle(x, 450, 8);
-    // nightstand + alarm clock
-    g.fillStyle(0x795548, 1);
-    g.fillRect(630, 450, 120, 120);
-    g.fillStyle(0xe74c3c, 1);
-    g.fillCircle(690, 420, 28);
-    g.fillStyle(0xffffff, 1);
-    g.fillCircle(690, 420, 22);
-    g.lineStyle(3, 0x333333, 1);
-    g.lineBetween(690, 420, 690, 404);
-    g.lineBetween(690, 420, 680, 430);
-    g.fillStyle(0xe74c3c, 1);
-    g.fillCircle(672, 396, 8);
-    g.fillCircle(708, 396, 8);
+    // wallpaper stripes, a skirting board and floorboards
+    for (let x = 0; x < W; x += 48) {
+      g.fillStyle(0x3c4864, 0.5);
+      g.fillRect(x, 0, 20, 560);
+    }
+    g.fillStyle(0x4a3c36, 1);
+    g.fillRect(0, 548, W, 14);
+    g.lineStyle(1, 0x3a2e28, 0.8);
+    for (let y = 580; y < H; y += 24) g.lineBetween(0, y, W, y);
+    // a framed picture of West Lake on the wall
+    g.fillStyle(0x8a6a44, 1);
+    g.fillRect(250, 150, 170, 120);
+    g.fillGradientStyle(0xb9d6e6, 0xb9d6e6, 0x9fc6c9, 0x9fc6c9, 1);
+    g.fillRect(260, 160, 150, 100);
+    g.fillStyle(0x8aa89f, 1);
+    g.fillTriangle(260, 230, 330, 190, 400, 230);
+    g.fillStyle(0xe0628e, 1);
+    g.fillCircle(300, 240, 6);
+    g.fillCircle(350, 246, 5);
+    // curtains, bed and the nightstand with its alarm clock
+    this.add.image(810, 80, 'roomCurtainPurple').setOrigin(0.5, 0).setScale(0.95);
+    this.add.image(1130, 80, 'roomCurtainPurple').setOrigin(0.5, 0).setScale(0.95).setFlipX(true);
+    this.add.image(60, 572, 'roomBedBlue').setOrigin(0, 1);
+    this.add.image(700, 572, 'roomNightstand').setOrigin(0.5, 1);
 
     // a soft sunbeam
     const beam = this.add.graphics().setBlendMode(Phaser.BlendModes.ADD).setAlpha(0);
@@ -96,7 +94,7 @@ export class WakeScene extends Phaser.Scene {
       i18nText(this, W / 2, 80, () => t('wake.album'), { fontFamily: FONT_SERIF, fontSize: '40px', color: CSS.paper }).setOrigin(0.5),
     );
 
-    const photos = run.photoKeys.filter((k) => this.textures.exists(k));
+    const photos = qyRun.photoKeys.filter((k) => this.textures.exists(k));
     if (!photos.length) {
       layer.add(
         i18nText(this, W / 2, H / 2, () => t('wake.noPhotos'), { fontFamily: FONT_SERIF, fontSize: '28px', color: CSS.paper }).setOrigin(0.5),
@@ -189,11 +187,8 @@ export class WakeScene extends Phaser.Scene {
   private leave(scene: string, replay: boolean): void {
     this.cameras.main.fadeOut(700, 20, 30, 40);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-      if (replay) {
-        resetRun(this.textures);
-        this.scene.start('Intro');
-      }
-      else this.scene.start(scene);
+      // the album's photos stay on screen until QuyuanIntroScene clears them
+      this.scene.start(replay ? 'QuyuanIntro' : scene);
     });
   }
 }

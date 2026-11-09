@@ -1,10 +1,10 @@
 /** Text for the 平湖秋月 chapter: the moon that fell into the lake. */
 export const pinghuZh = {
-  'ph.chapter': '第六个梦 · 平湖秋月',
+  'ph.chapter': '十景之三 · 平湖秋月',
   'name.rabbit': '玉兔',
 
   // ---- prologue ----
-  'ph.n1': '又做梦了。这一次，是中秋节的晚上。',
+  'ph.n1': '我做了一个梦。梦里，是中秋节的晚上。',
   'ph.n2': '桌上摆着月饼，我们提着灯笼，跑到平湖秋月去赏月。',
   'ph.k1': '月亮呢？天上怎么空空的？',
   'ph.g1': '在下面！月亮掉进湖里了！',
@@ -84,10 +84,10 @@ export const pinghuZh = {
 } as const;
 
 export const pinghuEn: Record<keyof typeof pinghuZh, string> = {
-  'ph.chapter': 'Dream 6 · Autumn Moon over the Calm Lake',
+  'ph.chapter': 'Scene 3 of 10 · Autumn Moon over the Calm Lake',
   'name.rabbit': 'Jade Rabbit',
 
-  'ph.n1': 'I was dreaming again. This time it was the night of the Mid-Autumn Festival.',
+  'ph.n1': 'I had a dream. In it, it was the night of the Mid-Autumn Festival.',
   'ph.n2': 'There were mooncakes on the table, and we ran with our lanterns to the Calm Lake to see the moon.',
   'ph.k1': 'Where’s the moon? Why is the sky empty?',
   'ph.g1': 'Down there! The moon fell into the lake!',

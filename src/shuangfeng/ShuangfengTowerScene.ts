@@ -8,7 +8,6 @@ import { i18nText, baseStyle } from '../ui/text';
 import { Dialogue, type Speaker } from '../ui/Dialogue';
 import { overGlobalUI } from '../ui/overlay';
 import { drawPerson, LOOKS } from '../art/Cyclist';
-import { hillPolygon } from '../art/paint';
 import { drawStorey, drawPagoda } from './art';
 import { sfRun } from './state';
 
@@ -70,36 +69,7 @@ export class ShuangfengTowerScene extends Phaser.Scene {
   }
 
   private paint(): void {
-    const g = this.add.graphics();
-    g.fillGradientStyle(0xbcd8ea, 0xbcd8ea, 0xf6ead6, 0xf6ead6, 1);
-    g.fillRect(0, 0, W, H);
-    // far below to the east: the lake, and the South Peak — still bare — across the valley
-    g.fillStyle(0xc9dde0, 1);
-    g.fillRect(0, 470, W, 60);
-    const far = hillPolygon(W + 40, 480, 30, 540, 72, 16);
-    g.fillStyle(0xa9c1bb, 1);
-    g.fillPoints(far, true);
-    g.fillStyle(0x93ad9f, 1);
-    g.fillPoints([new Phaser.Math.Vector2(0, 540), new Phaser.Math.Vector2(0, 420), new Phaser.Math.Vector2(110, 380), new Phaser.Math.Vector2(220, 430), new Phaser.Math.Vector2(330, 540)], true);
-    for (let i = 0; i < 3; i++) this.add.image(200 + i * 420, 520, 'sfMist').setScale(1.6, 0.6).setAlpha(0.7);
-    // the summit
-    g.fillStyle(0x6f8f64, 1);
-    g.fillPoints([new Phaser.Math.Vector2(0, H), new Phaser.Math.Vector2(0, GROUND + 30), new Phaser.Math.Vector2(300, GROUND - 4), new Phaser.Math.Vector2(980, GROUND - 4), new Phaser.Math.Vector2(W, GROUND + 40), new Phaser.Math.Vector2(W, H)], true);
-    g.fillStyle(0x8a9a7a, 1);
-    g.fillRect(380, GROUND - 4, 520, 10);
-    // the old foundation stones
-    g.fillStyle(0xb9b0a0, 1);
-    g.fillRect(640 - 150, GROUND - 14, 300, 16);
-    g.fillStyle(0xa39a88, 1);
-    for (let x = 640 - 150; x < 640 + 150; x += 50) g.fillRect(x, GROUND - 14, 2, 16);
-    // a corner of the temple roof at the top of the hill
-    g.fillStyle(0x7a2a20, 1);
-    g.fillRect(1090, 470, 190, 130);
-    g.fillStyle(0x3d4a4f, 1);
-    g.fillPoints([new Phaser.Math.Vector2(1050, 480), new Phaser.Math.Vector2(1110, 430), new Phaser.Math.Vector2(1280, 430), new Phaser.Math.Vector2(1280, 480)], true);
-    g.fillTriangle(1036, 466, 1066, 480, 1050, 486);
-    g.fillStyle(0xe8c55a, 1);
-    g.fillRect(1130, 500, 110, 70);
+    this.add.image(0, 0, 'sfSummit').setOrigin(0);
     // the three of us watching
     ([['koko', 190], ['gogo', 270], ['me', 350]] as const).forEach(([who, x]) => {
       const k = this.add.graphics().setDepth(30);

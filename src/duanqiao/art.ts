@@ -290,7 +290,133 @@ function silkUmbrella(ctx: Ctx, r: number): void {
 
 // ---- textures ----------------------------------------------------------------------------
 
+/**
+ * The tablet pavilion's hipped roof seen from straight above, after snow:
+ * four sloping faces of dark tiles, mostly buried in snow, with the tile rows
+ * showing at the eaves, snow-capped ridges and upturned corners.
+ */
+function paintPavTop(ctx: CanvasRenderingContext2D): void {
+  const S = 220;
+  const c = S / 2;
+  const hw = 84;
+  // seen from high up and a little to the south: the apex sits slightly north of centre
+  const ax = c;
+  const ay = c - 10;
+  const rh = 16;
+  ctx.fillStyle = 'rgba(11,42,51,0.28)';
+  ctx.fillRect(c - hw + 14, c - hw + 18, hw * 2, hw * 2);
+  const P = (x: number, y: number) => [x, y];
+  const corners = { nw: P(c - hw, c - hw), ne: P(c + hw, c - hw), se: P(c + hw, c + hw), sw: P(c - hw, c + hw) };
+  const rl = P(ax - rh, ay);
+  const rr = P(ax + rh, ay);
+  // [polygon, tile colour, how much snow is left (the sunny south and east faces have melted more)]
+  const faces: [number[][], string, number][] = [
+    [[corners.nw, corners.ne, rr, rl], '#4a5862', 0.95],
+    [[corners.ne, corners.se, rr], '#3a4650', 0.55],
+    [[corners.sw, corners.se, rr, rl], '#2e3a44', 0.4],
+    [[corners.nw, corners.sw, rl], '#43515c', 0.85],
+  ];
+  // a deep, soft blanket of snow: each face shaded by how it tilts to the light (from the north-west)
+  const shadeOf: Record<string, [string, string]> = {
+    '0.95': ['#ffffff', '#e8eef4'],
+    '0.55': ['#dfe7ef', '#c4d0dc'],
+    '0.4': ['#c2cedb', '#a8b6c6'],
+    '0.85': ['#f4f8fb', '#dce4ec'],
+  };
+  for (const [pts, , snow] of faces) {
+    const [hi, lo] = shadeOf[String(snow)];
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (const p of pts.slice(1)) ctx.lineTo(p[0], p[1]);
+    ctx.closePath();
+    ctx.clip();
+    const ex = pts.reduce((a2, p2) => a2 + p2[0], 0) / pts.length;
+    const ey = pts.reduce((a2, p2) => a2 + p2[1], 0) / pts.length;
+    const grad = ctx.createLinearGradient(ax, ay, ax + (ex - ax) * 2.2, ay + (ey - ay) * 2.2);
+    grad.addColorStop(0, hi);
+    grad.addColorStop(1, lo);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, S, S);
+    // faint ribs where the tile rows lie under the snow
+    ctx.strokeStyle = 'rgba(120,140,160,0.16)';
+    ctx.lineWidth = 3;
+    for (let k = -hw + 6; k <= hw; k += 12) {
+      for (const [x2, y2] of [[c + k, c - hw], [c + k, c + hw], [c - hw, c + k], [c + hw, c + k]]) {
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(ax + (x2 - ax) * 0.3, ay + (y2 - ay) * 0.3);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+  // the eaves: dark tile ends peeking out under a rounded overhang of snow
+  ctx.fillStyle = '#2a343c';
+  ctx.fillRect(c - hw - 3, c - hw - 3, hw * 2 + 6, 5);
+  ctx.fillRect(c - hw - 3, c + hw - 2, hw * 2 + 6, 5);
+  ctx.fillRect(c - hw - 3, c - hw - 3, 5, hw * 2 + 6);
+  ctx.fillRect(c + hw - 2, c - hw - 3, 5, hw * 2 + 6);
+  for (let k = -hw; k <= hw; k += 9) {
+    for (const [x2, y2, col] of [[c + k, c - hw + 2, '#ffffff'], [c + k, c + hw - 3, '#c8d4e0'], [c - hw + 2, c + k, '#f4f8fb'], [c + hw - 3, c + k, '#d8e2ea']] as const) {
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      ctx.arc(x2, y2, 4.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  // ridges: dark ridge tiles with a thin cap of snow
+  const ridges = [[corners.nw, rl], [corners.sw, rl], [corners.ne, rr], [corners.se, rr], [rl, rr]];
+  for (const [[x0, y0], [x1, y1]] of ridges) {
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(90,110,130,0.35)';
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0 + 2);
+    ctx.lineTo(x1, y1 + 2);
+    ctx.stroke();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+  }
+  // upturned corners, each with a curled tip and a little cap of snow
+  for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+    const x = c + sx * hw;
+    const y = c + sy * hw;
+    ctx.fillStyle = '#1e262e';
+    ctx.beginPath();
+    ctx.moveTo(x - sx * 12, y - sy * 2);
+    ctx.quadraticCurveTo(x + sx * 8, y + sy * 6, x + sx * 20, y + sy * 16);
+    ctx.quadraticCurveTo(x + sx * 6, y + sy * 2, x - sx * 2, y - sy * 12);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(x + sx * 19, y + sy * 15, 3.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // a gilded finial on the ridge
+  for (const x of [rl[0], rr[0]]) {
+    ctx.fillStyle = '#3a4650';
+    ctx.beginPath();
+    ctx.arc(x, ay, 4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = '#c8a048';
+  ctx.beginPath();
+  ctx.arc(ax, ay, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(ax - 1.5, ay - 1.5, 2.4, 0, Math.PI * 2);
+  ctx.fill();
+}
+
 export function generateDuanqiaoTextures(scene: Phaser.Scene): void {
+  canvas(scene, 'dqPavTop', 220, 220, paintPavTop);
   canvas(scene, 'dqFlake', 24, 24, (ctx) => {
     const g = ctx.createRadialGradient(12, 12, 0, 12, 12, 12);
     g.addColorStop(0, 'rgba(255,255,255,1)');

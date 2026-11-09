@@ -1,9 +1,9 @@
 /** Text for the 柳浪闻莺 chapter (Mum, willow whistles, orioles, kites) and the 十景全图 scroll. */
 export const liulangZh = {
-  'll.chapter': '第十个梦 · 柳浪闻莺',
+  'll.chapter': '十景之五 · 柳浪闻莺',
 
   // ---- an early-spring morning ----
-  'll.n1': '又做梦了。这一次，是早春的一个清晨。',
+  'll.n1': '我做了一个梦。梦里，是早春的一个清晨。',
   'll.n2': '妈妈牵着我的手，KOKO 和 GOGO 跟在后面，我们去柳浪闻莺。',
   'll.i.k1': '好冷呀……柳树怎么还光秃秃的？',
   'll.i.mom1': '白居易写西湖的春天：「几处早莺争暖树，谁家新燕啄春泥。」',
@@ -131,9 +131,9 @@ export const liulangZh = {
 } as const;
 
 export const liulangEn: Record<keyof typeof liulangZh, string> = {
-  'll.chapter': 'Dream 10 · Orioles Singing in the Willows',
+  'll.chapter': 'Scene 5 of 10 · Orioles Singing in the Willows',
 
-  'll.n1': 'I was dreaming again. This time it was an early-spring morning.',
+  'll.n1': 'I had a dream. In it, it was an early-spring morning.',
   'll.n2': 'Mum held my hand, KOKO and GOGO followed behind, and we went to the Willows by the lake.',
   'll.i.k1': 'Brrr… why are the willows still bare?',
   'll.i.mom1': 'Bai Juyi wrote of spring at West Lake: “Here and there early orioles vie for the sunny trees; swallows peck at the spring mud.”',

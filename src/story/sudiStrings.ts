@@ -1,9 +1,9 @@
 /** Text for the 苏堤春晓 chapter: six bridges before dawn. */
 export const sudiZh = {
-  'sudi.chapter': '第三个梦 · 苏堤春晓',
+  'sudi.chapter': '十景之一 · 苏堤春晓',
   'name.elder': '老爷爷',
 
-  'sudi.n1': '又做梦了。这一次，是苏堤。',
+  'sudi.n1': '我做了一个梦。梦里，是苏堤。',
   'sudi.n2': '那天在曲院风荷的凉亭里，我们说好了：苏堤，要天不亮的时候去。',
   'sudi.n3': '梦里天还没亮，湖上起着雾。KOKO 和 GOGO 已经推着车，在堤的南头等我。',
   'sudi.n4': '可是……雾里的堤，怎么断了一截？',
@@ -83,10 +83,10 @@ export const sudiZh = {
 } as const;
 
 export const sudiEn: Record<keyof typeof sudiZh, string> = {
-  'sudi.chapter': 'Dream 3 · Spring Dawn at Su Causeway',
+  'sudi.chapter': 'Scene 1 of 10 · Spring Dawn at Su Causeway',
   'name.elder': 'Old man',
 
-  'sudi.n1': 'I was dreaming again. This time, it was Su Causeway.',
+  'sudi.n1': 'I had a dream. In it, I was on Su Causeway.',
   'sudi.n2': 'That day in the pavilion at Quyuan, we had promised: Su Causeway, before dawn.',
   'sudi.n3': 'In the dream it was still dark, with mist on the lake. KOKO and GOGO were already waiting at the south end with their bikes.',
   'sudi.n4': 'But… why was there a gap in the causeway, out there in the mist?',

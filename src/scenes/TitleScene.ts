@@ -6,7 +6,7 @@ import { paintBackdrop, type Backdrop } from '../art/backdrop';
 import { i18nText } from '../ui/text';
 import { makeButton } from '../ui/Button';
 import { TEN_VIEWS } from '../story/chapters';
-import { getProgress, resetRun } from '../core/state';
+import { getProgress } from '../core/state';
 import { rng } from '../art/paint';
 import { sfx } from '../core/sfx';
 import { load, save } from '../core/storage';
@@ -147,11 +147,16 @@ export class TitleScene extends Phaser.Scene {
     }
   }
 
-  private begin(startScene = TEN_VIEWS[0].startScene): void {
+  /** "Start dreaming" goes to the first of the Ten Scenes (in order) not yet dreamt. */
+  private nextDream(): string | undefined {
+    const visited = new Set(getProgress().visited);
+    return (TEN_VIEWS.find((v) => v.startScene && !visited.has(v.id)) ?? TEN_VIEWS[0]).startScene;
+  }
+
+  private begin(startScene = this.nextDream()): void {
     if (this.leaving || !startScene) return;
     this.leaving = true;
     sfx.chime();
-    resetRun(this.textures);
     this.cameras.main.fadeOut(900, 20, 30, 40);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       this.scene.start(startScene);

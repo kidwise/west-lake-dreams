@@ -52,7 +52,96 @@ export function drawPeony(g: G, x: number, y: number, r: number, colour: (typeof
   for (let i = 0; i < 9; i++) g.fillCircle(x + (rr() - 0.5) * r * 0.25, y + (rr() - 0.5) * r * 0.25, r * 0.06 + 1);
 }
 
+/** A Himalayan cedar (雪松): tiered, drooping branches, lit from the upper left. */
+function paintCedar(ctx: CanvasRenderingContext2D): void {
+  const cx = 110;
+  ctx.fillStyle = '#4a3424';
+  ctx.fillRect(cx - 6, 300, 12, 40);
+  for (let k = 0; k < 7; k++) {
+    const y = 300 - k * 40;
+    const w = 100 - k * 12;
+    // each tier: a drooping skirt of needles
+    const tier = (dx: number, col: string) => {
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      ctx.moveTo(cx + dx, y - 50);
+      ctx.quadraticCurveTo(cx + dx - w * 0.3, y - 30, cx + dx - w, y + 4);
+      ctx.quadraticCurveTo(cx + dx - w * 0.5, y - 6, cx + dx, y - 2);
+      ctx.quadraticCurveTo(cx + dx + w * 0.5, y - 6, cx + dx + w, y + 4);
+      ctx.quadraticCurveTo(cx + dx + w * 0.3, y - 30, cx + dx, y - 50);
+      ctx.fill();
+    };
+    tier(0, '#2e5a3e');
+    tier(-3, '#3d6e4c');
+    // sunlit needles on the left
+    ctx.fillStyle = 'rgba(150,200,140,0.45)';
+    ctx.beginPath();
+    ctx.moveTo(cx - 4, y - 46);
+    ctx.quadraticCurveTo(cx - w * 0.4, y - 26, cx - w * 0.9, y);
+    ctx.quadraticCurveTo(cx - w * 0.5, y - 10, cx - 6, y - 10);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(20,40,28,0.5)';
+    ctx.lineWidth = 1;
+    for (let i = -w + 8; i < w; i += 7) {
+      ctx.beginPath();
+      ctx.moveTo(cx + i * 0.6, y - 10);
+      ctx.lineTo(cx + i, y + 2);
+      ctx.stroke();
+    }
+  }
+}
+
+/** A round camphor crown (香樟): a cloud of leaf clusters with light on top and shade below. */
+function paintCamphor(ctx: CanvasRenderingContext2D): void {
+  ctx.fillStyle = '#4a3424';
+  ctx.beginPath();
+  ctx.moveTo(110, 300);
+  ctx.lineTo(102, 200);
+  ctx.lineTo(80, 160);
+  ctx.lineTo(90, 158);
+  ctx.lineTo(110, 192);
+  ctx.lineTo(130, 150);
+  ctx.lineTo(138, 154);
+  ctx.lineTo(118, 200);
+  ctx.lineTo(118, 300);
+  ctx.fill();
+  const blobs: [number, number, number][] = [[110, 120, 70], [60, 150, 52], [160, 148, 56], [86, 92, 44], [140, 90, 46], [110, 170, 54]];
+  for (const [x, y, r] of blobs) {
+    ctx.fillStyle = '#3f6e3a';
+    ctx.beginPath();
+    ctx.arc(x, y + 6, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  for (const [x, y, r] of blobs) {
+    ctx.fillStyle = '#5b8a50';
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.9, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  for (const [x, y, r] of blobs) {
+    ctx.fillStyle = 'rgba(160,200,120,0.6)';
+    ctx.beginPath();
+    ctx.arc(x - r * 0.25, y - r * 0.3, r * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // leaf texture
+  let s = 7;
+  const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+  for (let i = 0; i < 300; i++) {
+    const a = rnd() * Math.PI * 2;
+    const d = rnd() * 90;
+    const x = 110 + Math.cos(a) * d * 1.1;
+    const y = 128 + Math.sin(a) * d * 0.75;
+    ctx.fillStyle = rnd() < 0.5 ? 'rgba(40,80,40,0.35)' : 'rgba(190,220,150,0.35)';
+    ctx.beginPath();
+    ctx.ellipse(x, y, 4, 2.4, rnd() * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
 export function generateHuagangTextures(scene: Phaser.Scene): void {
+  canvas(scene, 'hgCedar', 220, 340, paintCedar);
+  canvas(scene, 'hgCamphor', 220, 300, paintCamphor);
   // a fish-food pellet (鱼食)
   bake(scene, 'hgPellet', 14, 14, (g) => {
     g.fillStyle(0x3d2412, 0.5);

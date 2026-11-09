@@ -65,21 +65,9 @@ export class HuagangIntroScene extends Phaser.Scene {
     g.fillStyle(0xd9ccb4, 1);
     for (let x = 0; x < W; x += 54) g.fillRoundedRect(x + 4, GROUND - 6, 46, 26, 6);
     // trees behind: cedars (雪松) and round camphor crowns
-    const trees = this.add.graphics().setDepth(4);
     for (let x = 30; x < W; x += 140 + r() * 80) {
-      if (r() < 0.5) {
-        trees.fillStyle(0x3d6b4a, 1);
-        for (let k = 0; k < 5; k++) trees.fillTriangle(x - 70 + k * 10, 430 - k * 50, x + 70 - k * 10, 430 - k * 50, x, 330 - k * 50);
-      } else {
-        trees.fillStyle(0x5b8a50, 1);
-        trees.fillCircle(x, 360, 70);
-        trees.fillCircle(x - 50, 390, 50);
-        trees.fillCircle(x + 50, 385, 55);
-        trees.fillStyle(0x6f9f5c, 1);
-        trees.fillCircle(x - 20, 345, 36);
-      }
-      trees.fillStyle(0x5a4632, 1);
-      trees.fillRect(x - 5, 420, 10, 30);
+      const cedar = r() < 0.5;
+      this.add.image(x, 452, cedar ? 'hgCedar' : 'hgCamphor').setOrigin(0.5, 1).setScale(cedar ? 0.95 + r() * 0.2 : 1 + r() * 0.2).setDepth(4).setFlipX(r() < 0.5);
     }
     // peony bushes: big leaves, bigger flowers
     const bushes = this.add.graphics().setDepth(40);

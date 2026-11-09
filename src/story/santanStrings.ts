@@ -1,8 +1,8 @@
 /** Text for the 三潭印月 chapter: "寻找人民币上的西湖". */
 export const santanZh = {
-  'santan.chapter': '第二个梦 · 三潭印月',
+  'santan.chapter': '十景之十 · 三潭印月',
 
-  'santan.i1': '又做梦了。',
+  'santan.i1': '我做了一个梦。',
   'santan.i2': '梦里，我还是小学生的模样，手心里攥着一张一块钱——奶奶给的零花钱。',
   'santan.i3': '我把它翻过来：背面印着西湖。三座小石塔立在水里，一座近，两座远，远处是树和山。',
   'santan.i4': 'KOKO 凑过来，眼睛一亮：「这是三潭印月！我们去找找，纸币上的风景到底在哪儿！」',
@@ -66,9 +66,9 @@ export const santanZh = {
 } as const;
 
 export const santanEn: Record<keyof typeof santanZh, string> = {
-  'santan.chapter': 'Dream 2 · Three Pools Mirroring the Moon',
+  'santan.chapter': 'Scene 10 of 10 · Three Pools Mirroring the Moon',
 
-  'santan.i1': 'I was dreaming again.',
+  'santan.i1': 'I had a dream.',
   'santan.i2': 'In the dream I was a primary-school kid again, clutching a one-yuan note — pocket money from Grandma.',
   'santan.i3': 'I turned it over. On the back was West Lake: three little stone pagodas standing in the water — one close, two far — with trees and hills behind.',
   'santan.i4': 'KOKO leaned in, eyes shining: “That’s Three Pools Mirroring the Moon! Let’s go find where the picture on the note really is!”',

@@ -1,6 +1,6 @@
 /** Text for the 花港观鱼 chapter: feeding the koi, and the character 魚 that ran away. */
 export const huagangZh = {
-  'hg.chapter': '第四个梦 · 花港观鱼',
+  'hg.chapter': '十景之六 · 花港观鱼',
   'name.yu': '魚',
 
   'koi.higoi': '红鲤',
@@ -12,7 +12,7 @@ export const huagangZh = {
   'koi.tancho': '丹顶',
 
   // ---- prologue: a bag of fish food ----
-  'hg.n1': '又做梦了。这一次，梦回到了小时候。',
+  'hg.n1': '我做了一个梦。梦里，我又回到了小时候。',
   'hg.n2': '四月底的一个周末。苏堤的南头，过了映波桥，就是花港观鱼。',
   'hg.n3': '爸爸给了我一块钱。在园子门口，换来一小包鱼食。',
   'hg.n4': 'KOKO 和 GOGO 早就等不及了。',
@@ -117,7 +117,7 @@ export const huagangZh = {
 } as const;
 
 export const huagangEn: Record<keyof typeof huagangZh, string> = {
-  'hg.chapter': 'Dream 4 · Viewing Fish at Flower Harbour',
+  'hg.chapter': 'Scene 6 of 10 · Viewing Fish at Flower Harbour',
   'name.yu': '魚 (Fish)',
 
   'koi.higoi': 'Red carp',
@@ -128,7 +128,7 @@ export const huagangEn: Record<keyof typeof huagangZh, string> = {
   'koi.ogon': 'Ogon (gold)',
   'koi.tancho': 'Tanchō',
 
-  'hg.n1': 'I was dreaming again. This time, I was a kid.',
+  'hg.n1': 'I had a dream. In it, I was a kid again.',
   'hg.n2': 'A weekend at the end of April. At the south end of Su Causeway, just past Yingbo Bridge, is Flower Harbour.',
   'hg.n3': 'Dad gave me one yuan. At the park gate, I swapped it for a little bag of fish food.',
   'hg.n4': 'KOKO and GOGO couldn’t wait.',

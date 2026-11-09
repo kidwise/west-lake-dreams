@@ -36,7 +36,7 @@ export class TenScenesScene extends Phaser.Scene {
     bg.fillRect(0, 0, W, H);
     this.add.image(0, TOP, 'tenPanorama').setOrigin(0);
     // each scene's title, seal and a line about the dream
-    STATIONS.forEach((s, i) => {
+    STATIONS.forEach((s) => {
       const view = TEN_VIEWS.find((v) => v.id === s.id);
       if (!view) return;
       const zh = () => getLang() === 'zh';
@@ -49,7 +49,9 @@ export class TenScenesScene extends Phaser.Scene {
         wordWrap: { width: 150, useAdvancedWrap: true },
       }).setOrigin(0.5, 0);
       void title;
-      makeSeal(this, s.x + 120, TOP + 200, ['第一', '第二', '第三', '第四', '第五', '第六', '第七', '第八', '第九', '第十'][i], 34).setAngle(-4);
+      // the seal gives each scene's place in the traditional list of the Ten Scenes
+      const rank = TEN_VIEWS.findIndex((v) => v.id === s.id);
+      makeSeal(this, s.x + 120, TOP + 200, ['第一', '第二', '第三', '第四', '第五', '第六', '第七', '第八', '第九', '第十'][rank], 34).setAngle(-4);
       i18nText(this, s.x, TOP + PANO.h - 40, () => t(`ten.cap.${s.id}` as StrKey), {
         fontFamily: FONT_SERIF,
         fontSize: '17px',

@@ -3,11 +3,11 @@ import { W, H } from './core/config';
 import { unlockAudio } from './core/sfx';
 import { BootScene } from './scenes/BootScene';
 import { TitleScene } from './scenes/TitleScene';
-import { IntroScene } from './scenes/IntroScene';
-import { RideScene } from './scenes/RideScene';
-import { PavilionScene } from './scenes/PavilionScene';
-import { BridgeDreamScene } from './scenes/BridgeDreamScene';
-import { WakeScene } from './scenes/WakeScene';
+import { QuyuanIntroScene } from './quyuan/QuyuanIntroScene';
+import { QuyuanRideScene } from './quyuan/QuyuanRideScene';
+import { QuyuanPavilionScene } from './quyuan/QuyuanPavilionScene';
+import { QuyuanBridgeDreamScene } from './quyuan/QuyuanBridgeDreamScene';
+import { QuyuanWakeScene } from './quyuan/QuyuanWakeScene';
 import { UIScene } from './scenes/UIScene';
 import { SantanIntroScene } from './santan/SantanIntroScene';
 import { SantanBoatScene } from './santan/SantanBoatScene';
@@ -81,11 +81,11 @@ const game = new Phaser.Game({
     BootScene,
     TitleScene,
     // Dream 1 · 曲院风荷
-    IntroScene,
-    RideScene,
-    PavilionScene,
-    BridgeDreamScene,
-    WakeScene,
+    QuyuanIntroScene,
+    QuyuanRideScene,
+    QuyuanPavilionScene,
+    QuyuanBridgeDreamScene,
+    QuyuanWakeScene,
     // Dream 2 · 三潭印月
     SantanIntroScene,
     SantanBoatScene,
@@ -156,6 +156,9 @@ if (import.meta.env.DEV) {
   });
 }
 if (import.meta.env.DEV) {
+  void import('./quyuan/state').then(({ qyRun }) => {
+    (window as unknown as { __qyRun: unknown }).__qyRun = qyRun;
+  });
   void import('./huagang/state').then(({ hgRun }) => {
     (window as unknown as { __hgRun: unknown }).__hgRun = hgRun;
   });

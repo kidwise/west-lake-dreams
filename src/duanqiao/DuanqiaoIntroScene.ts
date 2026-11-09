@@ -100,21 +100,35 @@ export class DuanqiaoIntroScene extends Phaser.Scene {
     // a warm wall lamp glow
     const glow = this.add.image(170, 180, 'hgGlow').setScale(3).setTint(0xffd9a0).setAlpha(0.35).setDepth(0.5);
     void glow;
-    // bed with a thick winter quilt
-    const bed = this.add.graphics().setDepth(30);
-    bed.fillStyle(0x8a6a50, 1);
-    bed.fillRect(40, 480, 360, 160);
-    bed.fillStyle(0xfdfaf3, 1);
-    bed.fillRoundedRect(60, 450, 120, 50, 18);
-    bed.fillStyle(0xd9534f, 1);
-    bed.fillRoundedRect(150, 456, 260, 96, 28);
-    bed.fillStyle(0xf2a0a0, 1);
-    for (let i = 0; i < 5; i++) bed.fillCircle(190 + i * 46, 500, 8);
-    // windowsill and radiator
+    // floorboards and a skirting board
+    g.fillStyle(0xbfa888, 1);
+    g.fillRect(0, 512, W, 10);
+    g.lineStyle(1, 0xb09a7a, 0.8);
+    for (let y = 540; y < H; y += 26) g.lineBetween(0, y, W, y);
+    // bed with a thick winter quilt, curtains by the window
+    this.add.image(-60, 660, 'roomBedRed').setOrigin(0, 1).setScale(0.85).setDepth(30);
+    this.add.image(WIN.x - 40, WIN.y - 26, 'roomCurtainCream').setOrigin(0.5, 0).setScale(1.25).setDepth(27);
+    this.add.image(WIN.x + WIN.w + 40, WIN.y - 26, 'roomCurtainCream').setOrigin(0.5, 0).setScale(1.25).setFlipX(true).setDepth(27);
+    const bed = this.add.graphics().setDepth(26);
+    // windowsill, and a cast-iron radiator under it
     bed.fillStyle(0xcfc2a8, 1);
     bed.fillRect(WIN.x - 30, WIN.y + WIN.h + 10, WIN.w + 60, 20);
-    bed.fillStyle(0xbfb6a6, 1);
-    for (let i = 0; i < 12; i++) bed.fillRoundedRect(WIN.x + 60 + i * 42, WIN.y + WIN.h + 50, 30, 110, 8);
+    bed.fillStyle(0xe0d4bc, 1);
+    bed.fillRect(WIN.x - 30, WIN.y + WIN.h + 10, WIN.w + 60, 4);
+    for (let i = 0; i < 12; i++) {
+      const x = WIN.x + 60 + i * 42;
+      bed.fillStyle(0x8a8478, 1);
+      bed.fillRoundedRect(x - 1, WIN.y + WIN.h + 49, 32, 82, 9);
+      bed.fillGradientStyle(0xe8e2d6, 0xc8c0b0, 0xe8e2d6, 0xc8c0b0, 1);
+      bed.fillRoundedRect(x, WIN.y + WIN.h + 50, 30, 80, 8);
+    }
+    // a cup of hot tea steaming on the sill
+    bed.fillStyle(0xffffff, 1);
+    bed.fillRoundedRect(WIN.x + WIN.w - 60, WIN.y + WIN.h - 16, 26, 26, 5);
+    bed.lineStyle(3, 0xffffff, 1);
+    bed.strokeCircle(WIN.x + WIN.w - 30, WIN.y + WIN.h - 2, 6);
+    bed.fillStyle(0x7ab0d0, 1);
+    bed.fillRect(WIN.x + WIN.w - 58, WIN.y + WIN.h - 6, 22, 4);
   }
 
   private paintFrame(): void {
@@ -145,8 +159,11 @@ export class DuanqiaoIntroScene extends Phaser.Scene {
   }
 
   private async play(): Promise<void> {
+    const band = this.add.rectangle(W / 2, 612, W, 92, 0xf6efe2, 0.88).setDepth(590);
     await narrate(this, [{ key: 'dq.n1' }, { key: 'dq.n2' }, { key: 'dq.n3' }], { y: 600, size: 28, color: '#3a3230', hintY: H - 24, depth: 600 });
+    band.destroy();
     this.canWipe = true;
+    const hintBand = this.add.rectangle(W / 2, 620, W, 70, 0xf6efe2, 0.88).setDepth(590);
     const hint = i18nText(this, W / 2, 620, () => t('dq.wipeHint'), { fontFamily: FONT_SERIF, fontSize: '28px', color: '#3a3230' }).setOrigin(0.5).setDepth(600);
     this.tweens.add({ targets: hint, alpha: 0.5, yoyo: true, repeat: -1, duration: 800 });
     // a hand-shaped hint swiping across the glass
@@ -167,6 +184,7 @@ export class DuanqiaoIntroScene extends Phaser.Scene {
     });
     this.canWipe = false;
     hint.destroy();
+    hintBand.destroy();
     hand.destroy();
     await tweenP(this, { targets: this.fog, alpha: 0, duration: 900 });
     sfx.chime();

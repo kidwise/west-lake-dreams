@@ -1,10 +1,10 @@
 /** Text for the 南屏晚钟 chapter: the bell that lost its voice, 济公, and New Year's Eve. */
 export const nanpingZh = {
-  'np.chapter': '第九个梦 · 南屏晚钟',
+  'np.chapter': '十景之九 · 南屏晚钟',
   'name.jigong': '济公',
 
   // ---- the temple at dusk ----
-  'np.n1': '又做梦了。这一次，是黄昏的净慈寺。',
+  'np.n1': '我做了一个梦。梦里，是黄昏的净慈寺。',
   'np.n2': '黄墙灰瓦，香炉里飘着烟。后面的南屏山，已经暗下来了。',
   'np.i.k1': '听说「南屏晚钟」一敲，整个西湖都听得见！',
   'np.i.g1': '我来敲！我来敲！',
@@ -112,10 +112,10 @@ export const nanpingZh = {
 } as const;
 
 export const nanpingEn: Record<keyof typeof nanpingZh, string> = {
-  'np.chapter': 'Dream 9 · Evening Bell at Nanping Hill',
+  'np.chapter': 'Scene 9 of 10 · Evening Bell at Nanping Hill',
   'name.jigong': 'Jigong',
 
-  'np.n1': 'I was dreaming again. This time it was dusk at Jingci Temple.',
+  'np.n1': 'I had a dream. In it, it was dusk at Jingci Temple.',
   'np.n2': 'Yellow walls, grey tiles, incense smoke curling from the burner. Behind it, Nanping Hill was already growing dark.',
   'np.i.k1': 'They say when the Nanping Evening Bell rings, the whole of West Lake can hear it!',
   'np.i.g1': 'Let me ring it! Let me!',

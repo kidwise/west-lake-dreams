@@ -378,6 +378,277 @@ export function drawStelePavilion(scene: Phaser.Scene, g: G, x: number, ground: 
   return txt;
 }
 
+function ell(ctx: Ctx, x: number, y: number, rx: number, ry: number, fill: string): void {
+  ctx.fillStyle = fill;
+  ctx.beginPath();
+  ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function lgr(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]): CanvasGradient {
+  const g = ctx.createLinearGradient(x0, y0, x1, y1);
+  for (const [o, c] of stops) g.addColorStop(o, c);
+  return g;
+}
+
+/** A Masson pine: a crooked trunk and flat, layered tufts of needles, lit from the upper left. */
+function paintPine(ctx: Ctx): void {
+  ctx.strokeStyle = '#4a3024';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(40, 160);
+  ctx.quadraticCurveTo(36, 110, 44, 70);
+  ctx.quadraticCurveTo(48, 40, 40, 14);
+  ctx.stroke();
+  ctx.strokeStyle = '#7a5440';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(38, 158);
+  ctx.quadraticCurveTo(34, 110, 42, 70);
+  ctx.stroke();
+  // branches and tufts
+  const tufts: [number, number, number][] = [[40, 18, 22], [24, 46, 26], [58, 60, 26], [20, 84, 30], [60, 100, 28], [38, 76, 20]];
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#4a3024';
+  for (const [x, y] of tufts) {
+    ctx.beginPath();
+    ctx.moveTo(42, y + 8);
+    ctx.lineTo(x, y + 4);
+    ctx.stroke();
+  }
+  for (const [x, y, w] of tufts) {
+    ell(ctx, x, y + 3, w, 9, '#1e3a2a');
+    ell(ctx, x, y, w * 0.95, 8, '#2f5a3e');
+    ell(ctx, x - w * 0.2, y - 3, w * 0.65, 4.5, '#4f8a5a');
+    // needle texture
+    ctx.strokeStyle = 'rgba(140,200,140,0.45)';
+    ctx.lineWidth = 1;
+    for (let k = -w + 4; k < w - 4; k += 4) {
+      ctx.beginPath();
+      ctx.moveTo(x + k, y - 4);
+      ctx.lineTo(x + k + 2, y - 8);
+      ctx.stroke();
+    }
+  }
+}
+
+/** A clump of bamboo: slender jointed culms, and drooping sprays of narrow leaves. */
+function paintBamboo(ctx: Ctx): void {
+  const culms: [number, number, string][] = [[16, 0.08, '#5f9a4a'], [34, -0.04, '#4a8a3a'], [52, 0.05, '#6aa85a']];
+  for (const [x0, lean, col] of culms) {
+    const top = 6;
+    const x1 = x0 + lean * 200;
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x0, 220);
+    ctx.lineTo(x1, top);
+    ctx.stroke();
+    // a lit edge
+    ctx.strokeStyle = 'rgba(220,255,200,0.45)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(x0 - 1.6, 220);
+    ctx.lineTo(x1 - 1.6, top);
+    ctx.stroke();
+    // nodes: a thin dark ring and a pale band
+    for (let y = 196; y > 20; y -= 30) {
+      const x = x0 + (x1 - x0) * ((220 - y) / (220 - top));
+      ctx.strokeStyle = '#2e5a24';
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(x - 3.2, y);
+      ctx.lineTo(x + 3.2, y);
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(230,240,200,0.6)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x - 3, y - 2);
+      ctx.lineTo(x + 3, y - 2);
+      ctx.stroke();
+    }
+  }
+  // leaf sprays: little fans of narrow leaves hanging from the upper nodes
+  const leaf = (x: number, y: number, a: number, len: number, c: string) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(a);
+    ctx.fillStyle = c;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(len * 0.5, -3, len, 0.5);
+    ctx.quadraticCurveTo(len * 0.5, 3, 0, 0);
+    ctx.fill();
+    ctx.restore();
+  };
+  const r = rng(77);
+  for (let i = 0; i < 16; i++) {
+    const cx = 10 + r() * 50;
+    const cy = 10 + r() * 130;
+    for (let k = 0; k < 4; k++) leaf(cx, cy, 0.3 + k * 0.35 + (r() - 0.5) * 0.2 + (r() < 0.5 ? Math.PI * 0.6 : 0), 18 + r() * 8, ['#3a7a2e', '#5a9a42', '#7ab858'][(i + k) % 3]);
+  }
+}
+
+/**
+ * 北高峰 summit: hazy blue sky with clouds, the lake far below to the east,
+ * the bare South Peak across the valley, and the grassy summit with old
+ * foundation stones, framed by a pine and a corner of the temple.
+ */
+function paintSummit(ctx: Ctx): void {
+  const W2 = 1280;
+  const H2 = 720;
+  const GROUND = 600;
+  ctx.fillStyle = lgr(ctx, 0, 0, 0, 470, [[0, '#9cc8e4'], [0.6, '#d4e6ee'], [1, '#f6ecd8']]);
+  ctx.fillRect(0, 0, W2, 470);
+  for (const [x, y, sc] of [[260, 110, 1.2], [760, 70, 0.9], [1080, 150, 1.1]] as const) {
+    for (let i = 0; i < 7; i++) {
+      const cx = x + (i - 3) * 26 * sc;
+      const cy = y - Math.sin((i / 6) * Math.PI) * 18 * sc;
+      ell(ctx, cx, cy + 6 * sc, 30 * sc, 14 * sc, 'rgba(170,190,210,0.35)');
+      ell(ctx, cx, cy, 28 * sc, 20 * sc, 'rgba(255,255,255,0.95)');
+    }
+  }
+  // the lake, the city shore and Su Causeway, far below to the east
+  ctx.fillStyle = lgr(ctx, 0, 440, 0, 520, [[0, '#cfe2e4'], [1, '#b0ccd0']]);
+  ctx.fillRect(0, 440, W2, 90);
+  ctx.fillStyle = 'rgba(90,120,110,0.55)';
+  ctx.fillRect(420, 474, 560, 2.4);
+  for (let x = 424; x < 980; x += 7) ell(ctx, x, 472, 3.4, 2.4, 'rgba(90,120,110,0.55)');
+  // the far city shore: a soft, hazy band of rooftops
+  ctx.fillStyle = 'rgba(160,170,180,0.45)';
+  ctx.beginPath();
+  ctx.moveTo(0, 444);
+  for (let x = 0; x <= W2; x += 6) ctx.lineTo(x, 438 - Math.abs(Math.sin(x * 0.07)) * 4 - Math.abs(Math.sin(x * 0.013)) * 5);
+  ctx.lineTo(W2, 444);
+  ctx.fill();
+  // the near ridges, layered and hazy
+  const ridge = (base: number, amp: number, seed: number, col: string) => {
+    const q = rng(seed);
+    const w = [0, 1, 2].map((i) => ({ f: (0.003 + q() * 0.004) * (i + 1), p: q() * 7, a: amp / (i + 1.2) }));
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.moveTo(0, H2);
+    for (let x = 0; x <= W2; x += 8) ctx.lineTo(x, base - w.reduce((s2, v) => s2 + (Math.sin(x * v.f + v.p) * 0.5 + 0.5) * v.a, 0));
+    ctx.lineTo(W2, H2);
+    ctx.fill();
+  };
+  ridge(520, 40, 72, '#a9c1bb');
+  // the South Peak across the valley, bare on top
+  ctx.fillStyle = '#8fae9c';
+  ctx.beginPath();
+  ctx.moveTo(-40, 560);
+  ctx.quadraticCurveTo(60, 380, 110, 376);
+  ctx.quadraticCurveTo(170, 380, 330, 560);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(70,100,80,0.25)';
+  ctx.beginPath();
+  ctx.moveTo(110, 376);
+  ctx.quadraticCurveTo(170, 380, 330, 560);
+  ctx.lineTo(150, 560);
+  ctx.fill();
+  // mist in the valley
+  for (let i = 0; i < 9; i++) {
+    const g = ctx.createRadialGradient(80 + i * 150, 520, 10, 80 + i * 150, 520, 140);
+    g.addColorStop(0, 'rgba(255,255,255,0.75)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(i * 150 - 80, 440, 320, 160);
+  }
+  // the summit: grass, a worn path, scattered stones
+  ctx.fillStyle = lgr(ctx, 0, GROUND - 10, 0, H2, [[0, '#86a66e'], [1, '#5a7a4a']]);
+  ctx.beginPath();
+  ctx.moveTo(0, H2);
+  ctx.lineTo(0, GROUND + 30);
+  ctx.quadraticCurveTo(150, GROUND - 10, 300, GROUND - 4);
+  ctx.lineTo(980, GROUND - 4);
+  ctx.quadraticCurveTo(1150, GROUND + 6, W2, GROUND + 40);
+  ctx.lineTo(W2, H2);
+  ctx.fill();
+  const r = rng(5);
+  for (let i = 0; i < 900; i++) {
+    const x = r() * W2;
+    const y = GROUND + r() * (H2 - GROUND);
+    ctx.strokeStyle = r() < 0.5 ? 'rgba(60,90,40,0.5)' : 'rgba(170,200,120,0.5)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + (r() - 0.5) * 3, y - 4 - r() * 6);
+    ctx.stroke();
+  }
+  ctx.fillStyle = lgr(ctx, 0, GROUND, 0, GROUND + 14, [[0, '#c8bca0'], [1, '#a89a7e']]);
+  ctx.fillRect(380, GROUND - 4, 520, 10);
+  // the old pagoda's foundation stones, where the new storeys will stand
+  ctx.fillStyle = lgr(ctx, 0, GROUND - 16, 0, GROUND + 2, [[0, '#d8d0c0'], [1, '#9a9282']]);
+  ctx.fillRect(490, GROUND - 14, 300, 16);
+  ctx.strokeStyle = 'rgba(90,80,64,0.6)';
+  ctx.lineWidth = 1.4;
+  ctx.strokeRect(490, GROUND - 14, 300, 16);
+  for (let x = 540; x < 790; x += 50) {
+    ctx.beginPath();
+    ctx.moveTo(x, GROUND - 14);
+    ctx.lineTo(x, GROUND + 2);
+    ctx.stroke();
+  }
+  ell(ctx, 520, GROUND - 12, 10, 3, 'rgba(110,150,80,0.7)');
+  ell(ctx, 740, GROUND - 13, 14, 3, 'rgba(110,150,80,0.7)');
+  for (let i = 0; i < 14; i++) {
+    const x = 120 + r() * 1040;
+    const y = GROUND + 30 + r() * 80;
+    ell(ctx, x, y + 3, 14 + r() * 10, 5, 'rgba(0,0,0,0.15)');
+    ell(ctx, x, y, 12 + r() * 10, 7 + r() * 3, '#b8b0a0');
+    ell(ctx, x - 3, y - 2, 6 + r() * 5, 3, '#d8d0c0');
+  }
+  // the temple at the top of the hill: yellow wall, red pillars, a big tiled roof
+  ctx.fillStyle = lgr(ctx, 0, 480, 0, 600, [[0, '#e8b850'], [1, '#c08a2e']]);
+  ctx.fillRect(1060, 478, 220, 124);
+  ctx.fillStyle = '#7a2a20';
+  for (const x of [1080, 1170, 1260]) ctx.fillRect(x, 478, 10, 124);
+  ctx.fillStyle = lgr(ctx, 0, 496, 0, 580, [[0, '#ffe8a8'], [1, '#e8b060']]);
+  ctx.fillRect(1100, 500, 60, 80);
+  ctx.strokeStyle = 'rgba(120,60,20,0.8)';
+  ctx.lineWidth = 1.4;
+  for (let k = 1; k < 4; k++) {
+    ctx.beginPath();
+    ctx.moveTo(1100 + k * 15, 500);
+    ctx.lineTo(1100 + k * 15, 580);
+    ctx.stroke();
+  }
+  ctx.fillStyle = lgr(ctx, 0, 410, 0, 486, [[0, '#2e3840'], [1, '#4e5a62']]);
+  ctx.beginPath();
+  ctx.moveTo(1018, 478);
+  ctx.quadraticCurveTo(1040, 490, 1080, 490);
+  ctx.lineTo(W2, 490);
+  ctx.lineTo(W2, 418);
+  ctx.lineTo(1130, 418);
+  ctx.quadraticCurveTo(1080, 440, 1018, 478);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+  ctx.lineWidth = 1.2;
+  for (let x = 1060; x < W2; x += 10) {
+    ctx.beginPath();
+    ctx.moveTo(x, 490);
+    ctx.lineTo(x + 30, 420);
+    ctx.stroke();
+  }
+  ctx.fillStyle = '#c8a048';
+  ctx.fillRect(1040, 488, 240, 3);
+  ctx.fillStyle = '#1e262c';
+  ctx.fillRect(1128, 410, 152, 9);
+  ctx.beginPath();
+  ctx.moveTo(1018, 478);
+  ctx.quadraticCurveTo(1004, 470, 1000, 458);
+  ctx.quadraticCurveTo(1012, 470, 1030, 478);
+  ctx.fill();
+  // a pine framing the left edge
+  ctx.save();
+  ctx.translate(-20, 300);
+  ctx.scale(2.6, 2.6);
+  paintPine(ctx);
+  ctx.restore();
+}
+
 export function generateShuangfengTextures(scene: Phaser.Scene): void {
   canvas(scene, 'sfPuff', 128, 128, (ctx) => {
     const g = ctx.createRadialGradient(64, 64, 6, 64, 64, 64);
@@ -413,27 +684,9 @@ export function generateShuangfengTextures(scene: Phaser.Scene): void {
     g.fillStyle(0x8acb6a, 1);
     for (let i = 0; i < 7; i++) g.fillCircle(10 + i * 7.5, 10 + (i % 2) * 3, 3);
   });
-  bake(scene, 'sfPine', 80, 160, (g) => {
-    g.fillStyle(0x5a3a2a, 1);
-    g.fillRect(37, 60, 6, 100);
-    for (let i = 0; i < 4; i++) {
-      g.fillStyle(i % 2 ? 0x2f5a3e : 0x3a6a48, 1);
-      g.fillEllipse(40 + (i % 2 ? 10 : -10), 30 + i * 26, 70 - i * 6, 26);
-    }
-  });
-  bake(scene, 'sfBamboo', 60, 220, (g) => {
-    for (const [x, c] of [[14, 0x5f9a4a], [32, 0x4a8a3a], [48, 0x6aa85a]] as const) {
-      g.fillStyle(c, 1);
-      g.fillRect(x, 10, 6, 210);
-      g.fillStyle(0x3a6a2a, 1);
-      for (let y = 30; y < 220; y += 34) g.fillRect(x - 1, y, 8, 3);
-      g.fillStyle(0x7ab86a, 1);
-      for (let y = 20; y < 200; y += 50) {
-        g.fillEllipse(x + 12, y, 22, 6);
-        g.fillEllipse(x - 6, y + 14, 20, 5);
-      }
-    }
-  });
+  canvas(scene, 'sfPine', 80, 160, paintPine);
+  canvas(scene, 'sfBamboo', 70, 220, paintBamboo);
+  canvas(scene, 'sfSummit', 1280, 720, paintSummit);
   bake(scene, 'sfSpark', 16, 16, (g) => {
     g.fillStyle(0xffffff, 0.35);
     g.fillCircle(8, 8, 7);

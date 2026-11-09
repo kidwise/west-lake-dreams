@@ -3,15 +3,17 @@ import { music } from '../core/music';
 import { W, H } from '../core/config';
 import { narrate } from '../ui/narrate';
 import { rng } from '../art/paint';
+import { resetQuyuan } from './state';
 
 /** "我今天做了一个梦……" — the dream opens over a night sky. */
-export class IntroScene extends Phaser.Scene {
+export class QuyuanIntroScene extends Phaser.Scene {
   constructor() {
-    super('Intro');
+    super('QuyuanIntro');
   }
 
   create(): void {
     music.play('dream');
+    resetQuyuan(this.textures);
     const bg = this.add.graphics();
     bg.fillGradientStyle(0x1b2738, 0x1b2738, 0x3d4f6b, 0x3d4f6b, 1);
     bg.fillRect(0, 0, W, H);
@@ -39,6 +41,6 @@ export class IntroScene extends Phaser.Scene {
       { key: 'intro.4' },
     ]);
     this.cameras.main.fadeOut(900, 255, 255, 255);
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('Ride'));
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('QuyuanRide'));
   }
 }

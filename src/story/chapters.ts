@@ -1,7 +1,9 @@
 import type { StrKey } from './strings';
 
 /**
- * The Ten Scenes of West Lake (西湖十景). Each one is meant to become a chapter.
+ * The Ten Scenes of West Lake (西湖十景), in their traditional order (as named
+ * in the Southern Song): 苏堤春晓 first, 三潭印月 last. Each is one chapter;
+ * chapters can be played in any order.
  * To add a chapter later: build its scenes, then set `startScene` here.
  */
 export interface View {
@@ -12,8 +14,8 @@ export interface View {
 }
 
 export const TEN_VIEWS: View[] = [
-  { id: 'quyuan', name: 'view.quyuan', startScene: 'Intro' },
   { id: 'sudi', name: 'view.sudi', startScene: 'SudiIntro' },
+  { id: 'quyuan', name: 'view.quyuan', startScene: 'QuyuanIntro' },
   { id: 'pinghu', name: 'view.pinghu', startScene: 'PinghuIntro' },
   { id: 'duanqiao', name: 'view.duanqiao', startScene: 'DuanqiaoIntro' },
   { id: 'liulang', name: 'view.liulang', startScene: 'LiulangIntro' },

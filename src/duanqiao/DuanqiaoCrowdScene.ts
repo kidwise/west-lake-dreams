@@ -143,34 +143,18 @@ export class DuanqiaoCrowdScene extends Phaser.Scene {
       }
     }
     // the tablet pavilion (碑亭) at the east end: a hipped roof seen from above, under snow
-    const pav = this.add.graphics().setDepth(55);
     const px = PLAZA.x0 + 160;
     const py = PLAZA.y0 - 50;
-    const hw = 80;
-    pav.fillStyle(0x0b2a33, 0.25);
-    pav.fillRect(px - hw + 12, py - hw + 14, hw * 2, hw * 2);
-    const V = (x: number, y: number) => new Phaser.Math.Vector2(x, y);
-    const faces: [number, number[][]][] = [
-      [0xf4f6f8, [[px - hw, py - hw], [px + hw, py - hw], [px + 18, py], [px - 18, py]]],
-      [0xdfe5ea, [[px + hw, py - hw], [px + hw, py + hw], [px + 18, py], [px + 18, py]]],
-      [0xc9d1d8, [[px - hw, py + hw], [px + hw, py + hw], [px + 18, py], [px - 18, py]]],
-      [0xe9eef2, [[px - hw, py - hw], [px - hw, py + hw], [px - 18, py], [px - 18, py]]],
-    ];
-    for (const [c, pts] of faces) {
-      pav.fillStyle(c, 1);
-      pav.fillPoints(pts.map(([x, y]) => V(x, y)), true);
+    this.add.image(px, py, 'dqPavTop').setDepth(55);
+    // footprints wandering across the snowy plaza
+    const fp = this.add.graphics().setDepth(1.5);
+    for (let k = 0; k < 140; k++) {
+      const t = k / 140;
+      const x = PLAZA.x0 + 40 + t * (PLAZA.x1 - PLAZA.x0 - 80) + Math.sin(t * 12) * 30;
+      const y = PLAZA.y0 + 60 + ((k * 37) % (PLAZA.y1 - PLAZA.y0 - 120));
+      fp.fillStyle(0xb8c2ca, 0.55);
+      fp.fillEllipse(x + (k % 2 ? 5 : -5), y, 5, 8);
     }
-    // dark tile edges peeking out from under the snow, and upturned corners
-    pav.lineStyle(4, 0x3d4a4f, 1);
-    pav.strokeRect(px - hw, py - hw, hw * 2, hw * 2);
-    pav.lineStyle(2, 0x6b7378, 0.8);
-    pav.lineBetween(px - hw, py - hw, px - 18, py);
-    pav.lineBetween(px + hw, py - hw, px + 18, py);
-    pav.lineBetween(px - hw, py + hw, px - 18, py);
-    pav.lineBetween(px + hw, py + hw, px + 18, py);
-    pav.lineBetween(px - 18, py, px + 18, py);
-    pav.fillStyle(0x3d4a4f, 1);
-    for (const [cx, cy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) pav.fillTriangle(px + cx * hw, py + cy * hw, px + cx * (hw + 14), py + cy * (hw + 14), px + cx * (hw + 4), py + cy * (hw - 8));
   }
 
   private spawnCrowd(): void {

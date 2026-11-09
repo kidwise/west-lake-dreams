@@ -44,64 +44,66 @@ export class NightLake {
     }
     this.ripples = scene.add.tileSprite(0, HORIZON, W, H - HORIZON, 'ripples').setOrigin(0).setDepth(-79).setAlpha(0.18);
 
-    // the zig-zag bridge out to a little pavilion on the water
+    // the zig-zag bridge out to a little pavilion on the water: a stone deck with a side face and posts
     const b = scene.add.graphics().setDepth(-60);
-    const zig = [[-20, 420], [120, 420], [160, 400], [260, 400], [300, 380], [360, 380]];
-    b.lineStyle(9, 0x2a3350, 1);
-    for (let i = 0; i < zig.length - 1; i++) b.lineBetween(zig[i][0], zig[i][1], zig[i + 1][0], zig[i + 1][1]);
-    b.lineStyle(2, 0xc9cdd8, 0.6);
-    for (let i = 0; i < zig.length - 1; i++) b.lineBetween(zig[i][0], zig[i][1] - 6, zig[i + 1][0], zig[i + 1][1] - 6);
-    for (let x = 0; x < 360; x += 18) b.fillStyle(0xc9cdd8, 0.5).fillRect(x, 410 - (x / 360) * 36, 2, 7);
-    // 月波亭: a little pavilion with a warm lamp
-    b.fillStyle(0x222a44, 1);
-    b.fillRect(370, 350, 6, 32);
-    b.fillRect(424, 350, 6, 32);
-    b.fillTriangle(348, 352, 452, 352, 400, 318);
-    b.fillStyle(0xffd27a, 0.9);
-    b.fillCircle(400, 362, 5);
-    // 御书楼 on the right: two storeys, lit windows
-    const lib = scene.add.graphics().setDepth(-58);
-    lib.fillStyle(0x1c233c, 1);
-    lib.fillRect(980, 300, 260, 260);
-    lib.fillTriangle(950, 304, 1270, 304, 1110, 250);
-    lib.fillRect(1000, 410, 220, 10);
-    lib.fillTriangle(970, 414, 1250, 414, 1110, 392);
-    for (let i = 0; i < 5; i++) {
-      lib.fillStyle(0xffc46a, 0.85);
-      lib.fillRect(1004 + i * 44, 330, 24, 40);
-      lib.fillRect(1004 + i * 44, 440, 24, 50);
-      lib.fillStyle(0x7a4a2a, 0.6);
-      lib.fillRect(1015 + i * 44, 330, 2, 40);
-      lib.fillRect(1015 + i * 44, 440, 2, 50);
+    const zig = [[-20, 420], [120, 420], [160, 400], [260, 400], [300, 380], [352, 380]];
+    for (let i = 0; i < zig.length - 1; i++) {
+      const [x0, y0] = zig[i];
+      const [x1, y1] = zig[i + 1];
+      b.fillStyle(0x1a2036, 1);
+      b.fillPoints([new Phaser.Math.Vector2(x0, y0), new Phaser.Math.Vector2(x1, y1), new Phaser.Math.Vector2(x1, y1 + 8), new Phaser.Math.Vector2(x0, y0 + 8)], true);
+      b.lineStyle(5, 0x4a5270, 1);
+      b.lineBetween(x0, y0, x1, y1);
+      b.lineStyle(1.6, 0xc9cdd8, 0.7);
+      b.lineBetween(x0, y0 - 7, x1, y1 - 7);
+      const n = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / 16));
+      for (let k = 0; k <= n; k++) {
+        const x = x0 + ((x1 - x0) * k) / n;
+        const y = y0 + ((y1 - y0) * k) / n;
+        b.fillStyle(0xd8dce6, 0.75);
+        b.fillRect(x - 1, y - 9, 2.4, 9);
+        // stilts into the water
+        if (k % 2 === 0) {
+          b.fillStyle(0x141a2e, 1);
+          b.fillRect(x - 1.5, y + 8, 3, 14);
+        }
+      }
     }
+    scene.add.image(400, 402, 'phPavilion').setOrigin(0.5, 1).setDepth(-59);
+    scene.add.image(400, 350, 'phHalo').setScale(0.5).setTint(0xffc46a).setAlpha(0.5).setBlendMode(Phaser.BlendModes.ADD).setDepth(-58);
+    // 御书楼 on the right, among dark trees
+    const trees = scene.add.graphics().setDepth(-59);
+    for (let i = 0; i < 12; i++) {
+      trees.fillStyle(i % 2 ? 0x101628 : 0x141a30, 1);
+      trees.fillCircle(930 + i * 30 + r() * 20, 330 + r() * 40, 30 + r() * 20);
+    }
+    scene.add.image(1110, 572, 'phLibrary').setOrigin(0.5, 1).setDepth(-58);
     // warm reflections of the windows in the water
     const refl = scene.add.graphics().setDepth(-70);
     for (let i = 0; i < 5; i++) {
-      refl.fillStyle(0xffc46a, 0.25);
-      refl.fillRect(1006 + i * 44, 570, 20, 90);
+      refl.fillStyle(0xffc46a, 0.22);
+      refl.fillRect(976 + i * 56, 576, 30, 110);
     }
-    refl.fillStyle(0xffd27a, 0.25);
-    refl.fillRect(396, 400, 8, 60);
+    refl.fillStyle(0xffd27a, 0.3);
+    refl.fillRect(396, 404, 8, 70);
 
-    // the stone terrace and its railing
+    // the stone terrace: paving, then the carved railing in front
     const t = scene.add.graphics().setDepth(40);
-    t.fillStyle(0x3a3f50, 1);
+    t.fillGradientStyle(0x3a3f50, 0x3a3f50, 0x23273a, 0x23273a, 1);
     t.fillRect(0, RAIL_Y + 26, W, H - RAIL_Y - 26);
-    t.fillStyle(0x8b8f9a, 1);
-    t.fillRect(0, RAIL_Y, W, 14);
-    t.fillStyle(0xb5b9c2, 1);
-    t.fillRect(0, RAIL_Y - 4, W, 6);
+    t.lineStyle(1, 0x1a1e2c, 0.6);
+    for (let y = RAIL_Y + 40; y < H; y += 22) t.lineBetween(0, y, W, y);
+    for (let x = 0; x < W; x += 70) t.lineBetween(x, RAIL_Y + 26, x - 30, H);
     const n = opts.posts ?? 8;
+    for (let i = 0; i < n; i++) {
+      const x0 = (i / n) * W;
+      scene.add.image(x0, RAIL_Y - 10, 'phPanel').setOrigin(0, 0).setDisplaySize(W / n, 36).setDepth(40.5);
+    }
     for (let i = 0; i <= n; i++) {
       const x = (i / n) * W;
-      t.fillStyle(0x9a9ea8, 1);
-      t.fillRect(x - 12, RAIL_Y - 30, 24, 56);
-      t.fillStyle(0xc6cad2, 1);
-      t.fillRect(x - 14, RAIL_Y - 36, 28, 8);
+      scene.add.image(x, RAIL_Y + 30, 'phPost').setOrigin(0.5, 1).setDepth(41);
       this.posts.push({ x, y: RAIL_Y - 30 });
     }
-    t.fillStyle(0x6b6f7a, 1);
-    for (let i = 0; i < n; i++) t.fillRect(((i + 0.5) / n) * W - 50, RAIL_Y + 14, 100, 10);
     this.setBrightness(0);
   }
 

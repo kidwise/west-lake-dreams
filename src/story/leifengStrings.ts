@@ -1,11 +1,11 @@
 /** Text for the 雷峰夕照 chapter: the lady in white, 法海, and a sunset from the top of the pagoda. */
 export const leifengZh = {
-  'lf.chapter': '第八个梦 · 雷峰夕照',
+  'lf.chapter': '十景之七 · 雷峰夕照',
   'name.white': '白娘子',
   'name.fahai': '法海',
 
   // ---- dusk at the foot of the hill ----
-  'lf.n1': '又做梦了。这一次，是傍晚。',
+  'lf.n1': '我做了一个梦。梦里，是傍晚。',
   'lf.n2': '太阳斜斜地挂在西山上，把山顶的雷峰塔照得金灿灿的——这就是「雷峰夕照」。',
   'lf.i.g1': '哇，塔是金色的！',
   'lf.i.k1': '上去要爬好多好多台阶……',
@@ -128,11 +128,11 @@ export const leifengZh = {
 } as const;
 
 export const leifengEn: Record<keyof typeof leifengZh, string> = {
-  'lf.chapter': 'Dream 8 · Leifeng Pagoda at Sunset',
+  'lf.chapter': 'Scene 7 of 10 · Leifeng Pagoda at Sunset',
   'name.white': 'Lady White',
   'name.fahai': 'Fahai',
 
-  'lf.n1': 'I was dreaming again. This time it was evening.',
+  'lf.n1': 'I had a dream. In it, it was evening.',
   'lf.n2': 'The sun hung low over the western hills, turning Leifeng Pagoda on its hilltop to gold — “Leifeng Pagoda at Sunset”.',
   'lf.i.g1': 'Wow, the pagoda’s gold!',
   'lf.i.k1': 'It’s loads and loads of steps to get up there…',

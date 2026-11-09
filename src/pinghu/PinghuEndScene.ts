@@ -66,26 +66,8 @@ export class PinghuEndScene extends Phaser.Scene {
     // our little boat, gliding towards the moon's reflection
     this.wake = this.add.graphics().setDepth(5);
     const boat = this.add.container(-200, 560).setDepth(10);
-    const b = this.add.graphics();
-    b.fillStyle(0x1a1410, 1);
-    b.fillPoints(
-      [new Phaser.Math.Vector2(-120, -10), new Phaser.Math.Vector2(130, -14), new Phaser.Math.Vector2(100, 14), new Phaser.Math.Vector2(-96, 14)],
-      true,
-    );
-    b.fillStyle(0x2a201a, 1);
-    b.fillRect(-60, -44, 90, 30);
-    b.fillTriangle(-70, -44, 40, -44, -15, -66);
-    // three small figures and our lanterns
-    for (const [i, col] of [[0, 0xf1948a], [1, 0x5dade2], [2, 0xf5f0e1]] as const) {
-      b.fillStyle(col, 1);
-      b.fillRoundedRect(44 + i * 26, -36, 16, 24, 5);
-      b.fillStyle(0x2b2522, 1);
-      b.fillCircle(52 + i * 26, -44, 8);
-    }
-    b.lineStyle(3, 0x5a4030, 1);
-    b.lineBetween(-110, -20, -150, 30);
-    boat.add(b);
-    const lamp = this.add.image(120, -50, 'phHalo').setScale(0.3).setTint(0xffb36b).setBlendMode(Phaser.BlendModes.ADD);
+    boat.add(this.add.image(-10, -40, 'phBoatSide').setScale(0.75));
+    const lamp = this.add.image(126, -62, 'phHalo').setScale(0.4).setTint(0xffb36b).setBlendMode(Phaser.BlendModes.ADD);
     boat.add(lamp);
     this.boat = boat;
     this.tweens.add({ targets: boat, x: W / 2 - 40, duration: 9000, ease: 'Sine.easeOut' });

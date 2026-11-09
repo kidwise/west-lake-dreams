@@ -3,6 +3,7 @@
  * `en` is typed against `zh`, so a missing translation is a compile error.
  * To rename characters or tweak the story wording, edit this file only.
  */
+import { quyuanZh, quyuanEn } from './quyuanStrings';
 import { santanZh, santanEn } from './santanStrings';
 import { sudiZh, sudiEn } from './sudiStrings';
 import { huagangZh, huagangEn } from './huagangStrings';
@@ -14,6 +15,7 @@ import { nanpingZh, nanpingEn } from './nanpingStrings';
 import { liulangZh, liulangEn } from './liulangStrings';
 
 export const zh = {
+  ...quyuanZh,
   ...santanZh,
   ...sudiZh,
   ...huagangZh,
@@ -25,12 +27,15 @@ export const zh = {
   ...liulangZh,
   // ---- general ----
   'game.title': '西湖逍遥游',
-  'game.subtitle': '一场骑着单车的梦',
+  'game.subtitle': '十个梦，游遍西湖十景',
   'lang.toggle': 'EN',
   'music.on': '♫ 音乐',
   'music.off': '♫ 静音',
-  'common.next': '▼',
   'common.tapToContinue': '点击或按空格继续',
+  'home.ask': '回到主页吗？',
+  'home.note': '这个梦会从头开始。已经游览过的景点不受影响。',
+  'home.stay': '继续做梦',
+  'home.leave': '回到主页',
 
   // ---- characters ----
   'name.me': '我',
@@ -39,13 +44,9 @@ export const zh = {
 
   // ---- title screen ----
   'title.start': '开始做梦',
-  'title.continueHint': '点击「开始做梦」，或按回车键',
   'title.views': '西湖十景',
-  'title.locked': '敬请期待',
-  'title.moreSoon': '其余{n}景 · 敬请期待',
   'title.play': '▶ 进入',
   'title.visited': '已游览',
-  'title.new': '第一站',
 
   // ---- the ten scenes of West Lake ----
   'view.sudi': '苏堤春晓',
@@ -59,76 +60,6 @@ export const zh = {
   'view.nanping': '南屏晚钟',
   'view.santan': '三潭印月',
 
-  // ---- chapter 1 ----
-  'ch1.name': '第一个梦 · 曲院风荷',
-
-  'intro.1': '我今天做了一个梦。',
-  'intro.2': '梦见和童年的伙伴——小学同学 KOKO 和 GOGO——一起，骑单车游西湖。',
-  'intro.3': '正是荷叶无穷碧、荷花初绽的时节。',
-  'intro.poem': '毕竟西湖六月中，风光不与四时同。\n接天莲叶无穷碧，映日荷花别样红。',
-  'intro.poemBy': '—— 宋 · 杨万里《晓出净慈寺送林子方》',
-  'intro.4': '我们一人一部脚踏车，在曲院风荷附近穿行……',
-
-  'ride.hintKeys': '按住 → 骑行 · ← 刹车 · 按住空格举起相机，松开拍照',
-  'ride.hintTouch': '按住「踩踏」骑行 · 按住「拍照」举起相机，松开按下快门',
-  'ride.btnPedal': '踩踏',
-  'ride.btnPhoto': '拍照',
-  'ride.photos': '照片 {n}/{total}',
-  'ride.sign': '曲院风荷',
-  'ride.signSub': '',
-  'ride.snapGood': '咔嚓！拍到一朵初绽的荷花',
-  'ride.snapMiss': '咔嚓……取景框里没有初绽的荷花',
-  'ride.snapDup': '这朵已经拍过啦',
-  'ride.oneHand': '单手脱把！',
-  'ride.f1': '比比谁骑得快！',
-  'ride.f2': '快看，荷花开了！',
-  'ride.f3': '你一边骑车一边拍照，小心掉进湖里！',
-  'ride.f4': '接天莲叶无穷碧……真的一眼望不到边。',
-  'ride.f5': '前面有个凉亭，歇一会儿吧！',
-
-  'pav.n1': '我们慢下来，在凉亭的小石桌边停好车，商量接下来的骑行路线。',
-  'pav.photosMany': '你拍了{n}张荷花？给我看看！哇，拍得真好。',
-  'pav.photosFew': '才拍了{n}张呀？待会儿再多拍几张。',
-  'pav.photosNone': '你一路举着相机，结果一张荷花都没拍到？哈哈！',
-  'pav.gogo1': '接下来往哪儿骑？',
-  'pav.koko1': '苏堤？苏堤要天不亮的时候去才好看，留到下一个梦吧！',
-  'pav.gogo2': '那就杨公堤！也是六座桥，坡更陡，冲起来更过瘾！',
-  'pav.me1': '冲上桥顶，再飞下来……就像坐过山车一样！',
-  'pav.choose': '出发去哪儿？',
-  'pav.optYang': '杨公堤 · 六桥冲坡',
-  'pav.me2': '（我闭上眼睛，脑补着冲坡过桥的感受……）',
-  'pav.me3': '哈哈，光是想想就要飞起来了！',
-  'pav.me4': '哎呀，我内急，要去上个厕所。你们帮我管一下包，我去去就来！',
-  'pav.gogo3': '去吧去吧，快点回来！',
-  'pav.koko3': '包交给我们，放心！',
-
-  'dream.su': '苏堤 · 六桥',
-  'dream.yang': '杨公堤 · 六桥',
-  'dream.hintKeys': '按住 → 加速 · 冲上桥顶就能飞起来！',
-  'dream.hintTouch': '按住「踩踏」加速 · 冲上桥顶就能飞起来！',
-  'dream.fly': '飞起来啦！',
-  'dream.high': '飞得好高！',
-  'dream.su1': '映波桥',
-  'dream.su2': '锁澜桥',
-  'dream.su3': '望山桥',
-  'dream.su4': '压堤桥',
-  'dream.su5': '东浦桥',
-  'dream.su6': '跨虹桥',
-  'dream.yang1': '环璧桥',
-  'dream.yang2': '流金桥',
-  'dream.yang3': '卧龙桥',
-  'dream.yang4': '隐秀桥',
-  'dream.yang5': '景行桥',
-  'dream.yang6': '浚源桥',
-
-  'wake.1': '……然后，梦就醒了。',
-  'wake.2': '我起床，去上厕所。',
-  'wake.3': '我的包，还留在梦里的凉亭边，让小伙伴们看着呢。',
-  'wake.album': '梦里的相册',
-  'wake.noPhotos': '（梦里的照片，一张也没能带出来……）',
-  'wake.inviteTitle': '来杭州，把梦续完',
-  'wake.inviteBody':
-    '西湖十景，你已在梦里游览了第一景「曲院风荷」。\n剩下的九景，等你骑上单车，一处一处去看。',
   'wake.again': '再做一次梦',
   'wake.toTitle': '返回标题',
 } as const;
@@ -136,6 +67,7 @@ export const zh = {
 export type StrKey = keyof typeof zh;
 
 export const en: Record<StrKey, string> = {
+  ...quyuanEn,
   ...santanEn,
   ...sudiEn,
   ...huagangEn,
@@ -145,26 +77,25 @@ export const en: Record<StrKey, string> = {
   ...leifengEn,
   ...nanpingEn,
   ...liulangEn,
-  'game.title': 'West Lake Wandering',
-  'game.subtitle': 'A dream, on a bicycle',
+  'game.title': 'West Lake Dreams',
+  'game.subtitle': 'Ten dreams of the Ten Scenes of West Lake',
   'lang.toggle': '中文',
   'music.on': '♫ Music',
   'music.off': '♫ Muted',
-  'common.next': '▼',
   'common.tapToContinue': 'Click or press Space to continue',
+  'home.ask': 'Back to the main menu?',
+  'home.note': 'This dream will start over next time. Scenes you have already visited stay visited.',
+  'home.stay': 'Keep dreaming',
+  'home.leave': 'Main menu',
 
   'name.me': 'Me',
   'name.gogo': 'GOGO',
   'name.koko': 'KOKO',
 
   'title.start': 'Start dreaming',
-  'title.continueHint': 'Click “Start dreaming”, or press Enter',
   'title.views': 'Ten Scenes of West Lake',
-  'title.locked': 'Coming soon',
-  'title.moreSoon': '{n} more scenes · coming soon',
   'title.play': '▶ Play',
   'title.visited': 'Visited',
-  'title.new': 'First stop',
 
   'view.sudi': 'Spring Dawn at Su Causeway',
   'view.quyuan': 'Lotus in the Breeze at Quyuan',
@@ -177,79 +108,6 @@ export const en: Record<StrKey, string> = {
   'view.nanping': 'Evening Bell at Nanping Hill',
   'view.santan': 'Three Pools Mirroring the Moon',
 
-  'ch1.name': 'Dream 1 · Lotus in the Breeze at Quyuan',
-
-  'intro.1': 'Last night I had a dream.',
-  'intro.2':
-    'I was cycling around West Lake with my childhood friends from primary school, KOKO and GOGO.',
-  'intro.3':
-    'It was the season when the lotus leaves stretch out in endless green, and the first blossoms are just opening.',
-  'intro.poem':
-    'West Lake in the sixth month — no other season looks quite like this.\nLotus leaves meet the sky in endless green;\nlotus blossoms in the sun, a red like no other.',
-  'intro.poemBy': '— Yang Wanli, Song dynasty',
-  'intro.4': 'Each on our own bicycle, we wound our way along the paths around Quyuan Garden…',
-
-  'ride.hintKeys': 'Hold → to pedal · ← to brake · Hold Space to raise the camera, release to shoot',
-  'ride.hintTouch': 'Hold “Pedal” to ride · Hold “Photo” to raise the camera, release to shoot',
-  'ride.btnPedal': 'Pedal',
-  'ride.btnPhoto': 'Photo',
-  'ride.photos': 'Photos {n}/{total}',
-  'ride.sign': '曲院风荷',
-  'ride.signSub': 'Quyuan Fenghe',
-  'ride.snapGood': 'Click! A lotus just opening.',
-  'ride.snapMiss': 'Click… no opening blossom in the frame.',
-  'ride.snapDup': 'Already got that one.',
-  'ride.oneHand': 'Look, one hand!',
-  'ride.f1': 'Race you!',
-  'ride.f2': 'Look, the lotus are blooming!',
-  'ride.f3': 'Taking photos while riding? Don’t fall in the lake!',
-  'ride.f4': '“Lotus leaves meet the sky”… they really go on forever.',
-  'ride.f5': 'There’s a pavilion up ahead — let’s take a break!',
-
-  'pav.n1':
-    'We slowed down, parked by the little stone table in the pavilion, and talked about where to ride next.',
-  'pav.photosMany': 'You got {n} lotus photos? Let me see! Wow, these are lovely.',
-  'pav.photosFew': 'Only {n}? Take some more later.',
-  'pav.photosNone': 'You held that camera up the whole way and didn’t get a single lotus? Ha!',
-  'pav.gogo1': 'So, where to next?',
-  'pav.koko1': 'Su Causeway? That one’s best before dawn — let’s save it for another dream!',
-  'pav.gogo2': 'Then Yanggong Causeway! Six bridges too — steeper, way more fun!',
-  'pav.me1': 'Race up to the top and fly down the other side… like a roller coaster!',
-  'pav.choose': 'Where to?',
-  'pav.optYang': 'Yanggong Causeway · six steep bridges',
-  'pav.me2': '(I closed my eyes and imagined flying over the bridges…)',
-  'pav.me3': 'Ha! Just thinking about it makes me feel like I’m flying!',
-  'pav.me4': 'Oh no — I really need the toilet. Watch my bag for me? I’ll be right back!',
-  'pav.gogo3': 'Go on, go! Hurry back!',
-  'pav.koko3': 'Leave the bag with us. Don’t worry!',
-
-  'dream.su': 'Su Causeway · Six Bridges',
-  'dream.yang': 'Yanggong Causeway · Six Bridges',
-  'dream.hintKeys': 'Hold → to speed up · Hit the top of a bridge fast to fly!',
-  'dream.hintTouch': 'Hold “Pedal” to speed up · Hit the top of a bridge fast to fly!',
-  'dream.fly': 'Wheee!',
-  'dream.high': 'So high!',
-  'dream.su1': 'Yingbo Bridge',
-  'dream.su2': 'Suolan Bridge',
-  'dream.su3': 'Wangshan Bridge',
-  'dream.su4': 'Yadi Bridge',
-  'dream.su5': 'Dongpu Bridge',
-  'dream.su6': 'Kuahong Bridge',
-  'dream.yang1': 'Huanbi Bridge',
-  'dream.yang2': 'Liujin Bridge',
-  'dream.yang3': 'Wolong Bridge',
-  'dream.yang4': 'Yinxiu Bridge',
-  'dream.yang5': 'Jingxing Bridge',
-  'dream.yang6': 'Junyuan Bridge',
-
-  'wake.1': '…And then I woke up.',
-  'wake.2': 'I got out of bed and went to the toilet.',
-  'wake.3': 'My bag is still back in the dream, by the pavilion, with my friends looking after it.',
-  'wake.album': 'Photos from the dream',
-  'wake.noPhotos': '(Not a single photo made it out of the dream…)',
-  'wake.inviteTitle': 'Come to Hangzhou and finish the dream',
-  'wake.inviteBody':
-    'Of the Ten Scenes of West Lake, you have dreamed your way through the first: Lotus in the Breeze at Quyuan.\nNine more are waiting — hop on a bike and see them one by one.',
   'wake.again': 'Dream again',
   'wake.toTitle': 'Back to title',
 };

@@ -1,6 +1,6 @@
 /** Text for the 双峰插云 chapter: Granny Cow, the cloud sea and the two lost pagodas. */
 export const shuangfengZh = {
-  'sf.chapter': '第七个梦 · 双峰插云',
+  'sf.chapter': '十景之八 · 双峰插云',
   'name.cow': '牛奶奶',
   'name.porter': '挑山工',
 
@@ -168,7 +168,7 @@ export const shuangfengZh = {
 } as const;
 
 export const shuangfengEn: Record<keyof typeof shuangfengZh, string> = {
-  'sf.chapter': 'Dream 7 · Twin Peaks Piercing the Clouds',
+  'sf.chapter': 'Scene 8 of 10 · Twin Peaks Piercing the Clouds',
   'name.cow': 'Granny Cow',
   'name.porter': 'Porter',
 

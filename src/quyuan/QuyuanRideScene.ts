@@ -7,7 +7,7 @@ import { Cyclist, LOOKS } from '../art/Cyclist';
 import { rng } from '../art/paint';
 import { i18nText, onLang, baseStyle } from '../ui/text';
 import { makeButton, type Button } from '../ui/Button';
-import { run, nextPhotoKey } from '../core/state';
+import { qyRun, nextQyKey } from './state';
 import { sfx } from '../core/sfx';
 
 const WORLD = 10400;
@@ -31,7 +31,7 @@ interface Bubble {
   until: number;
 }
 
-export class RideScene extends Phaser.Scene {
+export class QuyuanRideScene extends Phaser.Scene {
   private backdrop!: Backdrop;
   private me!: Cyclist;
   private gogo!: Cyclist;
@@ -56,7 +56,7 @@ export class RideScene extends Phaser.Scene {
   private triggers: { x: number; who: 'gogo' | 'koko'; key: StrKey; done: boolean }[] = [];
 
   constructor() {
-    super('Ride');
+    super('QuyuanRide');
   }
 
   create(): void {
@@ -213,7 +213,7 @@ export class RideScene extends Phaser.Scene {
     drawPill();
     onLang(this, drawPill);
 
-    this.counter = i18nText(this, W - 282, 38, () => t('ride.photos', { n: run.photoKeys.length, total: this.targets.length }), {
+    this.counter = i18nText(this, W - 282, 38, () => t('ride.photos', { n: qyRun.photoKeys.length, total: this.targets.length }), {
       fontSize: '24px',
       backgroundColor: '#f6f1e7cc',
       padding: { x: 14, y: 8 },
@@ -332,13 +332,13 @@ export class RideScene extends Phaser.Scene {
       fresh.shot = true;
       this.tweens.killTweensOf(fresh.sparkle);
       this.tweens.add({ targets: fresh.sparkle, y: '-=40', alpha: 0, scale: 2, duration: 600 });
-      const key = nextPhotoKey();
+      const key = nextQyKey();
       this.game.renderer.snapshotArea(VIEW.x, VIEW.y, VIEW.width, VIEW.height, (snap) => {
         doFlash();
         if (snap instanceof HTMLImageElement) {
           const add = () => {
             if (!this.textures.exists(key)) this.textures.addImage(key, snap);
-            if (!run.photoKeys.includes(key)) run.photoKeys.push(key);
+            if (!qyRun.photoKeys.includes(key)) qyRun.photoKeys.push(key);
             this.refreshCounter();
           };
           if (snap.complete) add();
@@ -354,7 +354,7 @@ export class RideScene extends Phaser.Scene {
   }
 
   private refreshCounter(): void {
-    this.counter.setText(t('ride.photos', { n: run.photoKeys.length, total: this.targets.length }));
+    this.counter.setText(t('ride.photos', { n: qyRun.photoKeys.length, total: this.targets.length }));
   }
 
   private showToast(msg: string, bg: string): void {
@@ -465,7 +465,7 @@ export class RideScene extends Phaser.Scene {
     if (this.arriving && this.speed <= 1 && !this.finished) {
       this.finished = true;
       this.cameras.main.fadeOut(800, 246, 241, 231);
-      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('Pavilion', { part: 1 }));
+      this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('QuyuanPavilion', { part: 1 }));
     }
   }
 }

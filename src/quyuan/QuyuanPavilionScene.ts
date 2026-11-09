@@ -5,7 +5,7 @@ import type { StrKey } from '../core/i18n';
 import { paintBackdrop, type Backdrop } from '../art/backdrop';
 import { Cyclist, LOOKS, drawPerson, type Look } from '../art/Cyclist';
 import { Dialogue, type Speaker } from '../ui/Dialogue';
-import { run, type Route } from '../core/state';
+import { qyRun, type Route } from './state';
 import { tweenP, wait } from '../ui/narrate';
 import { rng } from '../art/paint';
 import { sfx } from '../core/sfx';
@@ -17,14 +17,14 @@ const FLOOR = 446;
  * then — "我内急" — leave the bag with friends... and the dream ends.
  * part 1 = before the daydream, part 2 = after it.
  */
-export class PavilionScene extends Phaser.Scene {
+export class QuyuanPavilionScene extends Phaser.Scene {
   private backdrop!: Backdrop;
   private dlg!: Dialogue;
   private people!: Record<'me' | 'gogo' | 'koko', Phaser.GameObjects.Graphics>;
   private bag!: Phaser.GameObjects.Image;
 
   constructor() {
-    super('Pavilion');
+    super('QuyuanPavilion');
   }
 
   create(data: { part?: 1 | 2 }): void {
@@ -121,7 +121,7 @@ export class PavilionScene extends Phaser.Scene {
   private async partOne(): Promise<void> {
     await wait(this, 500);
     await this.speak(null, 'pav.n1');
-    const n = run.photoKeys.length;
+    const n = qyRun.photoKeys.length;
     await this.speak('koko', n >= 5 ? 'pav.photosMany' : n > 0 ? 'pav.photosFew' : 'pav.photosNone', { n });
     await this.speak('gogo', 'pav.gogo1');
     await this.speak('koko', 'pav.koko1');
@@ -129,7 +129,7 @@ export class PavilionScene extends Phaser.Scene {
     await this.speak('me', 'pav.me1');
     // 苏堤 is saved for its own dream (苏堤春晓); here we ride 杨公堤
     const route = await this.dlg.choose<Route>('pav.choose', [{ key: 'pav.optYang', value: 'yang' }]);
-    run.route = route;
+    qyRun.route = route;
     await this.speak('me', 'pav.me2');
     this.dlg.hide();
 
@@ -137,7 +137,7 @@ export class PavilionScene extends Phaser.Scene {
     sfx.whee();
     this.cameras.main.zoomTo(1.15, 1400, 'Sine.easeInOut');
     this.cameras.main.fadeOut(1400, 250, 214, 230);
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('BridgeDream'));
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('QuyuanBridgeDream'));
   }
 
   private async partTwo(): Promise<void> {
@@ -160,7 +160,7 @@ export class PavilionScene extends Phaser.Scene {
     this.cameras.main.shake(1600, 0.004);
     await wait(this, 400);
     this.cameras.main.fadeOut(1800, 255, 255, 255);
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('Wake'));
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start('QuyuanWake'));
   }
 
   update(time: number): void {

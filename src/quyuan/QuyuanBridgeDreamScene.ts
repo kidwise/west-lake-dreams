@@ -6,7 +6,7 @@ import { Cyclist, LOOKS } from '../art/Cyclist';
 import { hillPolygon, rng } from '../art/paint';
 import { i18nText, baseStyle } from '../ui/text';
 import { makeButton, type Button } from '../ui/Button';
-import { run } from '../core/state';
+import { qyRun } from './state';
 import { sfx } from '../core/sfx';
 
 const BASE = 560; // causeway surface
@@ -31,7 +31,7 @@ interface Body {
  * The daydream: "脑补着经过苏堤六桥/杨公堤时像过山车一样飞起来冲坡过桥的感受".
  * A short, dreamy physics ride over six arched bridges.
  */
-export class BridgeDreamScene extends Phaser.Scene {
+export class QuyuanBridgeDreamScene extends Phaser.Scene {
   private bodies!: { me: Body; gogo: Body; koko: Body };
   private archH = 120;
   private endX = 0;
@@ -43,7 +43,7 @@ export class BridgeDreamScene extends Phaser.Scene {
   private petals: Phaser.GameObjects.Image[] = [];
 
   constructor() {
-    super('BridgeDream');
+    super('QuyuanBridgeDream');
   }
 
   /** Height of the causeway/bridge surface at world x (screen y; smaller = higher). */
@@ -64,7 +64,7 @@ export class BridgeDreamScene extends Phaser.Scene {
     music.play('flight');
     this.nextLabel = 0;
     this.petals = [];
-    this.archH = run.route === 'yang' ? 165 : 125;
+    this.archH = qyRun.route === 'yang' ? 165 : 125;
     this.endX = START + COUNT * (SPAN + GAP) + 500;
     const worldW = this.endX + W;
     this.cameras.main.setBounds(0, 0, worldW, H);
@@ -83,7 +83,7 @@ export class BridgeDreamScene extends Phaser.Scene {
     };
 
     // HUD
-    i18nText(this, W / 2, 46, () => t(run.route === 'yang' ? 'dream.yang' : 'dream.su'), {
+    i18nText(this, W / 2, 46, () => t(qyRun.route === 'yang' ? 'dream.yang' : 'dream.su'), {
       fontFamily: FONT_SERIF,
       fontSize: '34px',
       color: '#5b3a5e',
@@ -224,7 +224,7 @@ export class BridgeDreamScene extends Phaser.Scene {
         b.vy = -(b.s - 200) * 0.8;
         if (isMe) {
           sfx.whee();
-          run.flights += 1;
+          qyRun.flights += 1;
           this.pop(t('dream.fly'), nx, b.y - 170, CSS.me);
         }
       } else {
@@ -274,7 +274,7 @@ export class BridgeDreamScene extends Phaser.Scene {
     // bridge name cards
     if (this.nextLabel < COUNT && me.x > START + this.nextLabel * (SPAN + GAP) - 260) {
       const idx = this.nextLabel + 1;
-      const key = `dream.${run.route}${idx}` as StrKey;
+      const key = `dream.${qyRun.route}${idx}` as StrKey;
       const label = i18nText(this, W / 2, 160, () => t(key), {
         fontFamily: FONT_SERIF,
         fontSize: '30px',
@@ -294,7 +294,7 @@ export class BridgeDreamScene extends Phaser.Scene {
       this.finished = true;
       this.cameras.main.fadeOut(1200, 250, 214, 230);
       this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () =>
-        this.scene.start('Pavilion', { part: 2 }),
+        this.scene.start('QuyuanPavilion', { part: 2 }),
       );
     }
   }

@@ -1,6 +1,6 @@
 /** Text for the 断桥残雪 chapter: the snow that comes once every few years. */
 export const duanqiaoZh = {
-  'dq.chapter': '第五个梦 · 断桥残雪',
+  'dq.chapter': '十景之四 · 断桥残雪',
   'name.mom': '妈妈',
   'name.lady': '白衣姐姐',
 
@@ -124,7 +124,7 @@ export const duanqiaoZh = {
 } as const;
 
 export const duanqiaoEn: Record<keyof typeof duanqiaoZh, string> = {
-  'dq.chapter': 'Dream 5 · Lingering Snow on the Broken Bridge',
+  'dq.chapter': 'Scene 4 of 10 · Lingering Snow on the Broken Bridge',
   'name.mom': 'Mum',
   'name.lady': 'Lady in white',
 

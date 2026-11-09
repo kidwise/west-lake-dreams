@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { generateTextures } from '../art/textures';
+import { generateRoomTextures } from '../art/room';
 import { generateSantanTextures } from '../santan/art';
 import { generateSudiTextures } from '../sudi/art';
 import { generateHuagangTextures } from '../huagang/art';
@@ -18,6 +19,7 @@ export class BootScene extends Phaser.Scene {
 
   create(): void {
     generateTextures(this);
+    generateRoomTextures(this);
     generateSantanTextures(this);
     generateSudiTextures(this);
     generateHuagangTextures(this);
