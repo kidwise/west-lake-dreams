@@ -180,6 +180,51 @@ export const sfx = {
     tone(784, 0.5, 0.08, 'sine');
     tone(659, 0.7, 0.08, 'sine', 0.42);
   },
+  /** A fish gulping food at the surface: a little rising "bloop" at the given pitch. */
+  gulp(freq: number): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq * 0.62, t0);
+    o.frequency.exponentialRampToValueAtTime(freq, t0 + 0.045);
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.07, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
+    const o2 = a.createOscillator();
+    o2.type = 'triangle';
+    o2.frequency.setValueAtTime(freq * 2, t0 + 0.02);
+    const g2 = a.createGain();
+    g2.gain.setValueAtTime(0.0001, t0);
+    g2.gain.exponentialRampToValueAtTime(0.018, t0 + 0.03);
+    g2.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.3);
+    o.connect(g).connect(a.destination);
+    o2.connect(g2).connect(a.destination);
+    o.start(t0);
+    o2.start(t0);
+    o.stop(t0 + 0.3);
+    o2.stop(t0 + 0.35);
+  },
+  /** A pellet (or a handful) landing on the water. */
+  plop(n = 1): void {
+    noiseBurst(0.06 + Math.min(0.2, n * 0.015), 2600, 0.12 + Math.min(0.2, n * 0.02));
+  },
+  /** A big splash (jumping into the water). */
+  bigSplash(): void {
+    noiseBurst(0.6, 900, 0.5);
+    setTimeout(() => noiseBurst(0.5, 2200, 0.25), 90);
+    tone(110, 0.3, 0.12, 'sine');
+  },
+  /** A rising sweep of bubbles. */
+  bubbles(): void {
+    for (let i = 0; i < 6; i++) tone(500 + i * 160 + Math.random() * 80, 0.08, 0.03, 'sine', i * 0.05);
+  },
+  /** A soft magical shimmer (the character coming to life). */
+  shimmer(): void {
+    [1175, 1397, 1568, 1760, 2093, 2349].forEach((f, i) => tone(f, 1.2, 0.035, 'sine', i * 0.07));
+  },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));
   },

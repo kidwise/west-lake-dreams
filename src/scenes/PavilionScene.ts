@@ -111,7 +111,7 @@ export class PavilionScene extends Phaser.Scene {
   }
 
   private async speak(who: Speaker, key: StrKey, params?: Record<string, string | number>): Promise<void> {
-    if (who && who !== 'elder') {
+    if (who && who !== 'elder' && who !== 'yu') {
       const g = this.people[who];
       this.tweens.add({ targets: g, y: FLOOR - 8, yoyo: true, duration: 140, repeat: 1 });
     }

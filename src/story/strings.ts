@@ -5,10 +5,12 @@
  */
 import { santanZh, santanEn } from './santanStrings';
 import { sudiZh, sudiEn } from './sudiStrings';
+import { huagangZh, huagangEn } from './huagangStrings';
 
 export const zh = {
   ...santanZh,
   ...sudiZh,
+  ...huagangZh,
   // ---- general ----
   'game.title': '西湖逍遥游',
   'game.subtitle': '一场骑着单车的梦',
@@ -124,6 +126,7 @@ export type StrKey = keyof typeof zh;
 export const en: Record<StrKey, string> = {
   ...santanEn,
   ...sudiEn,
+  ...huagangEn,
   'game.title': 'West Lake Wandering',
   'game.subtitle': 'A dream, on a bicycle',
   'lang.toggle': '中文',

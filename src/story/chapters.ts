@@ -17,7 +17,7 @@ export const TEN_VIEWS: View[] = [
   { id: 'pinghu', name: 'view.pinghu' },
   { id: 'duanqiao', name: 'view.duanqiao' },
   { id: 'liulang', name: 'view.liulang' },
-  { id: 'huagang', name: 'view.huagang' },
+  { id: 'huagang', name: 'view.huagang', startScene: 'HuagangIntro' },
   { id: 'leifeng', name: 'view.leifeng' },
   { id: 'shuangfeng', name: 'view.shuangfeng' },
   { id: 'nanping', name: 'view.nanping' },

@@ -13,7 +13,20 @@
 import { audioContext, isAudioUnlocked, onAudioUnlocked } from './sfx';
 import { load, save } from './storage';
 
-export type TrackName = 'lake' | 'dream' | 'flight' | 'morning' | 'moonlake' | 'moonrise' | 'sudiDawn' | 'sudiRide' | 'sudiSunrise';
+export type TrackName =
+  | 'lake'
+  | 'dream'
+  | 'flight'
+  | 'morning'
+  | 'moonlake'
+  | 'moonrise'
+  | 'sudiDawn'
+  | 'sudiRide'
+  | 'sudiSunrise'
+  | 'huagang'
+  | 'huagangUnder'
+  | 'huagangStele'
+  | 'huagangFinale';
 
 interface Track {
   bpm: number;
@@ -27,7 +40,9 @@ interface Track {
   slide: number;
   /** Echo (delay) mix, 0..1. */
   echo: number;
-  voice: 'zheng' | 'bell' | 'dizi';
+  voice: 'zheng' | 'bell' | 'dizi' | 'pipa';
+  /** Heard from under the water: everything through a low-pass filter. */
+  muffle?: boolean;
   /** Soft woodblock (木鱼) on each beat. */
   woodblock?: boolean;
   /** Plucked guzheng broken chords on the off-beats under the melody. */
@@ -58,6 +73,14 @@ const TRACKS: Record<TrackName, Track> = {
   sudiRide: { bpm: 112, root: 65, bars: [0, -3, 5, -5, 0, -3, 2, -5], density: 0.6, slide: 0.2, echo: 0.24, voice: 'dizi', arp: true, woodblock: true, seed: 91 },
   // the sun is up — bright, full and joyful (G 宫)
   sudiSunrise: { bpm: 120, root: 67, bars: [0, 5, -3, 2, 0, 5, -5, 0], density: 0.66, slide: 0.18, echo: 0.22, voice: 'dizi', arp: true, woodblock: true, shaker: true, seed: 97 },
+  // 花港观鱼 — a sunny spring day by the fish pond: light 江南丝竹 on pipa (D 宫)
+  huagang: { bpm: 100, root: 62, bars: [0, -3, 5, -5, 0, -3, 2, -5], density: 0.58, slide: 0.2, echo: 0.28, voice: 'pipa', arp: true, shaker: true, seed: 103 },
+  // the same tune heard from under the water: muffled, slower to breathe, more echo
+  huagangUnder: { bpm: 100, root: 62, bars: [0, -3, 5, -5, 0, -3, 2, -5], density: 0.58, slide: 0.2, echo: 0.55, voice: 'zheng', arp: true, muffle: true, seed: 103 },
+  // the stele and its legend — quiet and a little magical (D 宫, 羽 colour)
+  huagangStele: { bpm: 72, root: 62, bars: [-3, 0, -5, -3, 5, 0, -5, -3], density: 0.36, slide: 0.25, echo: 0.48, voice: 'bell', home: 4, seed: 107 },
+  // the fish write 花港观鱼 — bright and festive (G 宫)
+  huagangFinale: { bpm: 112, root: 67, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.64, slide: 0.18, echo: 0.26, voice: 'pipa', arp: true, woodblock: true, shaker: true, seed: 109 },
 };
 
 const PENTA = [0, 2, 4, 7, 9]; // 宫 商 角 徵 羽
@@ -130,7 +153,15 @@ class TrackPlayer {
     this.bus = ctx.createGain();
     this.bus.gain.setValueAtTime(0, ctx.currentTime);
     this.bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.5);
-    this.bus.connect(dest);
+    if (track.muffle) {
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 820;
+      lp.Q.value = 0.8;
+      this.bus.connect(lp).connect(dest);
+    } else {
+      this.bus.connect(dest);
+    }
     const send = ctx.createGain();
     send.gain.value = track.echo;
     this.bus.connect(send).connect(echoIn);
@@ -180,9 +211,14 @@ class TrackPlayer {
 
     const note = this.melody[step % this.melody.length];
     if (note) {
-      const up = tr.voice === 'zheng' ? 0 : 12;
+      const up = tr.voice === 'zheng' || tr.voice === 'pipa' ? 0 : 12;
       const f = mtof(tr.root + degreeToSemis(note.degree) - 12 + up);
       if (tr.voice === 'zheng') this.zheng(f, t, note.slide);
+      else if (tr.voice === 'pipa') {
+        let len = 1;
+        while (len < 8 && !this.melody[(step + len) % this.melody.length]) len++;
+        this.pipa(f * 2, t, Math.min(len, 4) * this.stepDur, note.slide);
+      }
       else if (tr.voice === 'dizi') {
         // hold until the next note (up to a bar), for a singing line
         let len = 1;
@@ -344,6 +380,51 @@ class TrackPlayer {
     n.start(t);
   }
 
+  /**
+   * 琵琶: a bright, quickly fading pluck; long notes are sustained with a
+   * tremolo of rapid plucks (轮指) that swells and fades.
+   */
+  private pipa(f: number, t: number, dur: number, slide: boolean): void {
+    const c = this.ctx;
+    const one = (at: number, level: number, decay: number) => {
+      const o = c.createOscillator();
+      o.type = 'sawtooth';
+      if (slide && at === t) {
+        o.frequency.setValueAtTime(f * 0.891, at);
+        o.frequency.exponentialRampToValueAtTime(f, at + 0.08);
+      } else {
+        o.frequency.setValueAtTime(f, at);
+      }
+      const o2 = c.createOscillator();
+      o2.type = 'triangle';
+      o2.frequency.setValueAtTime(f * 2, at);
+      const lp = c.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.Q.value = 3;
+      lp.frequency.setValueAtTime(Math.min(9000, f * 7), at);
+      lp.frequency.exponentialRampToValueAtTime(Math.max(400, f * 1.6), at + decay * 0.6);
+      const g = this.env(at, level, decay, 0.002);
+      const lv2 = c.createGain();
+      lv2.gain.value = 0.3;
+      o.connect(lp);
+      o2.connect(lv2).connect(lp);
+      lp.connect(g).connect(this.bus);
+      o.start(at);
+      o2.start(at);
+      o.stop(at + decay + 0.05);
+      o2.stop(at + decay + 0.05);
+    };
+    one(t, 0.07, 0.55);
+    if (dur >= this.stepDur * 2.5) {
+      // 轮指 tremolo for the rest of the note
+      const n = Math.floor((dur - 0.08) / 0.065);
+      for (let i = 1; i < n; i++) {
+        const k = i / n;
+        one(t + i * 0.065, 0.035 * Math.sin(Math.PI * (0.3 + 0.7 * k)) + 0.008, 0.12);
+      }
+    }
+  }
+
   /** A soft, short guzheng pluck for broken chords. */
   private pluck(f: number, t: number): void {
     const o = this.ctx.createOscillator();
@@ -409,6 +490,15 @@ class Music {
     // Browsers block audio until the first click / key press; the constructor's
     // unlock hook starts whatever track is wanted at that moment.
     if (isAudioUnlocked()) this.start(name);
+  }
+
+  /**
+   * Frequency of a note in the key of the current track (pentatonic degree,
+   * 0 = 宫 an octave above the tonic), so sound effects play in tune.
+   */
+  noteFreq(degree: number): number {
+    const root = TRACKS[this.current ?? 'lake'].root;
+    return mtof(root + 12 + degreeToSemis(degree));
   }
 
   isMuted(): boolean {

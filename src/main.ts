@@ -16,6 +16,11 @@ import { SantanMoonScene } from './santan/SantanMoonScene';
 import { SudiIntroScene } from './sudi/SudiIntroScene';
 import { SudiRideScene } from './sudi/SudiRideScene';
 import { SudiEndScene } from './sudi/SudiEndScene';
+import { HuagangIntroScene } from './huagang/HuagangIntroScene';
+import { HuagangPondScene } from './huagang/HuagangPondScene';
+import { HuagangSteleScene } from './huagang/HuagangSteleScene';
+import { HuagangUnderScene } from './huagang/HuagangUnderScene';
+import { HuagangEndScene } from './huagang/HuagangEndScene';
 
 unlockAudio();
 
@@ -57,6 +62,12 @@ const game = new Phaser.Game({
     SudiIntroScene,
     SudiRideScene,
     SudiEndScene,
+    // Dream 4 · 花港观鱼
+    HuagangIntroScene,
+    HuagangPondScene,
+    HuagangSteleScene,
+    HuagangUnderScene,
+    HuagangEndScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -69,5 +80,10 @@ if (import.meta.env.DEV) {
     (window as unknown as { __santanDebug: unknown }).__santanDebug = {
       targetPose: (id: string) => TARGETS.find((t) => t.id === id)?.pose,
     };
+  });
+}
+if (import.meta.env.DEV) {
+  void import('./huagang/state').then(({ hgRun }) => {
+    (window as unknown as { __hgRun: unknown }).__hgRun = hgRun;
   });
 }
