@@ -21,6 +21,12 @@ import { HuagangPondScene } from './huagang/HuagangPondScene';
 import { HuagangSteleScene } from './huagang/HuagangSteleScene';
 import { HuagangUnderScene } from './huagang/HuagangUnderScene';
 import { HuagangEndScene } from './huagang/HuagangEndScene';
+import { DuanqiaoIntroScene } from './duanqiao/DuanqiaoIntroScene';
+import { DuanqiaoStreetScene } from './duanqiao/DuanqiaoStreetScene';
+import { DuanqiaoCrowdScene } from './duanqiao/DuanqiaoCrowdScene';
+import { DuanqiaoSnowmanScene } from './duanqiao/DuanqiaoSnowmanScene';
+import { DuanqiaoHillScene } from './duanqiao/DuanqiaoHillScene';
+import { DuanqiaoEndScene } from './duanqiao/DuanqiaoEndScene';
 
 unlockAudio();
 
@@ -68,6 +74,13 @@ const game = new Phaser.Game({
     HuagangSteleScene,
     HuagangUnderScene,
     HuagangEndScene,
+    // Dream 5 · 断桥残雪
+    DuanqiaoIntroScene,
+    DuanqiaoStreetScene,
+    DuanqiaoCrowdScene,
+    DuanqiaoSnowmanScene,
+    DuanqiaoHillScene,
+    DuanqiaoEndScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -85,5 +98,8 @@ if (import.meta.env.DEV) {
 if (import.meta.env.DEV) {
   void import('./huagang/state').then(({ hgRun }) => {
     (window as unknown as { __hgRun: unknown }).__hgRun = hgRun;
+  });
+  void import('./duanqiao/state').then(({ dqRun }) => {
+    (window as unknown as { __dqRun: unknown }).__dqRun = dqRun;
   });
 }

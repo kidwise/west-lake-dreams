@@ -225,6 +225,10 @@ export const sfx = {
   shimmer(): void {
     [1175, 1397, 1568, 1760, 2093, 2349].forEach((f, i) => tone(f, 1.2, 0.035, 'sine', i * 0.07));
   },
+  /** Summer cicadas: a buzzing, pulsing drone. */
+  cicada(): void {
+    for (let i = 0; i < 8; i++) setTimeout(() => noiseBurst(0.18, 5200, 0.06), i * 140);
+  },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));
   },

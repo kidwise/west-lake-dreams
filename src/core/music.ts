@@ -26,7 +26,12 @@ export type TrackName =
   | 'huagang'
   | 'huagangUnder'
   | 'huagangStele'
-  | 'huagangFinale';
+  | 'huagangFinale'
+  | 'dqMorning'
+  | 'dqFight'
+  | 'dqLady'
+  | 'dqHill'
+  | 'dqXiao';
 
 interface Track {
   bpm: number;
@@ -41,6 +46,8 @@ interface Track {
   /** Echo (delay) mix, 0..1. */
   echo: number;
   voice: 'zheng' | 'bell' | 'dizi' | 'pipa';
+  /** Shift the melody by octaves (−1 turns the flute into a low, breathy 箫). */
+  octave?: number;
   /** Heard from under the water: everything through a low-pass filter. */
   muffle?: boolean;
   /** Soft woodblock (木鱼) on each beat. */
@@ -81,6 +88,16 @@ const TRACKS: Record<TrackName, Track> = {
   huagangStele: { bpm: 72, root: 62, bars: [-3, 0, -5, -3, 5, 0, -5, -3], density: 0.36, slide: 0.25, echo: 0.48, voice: 'bell', home: 4, seed: 107 },
   // the fish write 花港观鱼 — bright and festive (G 宫)
   huagangFinale: { bpm: 112, root: 67, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.64, slide: 0.18, echo: 0.26, voice: 'pipa', arp: true, woodblock: true, shaker: true, seed: 109 },
+  // 断桥残雪 — a snowy morning: crisp bells like falling snow (A 宫)
+  dqMorning: { bpm: 88, root: 69, bars: [0, -3, 5, -5, 0, 2, -3, -5], density: 0.5, slide: 0, echo: 0.42, voice: 'bell', arp: true, seed: 113 },
+  // the snowball fight — quick flute and woodblock (G 宫)
+  dqFight: { bpm: 126, root: 67, bars: [0, -5, -3, -5, 0, 5, -3, 0], density: 0.7, slide: 0.15, echo: 0.2, voice: 'dizi', arp: true, woodblock: true, shaker: true, seed: 127 },
+  // the lady in white — cool guzheng in the 羽 mode (E 宫, resolving on C♯ 羽)
+  dqLady: { bpm: 74, root: 64, bars: [-3, -5, 0, -3, 5, -3, -5, -3], density: 0.42, slide: 0.32, echo: 0.46, voice: 'zheng', arp: true, home: 4, seed: 131 },
+  // the sun comes out over the bridge (D 宫)
+  dqHill: { bpm: 92, root: 62, bars: [0, -3, 5, 0, -5, -3, 2, -5], density: 0.5, slide: 0.2, echo: 0.36, voice: 'zheng', arp: true, seed: 137 },
+  // 湖心亭看雪 — almost silence: a low 箫 and long echoes (D 宫, 羽 colour)
+  dqXiao: { bpm: 56, root: 62, bars: [-3, 0, -5, -3], density: 0.26, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 139 },
 };
 
 const PENTA = [0, 2, 4, 7, 9]; // 宫 商 角 徵 羽
@@ -211,7 +228,7 @@ class TrackPlayer {
 
     const note = this.melody[step % this.melody.length];
     if (note) {
-      const up = tr.voice === 'zheng' || tr.voice === 'pipa' ? 0 : 12;
+      const up = (tr.voice === 'zheng' || tr.voice === 'pipa' ? 0 : 12) + 12 * (tr.octave ?? 0);
       const f = mtof(tr.root + degreeToSemis(note.degree) - 12 + up);
       if (tr.voice === 'zheng') this.zheng(f, t, note.slide);
       else if (tr.voice === 'pipa') {
