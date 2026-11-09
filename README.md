@@ -6,6 +6,10 @@ A small story game about childhood dreams: wandering the Ten Scenes of Hangzhou'
 
 > 我今天做了一个梦，梦见和童年的伙伴，小学同学一起，游西湖……
 
+**在线游玩 / Play online:** https://kidwise.github.io/west-lake-dreams/
+
+无需安装，用浏览器打开即可（手机请横屏）。No install needed — just open it in a browser (turn phones sideways).
+
 ---
 
 ## 故事（中文）
@@ -50,7 +54,9 @@ Every dream ends with an invitation: come to Hangzhou and walk these places for 
 
 ## Play / 运行
 
-Requires Node.js (`brew install node`).
+Online: https://kidwise.github.io/west-lake-dreams/ — rebuilt and published automatically on every push to `main` (`.github/workflows/pages.yml`).
+
+To run it locally, you need Node.js (`brew install node`).
 
 ```bash
 npm install     # first time only
