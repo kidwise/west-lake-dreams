@@ -93,6 +93,15 @@ export class TitleScene extends Phaser.Scene {
       const y = y0 + 82 + i * 36;
       const playable = !!v.startScene;
       const done = visited.has(v.id);
+      if (playable) {
+        const hl = this.add.graphics().setDepth(20).setAlpha(0);
+        hl.fillStyle(0xe0628e, 0.14);
+        hl.fillRoundedRect(x0 + 12, y - 16, pw - 24, 32, 10);
+        const zone = this.add.zone(x0 + pw / 2, y, pw - 24, 34).setInteractive({ useHandCursor: true }).setDepth(23);
+        zone.on('pointerover', () => hl.setAlpha(1));
+        zone.on('pointerout', () => hl.setAlpha(0));
+        zone.on('pointerup', () => this.begin(v.startScene));
+      }
       const dot = this.add.graphics().setDepth(21);
       dot.fillStyle(playable ? 0xe0628e : 0xb7b2a8, 1);
       dot.fillCircle(x0 + 30, y + 1, 7);
@@ -103,7 +112,7 @@ export class TitleScene extends Phaser.Scene {
         .setOrigin(0, 0.5)
         .setDepth(21);
       if (playable) {
-        i18nText(this, x0 + pw - 20, y, () => t(done ? 'title.visited' : 'title.new'), {
+        i18nText(this, x0 + pw - 20, y, () => t(done ? 'title.visited' : 'title.play'), {
           fontSize: '15px',
           color: done ? '#2e8b57' : CSS.koko,
         })
@@ -111,7 +120,8 @@ export class TitleScene extends Phaser.Scene {
           .setDepth(21);
       }
     });
-    i18nText(this, x0 + pw / 2, y0 + 452, () => t('title.moreSoon'), {
+    const locked = TEN_VIEWS.filter((v) => !v.startScene).length;
+    i18nText(this, x0 + pw / 2, y0 + 452, () => t('title.moreSoon', { n: locked }), {
       fontSize: '16px',
       color: '#a8a39a',
     })
@@ -119,14 +129,14 @@ export class TitleScene extends Phaser.Scene {
       .setDepth(21);
   }
 
-  private begin(): void {
-    if (this.leaving) return;
+  private begin(startScene = TEN_VIEWS[0].startScene): void {
+    if (this.leaving || !startScene) return;
     this.leaving = true;
     sfx.chime();
     resetRun(this.textures);
     this.cameras.main.fadeOut(900, 20, 30, 40);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-      this.scene.start(TEN_VIEWS[0].startScene as string);
+      this.scene.start(startScene);
     });
   }
 

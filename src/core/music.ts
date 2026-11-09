@@ -13,7 +13,7 @@
 import { audioContext, isAudioUnlocked, onAudioUnlocked } from './sfx';
 import { load, save } from './storage';
 
-export type TrackName = 'lake' | 'dream' | 'flight' | 'morning';
+export type TrackName = 'lake' | 'dream' | 'flight' | 'morning' | 'moonlake' | 'moonrise';
 
 interface Track {
   bpm: number;
@@ -30,6 +30,8 @@ interface Track {
   voice: 'zheng' | 'bell';
   /** Soft woodblock (木鱼) on each beat. */
   woodblock?: boolean;
+  /** Scale degree phrases resolve to (5 = 宫; 4 or 9 = 羽 for a minor, wistful feel). */
+  home?: number;
   seed: number;
 }
 
@@ -42,6 +44,10 @@ const TRACKS: Record<TrackName, Track> = {
   flight: { bpm: 116, root: 67, bars: [0, -3, -7, -5], density: 0.72, slide: 0.15, echo: 0.22, voice: 'zheng', woodblock: true, seed: 37 },
   // waking up — soft morning bells (C 宫)
   morning: { bpm: 72, root: 60, bars: [0, 5, -3, -5], density: 0.34, slide: 0.05, echo: 0.42, voice: 'bell', seed: 51 },
+  // rowing around the Three Pools at dusk — 羽 mode, calm and a little mysterious (D 宫, resolving on B 羽)
+  moonlake: { bpm: 70, root: 62, bars: [-3, -5, 0, -3, -3, 2, -5, -3], density: 0.46, slide: 0.32, echo: 0.4, voice: 'zheng', home: 4, seed: 67 },
+  // moonrise over the lit pagodas — slow, shimmering bells (E♭ 宫)
+  moonrise: { bpm: 58, root: 63, bars: [0, -3, 5, 0], density: 0.4, slide: 0, echo: 0.55, voice: 'bell', home: 9, seed: 79 },
 };
 
 const PENTA = [0, 2, 4, 7, 9]; // 宫 商 角 徵 羽
@@ -89,9 +95,10 @@ function compose(track: Track): (Note | null)[] {
     }
     return out;
   };
-  const a = phrase(5);
-  const a2 = [...a.slice(0, 24), ...phrase(8).slice(24)];
-  const b = phrase(3 + 5); // ends on 徵 above the tonic
+  const home = track.home ?? 5;
+  const a = phrase(home);
+  const a2 = [...a.slice(0, 24), ...phrase(Math.min(9, home + 3)).slice(24)];
+  const b = phrase(Math.min(9, home + 3)); // a contrasting phrase ending higher
   return [...a, ...a2, ...b, ...a];
 }
 

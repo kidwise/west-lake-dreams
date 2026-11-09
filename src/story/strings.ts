@@ -3,7 +3,10 @@
  * `en` is typed against `zh`, so a missing translation is a compile error.
  * To rename characters or tweak the story wording, edit this file only.
  */
+import { santanZh, santanEn } from './santanStrings';
+
 export const zh = {
+  ...santanZh,
   // ---- general ----
   'game.title': '西湖逍遥游',
   'game.subtitle': '一场骑着单车的梦',
@@ -23,7 +26,8 @@ export const zh = {
   'title.continueHint': '点击「开始做梦」，或按回车键',
   'title.views': '西湖十景',
   'title.locked': '敬请期待',
-  'title.moreSoon': '其余九景 · 敬请期待',
+  'title.moreSoon': '其余{n}景 · 敬请期待',
+  'title.play': '▶ 进入',
   'title.visited': '已游览',
   'title.new': '第一站',
 
@@ -40,10 +44,10 @@ export const zh = {
   'view.santan': '三潭印月',
 
   // ---- chapter 1 ----
-  'ch1.name': '第一章 · 曲院风荷',
+  'ch1.name': '第一个梦 · 曲院风荷',
 
   'intro.1': '我今天做了一个梦。',
-  'intro.2': '梦见和童年的伙伴——小学同学 KOKO 和 GOGO——一起，骑单车游西湖。',
+  'intro.2': '梦见和童年的伙伴——小学同学 KOKO 和 GOGO——一起，骑单车游西湖。',
   'intro.3': '正是荷叶无穷碧、荷花初绽的时节。',
   'intro.poem': '毕竟西湖六月中，风光不与四时同。\n接天莲叶无穷碧，映日荷花别样红。',
   'intro.poemBy': '—— 宋 · 杨万里《晓出净慈寺送林子方》',
@@ -117,6 +121,7 @@ export const zh = {
 export type StrKey = keyof typeof zh;
 
 export const en: Record<StrKey, string> = {
+  ...santanEn,
   'game.title': 'West Lake Wandering',
   'game.subtitle': 'A dream, on a bicycle',
   'lang.toggle': '中文',
@@ -133,7 +138,8 @@ export const en: Record<StrKey, string> = {
   'title.continueHint': 'Click “Start dreaming”, or press Enter',
   'title.views': 'Ten Scenes of West Lake',
   'title.locked': 'Coming soon',
-  'title.moreSoon': 'The other nine scenes · coming soon',
+  'title.moreSoon': '{n} more scenes · coming soon',
+  'title.play': '▶ Play',
   'title.visited': 'Visited',
   'title.new': 'First stop',
 
@@ -148,7 +154,7 @@ export const en: Record<StrKey, string> = {
   'view.nanping': 'Evening Bell at Nanping Hill',
   'view.santan': 'Three Pools Mirroring the Moon',
 
-  'ch1.name': 'Chapter 1 · Lotus in the Breeze at Quyuan',
+  'ch1.name': 'Dream 1 · Lotus in the Breeze at Quyuan',
 
   'intro.1': 'Last night I had a dream.',
   'intro.2':

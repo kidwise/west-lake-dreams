@@ -9,6 +9,10 @@ import { PavilionScene } from './scenes/PavilionScene';
 import { BridgeDreamScene } from './scenes/BridgeDreamScene';
 import { WakeScene } from './scenes/WakeScene';
 import { UIScene } from './scenes/UIScene';
+import { SantanIntroScene } from './santan/SantanIntroScene';
+import { SantanBoatScene } from './santan/SantanBoatScene';
+import { SantanPuzzleScene } from './santan/SantanPuzzleScene';
+import { SantanMoonScene } from './santan/SantanMoonScene';
 
 unlockAudio();
 
@@ -32,8 +36,31 @@ const game = new Phaser.Game({
     preserveDrawingBuffer: true,
   },
   // UIScene is last so it always renders above the other scenes.
-  scene: [BootScene, TitleScene, IntroScene, RideScene, PavilionScene, BridgeDreamScene, WakeScene, UIScene],
+  scene: [
+    BootScene,
+    TitleScene,
+    // Dream 1 · 曲院风荷
+    IntroScene,
+    RideScene,
+    PavilionScene,
+    BridgeDreamScene,
+    WakeScene,
+    // Dream 2 · 三潭印月
+    SantanIntroScene,
+    SantanBoatScene,
+    SantanPuzzleScene,
+    SantanMoonScene,
+    // overlay last so it renders on top
+    UIScene,
+  ],
 });
 
 // Expose the game instance during development for debugging / automated play-testing.
 if (import.meta.env.DEV) (window as unknown as { __game: Phaser.Game }).__game = game;
+if (import.meta.env.DEV) {
+  void import('./santan/world').then(({ TARGETS }) => {
+    (window as unknown as { __santanDebug: unknown }).__santanDebug = {
+      targetPose: (id: string) => TARGETS.find((t) => t.id === id)?.pose,
+    };
+  });
+}

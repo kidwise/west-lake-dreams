@@ -45,11 +45,11 @@ export function tweenP(scene: Phaser.Scene, config: Phaser.Types.Tweens.TweenBui
 export async function narrate(
   scene: Phaser.Scene,
   pages: Page[],
-  opts: { color?: string; y?: number; depth?: number } = {},
+  opts: { color?: string; y?: number; depth?: number; size?: number; hintY?: number } = {},
 ): Promise<void> {
   const color = opts.color ?? CSS.paper;
   const y = opts.y ?? H / 2 - 20;
-  const hint = i18nText(scene, W / 2, H - 56, () => t('common.tapToContinue'), {
+  const hint = i18nText(scene, W / 2, opts.hintY ?? H - 56, () => t('common.tapToContinue'), {
     fontSize: '18px',
     color,
   })
@@ -61,7 +61,7 @@ export async function narrate(
   for (const page of pages) {
     const main = i18nText(scene, W / 2, y, () => t(page.key), {
       fontFamily: FONT_SERIF,
-      fontSize: page.poem ? '34px' : '36px',
+      fontSize: `${opts.size ?? (page.poem ? 34 : 36)}px`,
       color,
       align: 'center',
       lineSpacing: page.poem ? 22 : 14,

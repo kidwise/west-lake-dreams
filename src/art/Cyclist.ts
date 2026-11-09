@@ -44,7 +44,7 @@ function limb(g: G, a: Pt, j: Pt, b: Pt, width: number, color: number): void {
   g.fillCircle(b.x, b.y, width / 2);
 }
 
-function head(g: G, cx: number, cy: number, look: Look, facing = 1): void {
+export function drawHead(g: G, cx: number, cy: number, look: Look, facing = 1): void {
   if (look.hair === 'ponytail') {
     g.fillStyle(HAIR, 1);
     g.fillEllipse(cx - 13 * facing, cy + 6, 10, 22);
@@ -189,7 +189,7 @@ export class Cyclist {
       g.lineBetween(-8, -82, SH.x + 2, SH.y + 2);
     }
 
-    head(g, HEAD.x, HEAD.y, L);
+    drawHead(g, HEAD.x, HEAD.y, L);
 
     // near arm: on the handlebar, or raised holding the camera
     if (this.cameraUp) {
@@ -249,5 +249,5 @@ export function drawPerson(g: G, look: Look, opts: { facing?: 1 | -1; armUp?: bo
   }
   g.fillStyle(SKIN, 1);
   g.fillCircle(-16, -62, 4);
-  head(g, 0, -116, look, f);
+  drawHead(g, 0, -116, look, f);
 }
