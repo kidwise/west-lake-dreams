@@ -9,6 +9,7 @@ import { TEN_VIEWS } from '../story/chapters';
 import { getProgress, resetRun } from '../core/state';
 import { rng } from '../art/paint';
 import { sfx } from '../core/sfx';
+import { load, save } from '../core/storage';
 
 export class TitleScene extends Phaser.Scene {
   private backdrop!: Backdrop;
@@ -71,6 +72,11 @@ export class TitleScene extends Phaser.Scene {
     this.input.keyboard?.once('keydown-ENTER', () => this.begin());
 
     this.drawViewList();
+    // the first time all ten are done, unroll the whole scroll straight away
+    if (TEN_VIEWS.every((v) => getProgress().visited.includes(v.id)) && !load<boolean>('tenShown', false)) {
+      save('tenShown', true);
+      this.time.delayedCall(700, () => this.begin('TenScenes'));
+    }
   }
 
   private drawViewList(): void {
@@ -120,13 +126,25 @@ export class TitleScene extends Phaser.Scene {
           .setDepth(21);
       }
     });
-    const locked = TEN_VIEWS.filter((v) => !v.startScene).length;
-    i18nText(this, x0 + pw / 2, y0 + 452, () => t('title.moreSoon', { n: locked }), {
-      fontSize: '16px',
-      color: '#a8a39a',
-    })
-      .setOrigin(0.5)
-      .setDepth(21);
+    // once all ten are dreamt, the whole scroll opens; until then, show progress
+    const n = TEN_VIEWS.filter((v) => visited.has(v.id)).length;
+    if (n >= TEN_VIEWS.length) {
+      makeButton(this, x0 + pw / 2, y0 + 452, () => t('ten.open'), {
+        width: 300,
+        height: 44,
+        fontSize: 19,
+        fill: 0xf4e2b8,
+        depth: 22,
+        onClick: () => this.begin('TenScenes'),
+      });
+    } else {
+      i18nText(this, x0 + pw / 2, y0 + 452, () => t('ten.progress', { n }), {
+        fontSize: '15px',
+        color: '#8a857c',
+      })
+        .setOrigin(0.5)
+        .setDepth(21);
+    }
   }
 
   private begin(startScene = TEN_VIEWS[0].startScene): void {

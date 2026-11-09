@@ -631,6 +631,87 @@ Other chapters were also made order-independent:
 [Jingci Temple](https://www.Wikipedia.com/wiki/Jingci_Temple),
 [今日头条](https://www.toutiao.com/zixun/7523451056681158695)
 
+## Dream 10 · 柳浪闻莺 (Orioles Singing in the Willows): Mum, willow whistles and kites
+
+The real place:
+- It began as 聚景园, a Southern Song imperial garden that Emperor Xiaozong
+  enlarged for his retired father Gaozong, one of the largest in the capital.
+- Willows shaded it and orioles sang among them. After the Song it went to
+  ruin.
+- In 1699 Kangxi inscribed 「柳浪闻莺」 and set up the tablet.
+- Today it is the largest free park on the south-east shore, and its big lawn
+  fills with kites in spring.
+- Bai Juyi's 「几处早莺争暖树」 is about this time of year.
+
+The chapter comes from a childhood memory: Mum taking me there in spring. It
+is the one dream where Mum is with us the whole way. The title splits into
+three games:
+
+1. **Early spring, bare willows.** A grey morning, no birdsong. Mum remembers
+   her own mother (外婆) teaching her to make willow whistles.
+2. **Making a willow whistle (柳笛).** Draw slow circles round the twig to
+   twist the bark loose, then slide the white core out.
+   - Too fast and the bark splits or the core snaps; Mum: "I broke plenty
+     too".
+   - Everyone blows theirs. Mine is clear, KOKO's squeaks, and GOGO's sounds
+     like a fart.
+3. **Hearing the orioles (闻莺).** A song comes from one of five willows,
+   panned left or right, with a faint gold glint as a backup.
+   - Part that tree's living strands with your finger or the mouse to find
+     the black-naped oriole hiding there.
+   - Whistle its rhythm back: tap for short notes, hold for long ones.
+   - Each bird turns its tree green, bud by bud.
+   - After five birds a spring wind rolls along the row as a wave (柳浪):
+     the willows turn green, peach blossom opens, petals blow across, and a
+     flock of orioles arrives. That picture goes on the scroll.
+4. **Kites on the big lawn.** GOGO's butterfly sticks in a willow. Part the
+   strands to free it, and orioles burst out.
+   - Choose a kite. There are always three ordinary ones (swallow, butterfly,
+     centipede), **plus one for every chapter already dreamt**: Granny Cow,
+     the Jade Rabbit, a koi, the crab monk, the great bell, the silk umbrella,
+     the lotus, peach blossom and the stone lantern.
+   - Hold to run until it lifts. Then hold to reel in and let go to let line
+     out, keeping the tension in the green zone through gusts.
+   - It climbs past the willows and the pagoda into the clouds.
+5. **Waking up.** Spring sunshine and an oriole on the windowsill. Mum: "Shall
+   we go and fly a kite at 柳浪闻莺?" The dream becomes today.
+
+**Art:**
+- The willows are live: every strand is drawn each frame, sways in the
+  breeze, rolls with gusts, parts under your hand, and greens from bare twigs
+  through buds to full leaf.
+- Mum is painted at twice the resolution, with ink outlines: a permed bob, a
+  pink cardigan, a canvas tote with an embroidered flower.
+- The orioles are painted in four poses, and there are twelve hand-painted
+  kites.
+
+**Music:**
+- `llEarly`: lonely flute.
+- `llWhistle`: pipa.
+- `llSpring`: full 江南丝竹.
+- `llKite`: bright and bouncing.
+- New sound effects: a synthesized oriole song (panned), a held willow
+  whistle, the three whistle voices and rustling strands.
+
+## 西湖十景全图 · The Ten Scenes Scroll
+
+When all ten dreams have been played, in any order, the title screen unrolls
+a long handscroll of the whole lake. It is ink and light colour on old paper,
+3600 px wide.
+- Each scene is painted small in its place round the shore.
+- Each has its vertical title, a red seal numbering it, and a line about
+  that dream.
+- The scroll pans by itself; drag or use ←/→ to look around.
+- At the end a big 「十景」 seal and a thank-you appear.
+- After that it stays on the title screen as a button. Until then, the title
+  shows "visited n / 10".
+
+**Sources:**
+[携程 · 柳浪闻莺](https://you.ctrip.com/sight/hangzhou14/2032.html),
+[杭州网 2025](https://hznews.hangzhou.com.cn/chengshi/content/2025-06/15/content_9017161_0.htm),
+[杭州网 2023](https://hznews.hangzhou.com.cn/chengshi/content/2023-03/16/content_8493315_0.htm),
+[杭州网 · 大草坪](https://hznews.hangzhou.com.cn/chengshi/content/2017-05/03/content_6539854_2.htm)
+
 ## Running it
 
 Requires Node.js. Install it with `brew install node` if you don't have it.
@@ -778,6 +859,18 @@ src/
     NanpingEchoScene   the caves' listen-and-repeat echo game
     NanpingBellScene   pulling and striking the bell; the roll call across the lake, by chapters visited
     NanpingEndScene    New Year's Eve countdown to 108, fireworks, the scroll, invitation
+  liulang/             Dream 10 · 柳浪闻莺
+    paint.ts           canvas painting helpers (gradients, ink outlines, curves)
+    characters.ts      Mum, the black-naped oriole (4 poses), twelve kites
+    art.ts             the lakeside (bare and in spring), the kite lawn, the bench, my room, willow trunk, whistle
+    Willows.ts         live willows: swaying strands, gust waves (柳浪), parting by hand, greening
+    LiulangIntroScene  an early-spring morning with Mum; bare willows
+    LiulangWhistleScene twisting and sliding a willow whistle
+    LiulangOrioleScene finding orioles by ear, whistling their songs back; the willow wave
+    LiulangKiteScene   rescuing GOGO's kite, choosing a kite (by chapters dreamt), flying it into the clouds
+    LiulangEndScene    waking up, the scroll, invitation
+  art/tenPanorama.ts   the painted handscroll of all ten scenes
+  scenes/TenScenesScene the 西湖十景全图 viewer (unlocked when all ten are dreamt)
   scenes/
     BootScene          generates art
     TitleScene         title + Ten Scenes list

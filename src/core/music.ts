@@ -50,7 +50,12 @@ export type TrackName =
   | 'npDusk'
   | 'npWell'
   | 'npBell'
-  | 'npNewYear';
+  | 'npNewYear'
+  | 'llEarly'
+  | 'llWhistle'
+  | 'llSpring'
+  | 'llKite'
+  | 'llScroll';
 
 interface Track {
   bpm: number;
@@ -154,6 +159,16 @@ const TRACKS: Record<TrackName, Track> = {
   npBell: { bpm: 54, root: 62, bars: [0, -3, -5, 0], density: 0.22, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 239 },
   // New Year's Eve: festive and bright (G 宫)
   npNewYear: { bpm: 126, root: 67, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.7, slide: 0.15, echo: 0.2, voice: 'dizi', arp: true, woodblock: true, shaker: true, seed: 241 },
+  // 柳浪闻莺 — a chilly early-spring morning: a soft, lonely flute (F 宫, 羽 colour)
+  llEarly: { bpm: 70, root: 65, bars: [-3, 0, -5, -3, 5, 0, -5, -3], density: 0.3, slide: 0.3, echo: 0.5, voice: 'dizi', home: 4, seed: 251 },
+  // making whistles on the bench: light plucked pipa (D 宫)
+  llWhistle: { bpm: 96, root: 62, bars: [0, -3, 5, -5, 0, 2, -3, 0], density: 0.48, slide: 0.18, echo: 0.3, voice: 'pipa', arp: true, seed: 257 },
+  // spring arrives: full 江南丝竹 — flute over guzheng, shaker (G 宫)
+  llSpring: { bpm: 108, root: 67, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.62, slide: 0.24, echo: 0.3, voice: 'dizi', arp: true, shaker: true, seed: 263 },
+  // kites on the lawn: bright and bouncing (A 宫)
+  llKite: { bpm: 120, root: 69, bars: [0, -3, 5, -5, 0, 5, -3, 0], density: 0.62, slide: 0.15, echo: 0.24, voice: 'pipa', arp: true, woodblock: true, shaker: true, seed: 269 },
+  // the whole scroll of the Ten Scenes: slow and grand guzheng (E♭ 宫)
+  llScroll: { bpm: 66, root: 63, bars: [0, -3, 5, 0, -5, -3, 2, 0], density: 0.4, slide: 0.3, echo: 0.55, voice: 'zheng', arp: true, seed: 271 },
   dqXiao: { bpm: 56, root: 62, bars: [-3, 0, -5, -3], density: 0.26, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 139 },
 };
 

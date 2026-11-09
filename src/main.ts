@@ -48,6 +48,12 @@ import { NanpingWellScene } from './nanping/NanpingWellScene';
 import { NanpingEchoScene } from './nanping/NanpingEchoScene';
 import { NanpingBellScene } from './nanping/NanpingBellScene';
 import { NanpingEndScene } from './nanping/NanpingEndScene';
+import { LiulangIntroScene } from './liulang/LiulangIntroScene';
+import { LiulangWhistleScene } from './liulang/LiulangWhistleScene';
+import { LiulangOrioleScene } from './liulang/LiulangOrioleScene';
+import { LiulangKiteScene } from './liulang/LiulangKiteScene';
+import { LiulangEndScene } from './liulang/LiulangEndScene';
+import { TenScenesScene } from './scenes/TenScenesScene';
 
 unlockAudio();
 
@@ -127,6 +133,14 @@ const game = new Phaser.Game({
     NanpingEchoScene,
     NanpingBellScene,
     NanpingEndScene,
+    // Dream 10 · 柳浪闻莺
+    LiulangIntroScene,
+    LiulangWhistleScene,
+    LiulangOrioleScene,
+    LiulangKiteScene,
+    LiulangEndScene,
+    // 西湖十景全图 (unlocked when all ten are dreamt)
+    TenScenesScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -159,5 +173,8 @@ if (import.meta.env.DEV) {
   });
   void import('./nanping/state').then(({ npRun }) => {
     (window as unknown as { __npRun: unknown }).__npRun = npRun;
+  });
+  void import('./liulang/state').then(({ llRun }) => {
+    (window as unknown as { __llRun: unknown }).__llRun = llRun;
   });
 }

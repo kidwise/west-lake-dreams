@@ -85,6 +85,12 @@ function tone(freq: number, duration: number, gain: number, type: OscillatorType
   osc.stop(t0 + duration + 0.05);
 }
 
+/** One note of a bird's (or a whistle's) song. */
+export interface WhistleNote {
+  f: number;
+  long: boolean;
+}
+
 export const sfx = {
   shutter(): void {
     noiseBurst(0.05, 3000, 0.5);
@@ -447,6 +453,117 @@ export const sfx = {
     o.connect(lp).connect(g).connect(a.destination);
     o.start(t0);
     o.stop(t0 + 0.32);
+  },
+  /**
+   * A black-naped oriole's liquid, fluting song: each note glides up or down
+   * into place, with a quick warble. Panned left–right (−1..1). Returns its length in seconds.
+   */
+  oriole(notes: WhistleNote[], pan = 0): number {
+    const a = ac();
+    if (!a) return notes.reduce((s, n) => s + (n.long ? 0.42 : 0.16) + 0.08, 0);
+    const out = a.createStereoPanner();
+    out.pan.value = Math.max(-1, Math.min(1, pan));
+    out.connect(a.destination);
+    let t0 = a.currentTime + 0.02;
+    let prev = notes[0]?.f ?? 1500;
+    for (const n of notes) {
+      const dur = n.long ? 0.42 : 0.16;
+      const o = a.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(prev * (n.f > prev ? 0.85 : 1.12), t0);
+      o.frequency.exponentialRampToValueAtTime(n.f, t0 + 0.05);
+      if (n.long) {
+        // a warbling held note that turns over at the end
+        o.frequency.setValueAtTime(n.f, t0 + dur * 0.6);
+        o.frequency.exponentialRampToValueAtTime(n.f * 0.86, t0 + dur);
+      }
+      const lfo = a.createOscillator();
+      lfo.frequency.value = 22;
+      const lg = a.createGain();
+      lg.gain.value = n.f * 0.015;
+      lfo.connect(lg).connect(o.frequency);
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.09, t0 + 0.02);
+      g.gain.setValueAtTime(0.09, t0 + dur * 0.8);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g).connect(out);
+      o.start(t0);
+      lfo.start(t0);
+      o.stop(t0 + dur + 0.05);
+      lfo.stop(t0 + dur + 0.05);
+      prev = n.f;
+      t0 += dur + 0.08;
+    }
+    return t0 - a.currentTime;
+  },
+  /** Start a held willow-whistle note; call the returned function to stop it. */
+  whistleHold(f: number): () => void {
+    const a = ac();
+    if (!a) return () => {};
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(f * 0.9, t0);
+    o.frequency.exponentialRampToValueAtTime(f, t0 + 0.06);
+    const lfo = a.createOscillator();
+    lfo.frequency.value = 6;
+    const lg = a.createGain();
+    lg.gain.value = f * 0.01;
+    lfo.connect(lg).connect(o.frequency);
+    const lp = a.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = f * 3;
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.08, t0 + 0.04);
+    o.connect(lp).connect(g).connect(a.destination);
+    o.start(t0);
+    lfo.start(t0);
+    return () => {
+      const t1 = a.currentTime;
+      g.gain.cancelScheduledValues(t1);
+      g.gain.setValueAtTime(Math.max(0.0001, g.gain.value), t1);
+      g.gain.exponentialRampToValueAtTime(0.0001, t1 + 0.08);
+      o.stop(t1 + 0.1);
+      lfo.stop(t1 + 0.1);
+    };
+  },
+  /** A willow whistle blown once: clear, squeaky, or (GOGO's) a rude raspberry. */
+  willow(f: number, dur: number, kind: 'clear' | 'squeak' | 'raspberry' = 'clear'): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = kind === 'raspberry' ? 'sawtooth' : 'triangle';
+    o.frequency.setValueAtTime(f * 0.9, t0);
+    o.frequency.exponentialRampToValueAtTime(f, t0 + 0.06);
+    if (kind === 'squeak') o.frequency.exponentialRampToValueAtTime(f * 1.3, t0 + dur);
+    if (kind === 'raspberry') o.frequency.exponentialRampToValueAtTime(f * 0.7, t0 + dur);
+    const lp = a.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = kind === 'raspberry' ? 600 : f * 3;
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(kind === 'raspberry' ? 0.16 : 0.09, t0 + 0.03);
+    g.gain.setValueAtTime(kind === 'raspberry' ? 0.16 : 0.09, t0 + dur * 0.8);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    if (kind === 'raspberry') {
+      const am = a.createOscillator();
+      am.frequency.value = 28;
+      const amg = a.createGain();
+      amg.gain.value = 0.08;
+      am.connect(amg).connect(g.gain);
+      am.start(t0);
+      am.stop(t0 + dur + 0.05);
+    }
+    o.connect(lp).connect(g).connect(a.destination);
+    o.start(t0);
+    o.stop(t0 + dur + 0.05);
+  },
+  /** Willow strands swishing. */
+  rustle(): void {
+    noiseBurst(0.18, 3800, 0.06);
   },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));

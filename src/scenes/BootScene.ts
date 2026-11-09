@@ -8,6 +8,7 @@ import { generatePinghuTextures } from '../pinghu/art';
 import { generateShuangfengTextures } from '../shuangfeng/art';
 import { generateLeifengTextures } from '../leifeng/art';
 import { generateNanpingTextures } from '../nanping/art';
+import { generateLiulangTextures } from '../liulang/art';
 
 /** Generates all procedural art, starts the always-on-top UI overlay, then opens the title. */
 export class BootScene extends Phaser.Scene {
@@ -25,6 +26,7 @@ export class BootScene extends Phaser.Scene {
     generateShuangfengTextures(this);
     generateLeifengTextures(this);
     generateNanpingTextures(this);
+    generateLiulangTextures(this);
     this.scene.launch('UI');
     this.scene.start('Title');
   }
