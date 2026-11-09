@@ -17,6 +17,14 @@ export async function play(t) {
   const ev = (k, f) => t.ev(k, f);
   const space = (n, ms) => t.space(n, ms);
   const R = (f) => page.evaluate(f);
+  const held = new Set();
+  const hold = async (keys) => {
+    for (const k of ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']) {
+      const want = keys.includes(k);
+      if (want && !held.has(k)) { await page.keyboard.down(k); held.add(k); }
+      if (!want && held.has(k)) { await page.keyboard.up(k); held.delete(k); }
+    }
+  };
 
   await sleep(1000); await shot('f01-title');
   await t.open('HuagangIntro');

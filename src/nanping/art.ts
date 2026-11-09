@@ -455,7 +455,7 @@ function paintCliff(ctx: Ctx): void {
       const c = (v: number) => Math.round(v * tone);
       ctx.fillStyle = lin(ctx, 0, y0, 0, y0 + h, [[0, `rgb(${c(150)},${c(132)},${c(148)})`], [0.35, `rgb(${c(118)},${c(102)},${c(122)})`], [1, `rgb(${c(70)},${c(58)},${c(80)})`]]);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(30,20,36,0.7)';
+      ctx.strokeStyle = 'rgba(30,20,36,0.22)';
       ctx.lineWidth = 2;
       ctx.stroke();
       // a lit upper edge and a crack or two

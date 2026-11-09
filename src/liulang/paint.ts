@@ -1,7 +1,10 @@
 /** Small canvas-painting helpers shared by the 柳浪闻莺 art (picture-book style, ink outlines). */
 export type Ctx = CanvasRenderingContext2D;
 
+/** Dark ink, for facial features and small details only. */
 export const INK = '#3a2a22';
+/** The soft edge round shapes: a faint darkening of whatever it outlines. */
+export const EDGE = 'rgba(0,0,0,0.16)';
 
 export function lin(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]): CanvasGradient {
   const g = ctx.createLinearGradient(x0, y0, x1, y1);
@@ -23,7 +26,7 @@ export function ell(ctx: Ctx, x: number, y: number, rx: number, ry: number, fill
 }
 
 /** Fill the current path, then ink its outline. */
-export function inked(ctx: Ctx, fill: string | CanvasGradient, width = 1.4, ink = INK): void {
+export function inked(ctx: Ctx, fill: string | CanvasGradient, width = 1.4, ink = EDGE): void {
   ctx.fillStyle = fill;
   ctx.fill();
   ctx.strokeStyle = ink;

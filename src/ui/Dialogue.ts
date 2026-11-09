@@ -59,14 +59,17 @@ export class Dialogue {
     this.scene = scene;
     const top = Dialogue.PANEL_TOP;
     const panel = scene.add.graphics();
-    panel.fillStyle(0x000000, 0.18);
-    panel.fillRoundedRect(44, top + 8, W - 88, 172, 22);
-    panel.fillStyle(0xf8f4ea, 0.96);
-    panel.fillRoundedRect(40, top, W - 80, 172, 22);
-    panel.lineStyle(3, 0x2f3b3a, 0.8);
-    panel.strokeRoundedRect(40, top, W - 80, 172, 22);
-    panel.lineStyle(1.5, 0x2f3b3a, 0.25);
-    panel.strokeRoundedRect(50, top + 10, W - 100, 152, 16);
+    // a soft, floating card: layered shadow, warm translucent white, a hairline edge
+    panel.fillStyle(0x1e2a28, 0.05);
+    panel.fillRoundedRect(36, top + 6, W - 72, 180, 26);
+    panel.fillStyle(0x1e2a28, 0.08);
+    panel.fillRoundedRect(40, top + 4, W - 80, 174, 24);
+    panel.fillStyle(0xfbf8f2, 0.95);
+    panel.fillRoundedRect(40, top, W - 80, 172, 24);
+    panel.fillStyle(0xffffff, 0.22);
+    panel.fillRoundedRect(44, top + 3, W - 88, 28, { tl: 21, tr: 21, bl: 0, br: 0 });
+    panel.lineStyle(1, 0x2f3b3a, 0.12);
+    panel.strokeRoundedRect(40, top, W - 80, 172, 24);
 
     this.nameTag = scene.add.graphics();
     this.nameText = scene.add.text(96, top - 4, '', baseStyle({ fontSize: '24px', color: '#ffffff', fontStyle: 'bold' }));
@@ -76,7 +79,7 @@ export class Dialogue {
       lineSpacing: 10,
       wordWrap: { width: W - 170, useAdvancedWrap: true },
     }));
-    this.arrow = scene.add.text(W - 92, top + 140, '▼', baseStyle({ fontSize: '20px', color: CSS.muted }));
+    this.arrow = scene.add.text(W - 92, top + 140, '▼', baseStyle({ fontSize: '15px', color: '#a8a39a' }));
     scene.tweens.add({ targets: this.arrow, y: '+=6', yoyo: true, repeat: -1, duration: 420 });
 
     this.root = scene.add.container(0, 0, [panel, this.nameTag, this.nameText, this.body, this.arrow]);
@@ -189,8 +192,15 @@ export class Dialogue {
     const color = Phaser.Display.Color.HexStringToColor(SPEAKER_COLOR[sp]).color;
     const top = Dialogue.PANEL_TOP;
     const w = this.nameText.width + 44;
+    // a pill with a soft shadow, and a thin accent stripe of the speaker's colour along the panel's top
+    this.nameTag.fillStyle(0x1e2a28, 0.12);
+    this.nameTag.fillRoundedRect(74, top - 21, w, 42, 21);
     this.nameTag.fillStyle(color, 1);
-    this.nameTag.fillRoundedRect(74, top - 24, w, 42, 14);
+    this.nameTag.fillRoundedRect(74, top - 24, w, 42, 21);
+    this.nameTag.fillStyle(0xffffff, 0.16);
+    this.nameTag.fillRoundedRect(78, top - 22, w - 8, 16, { tl: 18, tr: 18, bl: 4, br: 4 });
+    this.nameTag.fillStyle(color, 0.55);
+    this.nameTag.fillRoundedRect(74 + w + 12, top + 1, 120, 3, 1.5);
   }
 
   private startTyping(fromFraction: number): void {

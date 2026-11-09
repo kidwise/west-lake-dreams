@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { drawPanel } from '../ui/panel';
 import { music } from '../core/music';
 import { W, H, FONT_SERIF, CSS } from '../core/config';
 import { t, getLang, type StrKey } from '../core/i18n';
@@ -114,10 +115,7 @@ export class TenScenesScene extends Phaser.Scene {
     sfx.stamp();
     const layer = this.add.container(0, 0).setScrollFactor(0).setDepth(50).setAlpha(0);
     const bg = this.add.graphics();
-    bg.fillStyle(0xf6f1e7, 0.95);
-    bg.fillRoundedRect(W / 2 - 330, 150, 660, 380, 26);
-    bg.lineStyle(2, 0x2f3b3a, 0.5);
-    bg.strokeRoundedRect(W / 2 - 318, 162, 636, 356, 20);
+    drawPanel(bg, W / 2 - 330, 150, 660, 380, 26, 0xfbf8f2, 0.95);
     layer.add(bg);
     layer.add(makeSeal(this, W / 2, 240, '十景', 80).setAngle(-5));
     layer.add(i18nText(this, W / 2, 330, () => t('ten.end'), { fontFamily: FONT_SERIF, fontSize: '30px', color: CSS.me }).setOrigin(0.5));

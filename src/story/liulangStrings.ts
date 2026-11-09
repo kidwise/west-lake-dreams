@@ -125,7 +125,6 @@ export const liulangZh = {
   'ten.cap.liulang': '妈妈教我做柳笛，黄莺出来了',
   'ten.end': '十个梦，都做完了',
   'ten.endBody': '谢谢你陪我们走完西湖十景。\n梦醒了，西湖还在那里——来杭州，把这些梦，一个一个走一遍吧。',
-  'ten.progress': '已游览 {n} / 10 · 集齐十景，解锁「十景全图」',
   'ten.open': '西湖十景全图',
   'ten.dismiss': '点击任意处收起，继续看画卷',
 } as const;
@@ -250,7 +249,6 @@ export const liulangEn: Record<keyof typeof liulangZh, string> = {
   'ten.cap.liulang': 'Mum taught me a willow whistle, and the orioles came out',
   'ten.end': 'All ten dreams, dreamt',
   'ten.endBody': 'Thank you for walking all ten scenes of West Lake with us.\nThe dream is over, but the lake is still there — come to Hangzhou, and walk these dreams one by one.',
-  'ten.progress': 'Visited {n} / 10 · visit all ten to unlock the whole scroll',
   'ten.open': 'The Ten Scenes Scroll',
   'ten.dismiss': 'Tap anywhere to put this away and keep looking at the scroll',
 };

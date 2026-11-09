@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { drawPanel } from '../ui/panel';
 import { music } from '../core/music';
 import { W, H, FONT_SERIF, CSS } from '../core/config';
 import { t } from '../core/i18n';
@@ -130,10 +131,7 @@ export class QuyuanWakeScene extends Phaser.Scene {
     sfx.chime();
     const layer = this.add.container(0, 0).setDepth(200).setAlpha(0);
     const bg = this.add.graphics();
-    bg.fillStyle(0xf6f1e7, 0.97);
-    bg.fillRoundedRect(110, 50, W - 220, H - 100, 30);
-    bg.lineStyle(2, 0x2f3b3a, 0.5);
-    bg.strokeRoundedRect(124, 64, W - 248, H - 128, 24);
+    drawPanel(bg, 110, 50, W - 220, H - 100, 30, 0xfbf8f2, 0.97);
     layer.add(bg);
 
     layer.add(

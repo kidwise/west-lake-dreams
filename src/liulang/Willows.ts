@@ -46,7 +46,8 @@ interface Push {
   life: number;
 }
 
-const BARE = Phaser.Display.Color.ValueToColor(0x8a7458);
+// early spring: pale olive twigs with a first hint of green, not dead brown
+const BARE = Phaser.Display.Color.ValueToColor(0xa8a47a);
 const BUD = Phaser.Display.Color.ValueToColor(0x9ac05a);
 const LUSH = Phaser.Display.Color.ValueToColor(0x5a9a3a);
 
@@ -128,6 +129,15 @@ export class Willow {
     g.clear();
     const green = this.green;
     const stemCol = green < 0.5 ? mix(BARE, BUD, green * 2) : mix(BUD, LUSH, (green - 0.5) * 2);
+    // a soft haze of crown behind the strands, so the tree reads as one gentle shape (like the willows at 曲院)
+    const sc = this.scale;
+    const sway = this.wind.at(this.x, t) * 0.25;
+    const hz = green < 0.5 ? mix(BARE, BUD, green * 2) : mix(BUD, LUSH, (green - 0.5) * 2);
+    g.fillStyle(hz, 0.16 + green * 0.18);
+    g.fillEllipse(this.x + sway, this.ground - 330 * sc, 300 * sc, 150 * sc);
+    g.fillEllipse(this.x + sway * 1.5, this.ground - 250 * sc, 340 * sc, 170 * sc);
+    g.fillStyle(0xffffff, 0.06 + green * 0.06);
+    g.fillEllipse(this.x + 40 * sc + sway, this.ground - 360 * sc, 160 * sc, 60 * sc);
     const SEG = 10;
     for (const s of this.strands) {
       const pts: Phaser.Math.Vector2[] = [];
@@ -146,7 +156,7 @@ export class Willow {
       }
       const shade = 0.8 + s.shade * 0.4;
       const col = Phaser.Display.Color.ValueToColor(stemCol);
-      g.lineStyle(1.3 * this.scale + 0.4, Phaser.Display.Color.GetColor(Math.min(255, col.red * shade), Math.min(255, col.green * shade), Math.min(255, col.blue * shade)), 0.95);
+      g.lineStyle((0.9 + green * 0.5) * this.scale + 0.3, Phaser.Display.Color.GetColor(Math.min(255, col.red * shade), Math.min(255, col.green * shade), Math.min(255, col.blue * shade)), 0.6 + green * 0.35);
       g.strokePoints(pts, false, false);
       // buds, then leaves, along the strand
       if (green > 0.05) {

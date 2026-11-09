@@ -10,6 +10,8 @@ type Ctx = CanvasRenderingContext2D;
 export const JIGONG_TEX = { w: 400, h: 560, scale: 0.5 };
 
 const INK = '#3a2618';
+/** The soft edge round shapes (faces keep the dark INK for eyes and mouth). */
+const EDGE = 'rgba(0,0,0,0.16)';
 
 function lin(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]): CanvasGradient {
   const g = ctx.createLinearGradient(x0, y0, x1, y1);
@@ -27,7 +29,7 @@ function rad(ctx: Ctx, x: number, y: number, r0: number, r1: number, stops: [num
 function inked(ctx: Ctx, fill: string | CanvasGradient, width = 1.4): void {
   ctx.fillStyle = fill;
   ctx.fill();
-  ctx.strokeStyle = INK;
+  ctx.strokeStyle = EDGE;
   ctx.lineWidth = width;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
@@ -199,14 +201,14 @@ export function paintJigong(ctx: Ctx): void {
     ctx.stroke();
   }
   dot(ctx, 116, 156, 4.2, '#b8924a');
-  ctx.strokeStyle = INK;
+  ctx.strokeStyle = EDGE;
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.arc(116, 156, 4.2, 0, Math.PI * 2);
   ctx.stroke();
   line(ctx, [114, 159, 112, 172, 116, 184], '#b8924a', 3);
   line(ctx, [118, 159, 122, 170, 120, 180], '#a8823e', 3);
-  line(ctx, [114, 159, 112, 172, 116, 184], INK, 0.6, 0.6);
+  line(ctx, [114, 159, 112, 172, 116, 184], EDGE, 0.6, 0.6);
 
   // ---- big wooden prayer beads round the neck ----
   for (let k = 0; k < 17; k++) {
@@ -231,8 +233,8 @@ export function paintJigong(ctx: Ctx): void {
   ctx.closePath();
   inked(ctx, lin(ctx, 54, 0, 92, 0, [[0, '#6a5e4a'], [1, '#958668']]), 1.4);
   // ragged sleeve end
-  line(ctx, [60, 158, 66, 162, 72, 158], INK, 1.1);
-  line(ctx, [72, 158, 76, 162, 80, 156], INK, 1.1);
+  line(ctx, [60, 158, 66, 162, 72, 158], EDGE, 1.1);
+  line(ctx, [72, 158, 76, 162, 80, 156], EDGE, 1.1);
   // hand round the gourd's neck
   ctx.beginPath();
   ctx.ellipse(72, 164, 7, 6, 0.3, 0, Math.PI * 2);
@@ -462,7 +464,7 @@ export function paintJigong(ctx: Ctx): void {
   ctx.ellipse(13, -14, 4, 3.2, 0.3, 0, Math.PI * 2);
   ctx.fillStyle = '#f2c49a';
   ctx.fill();
-  ctx.strokeStyle = INK;
+  ctx.strokeStyle = EDGE;
   ctx.lineWidth = 1;
   ctx.stroke();
   line(ctx, [10, -11, 9, -8, 10, -6], 'rgba(200,180,150,0.9)', 0.7);

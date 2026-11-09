@@ -1,6 +1,8 @@
 /** Orioles Singing in the Willows: willow whistle, orioles, kites; finishing it completes all ten and opens the scroll. */
 export const start = 'LiulangIntro';
 export const visited = ['quyuan', 'sudi', 'pinghu', 'duanqiao', 'huagang', 'leifeng', 'shuangfeng', 'nanping', 'santan'];
+/** finishing this chapter completes all ten, so the scroll should open on the title */
+export const tenShown = false;
 
 export async function play(t) {
   const { page, sleep } = t;

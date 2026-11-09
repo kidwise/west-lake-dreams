@@ -43,7 +43,7 @@ for (const id of chapters) {
   let t;
   let failure = null;
   try {
-    t = await openPage({ url, out, visited: mod.visited ?? [] });
+    t = await openPage({ url, out, visited: mod.visited ?? [], tenShown: mod.tenShown ?? true });
     await mod.play(t);
   } catch (e) {
     failure = e;

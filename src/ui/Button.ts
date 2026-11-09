@@ -70,17 +70,26 @@ export function makeButton(
   let enabled = true;
   let w = minW;
 
+  // a modern pill: soft layered shadow, no heavy outline, a faint top highlight
   const draw = (pressed: boolean) => {
     w = Math.max(minW, label.width + 48);
     zone.setSize(w, h);
     if (zone.input?.hitArea instanceof Phaser.Geom.Rectangle) zone.input.hitArea.setTo(0, 0, w, h);
+    const r = Math.min(h / 2, 28);
     bg.clear();
-    bg.fillStyle(0x000000, 0.12);
-    bg.fillRoundedRect(-w / 2 + 3, -h / 2 + 5, w, h, h / 2.6);
-    bg.fillStyle(pressed ? Phaser.Display.Color.IntegerToColor(fill).darken(12).color : fill, fillAlpha);
-    bg.fillRoundedRect(-w / 2, -h / 2, w, h, h / 2.6);
-    bg.lineStyle(2.5, stroke, 0.85);
-    bg.strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2.6);
+    if (!pressed) {
+      bg.fillStyle(0x1e2a28, 0.06);
+      bg.fillRoundedRect(-w / 2 - 1, -h / 2 + 5, w + 2, h + 2, r);
+      bg.fillStyle(0x1e2a28, 0.1);
+      bg.fillRoundedRect(-w / 2, -h / 2 + 3, w, h, r);
+    }
+    const base = pressed ? Phaser.Display.Color.IntegerToColor(fill).darken(8).color : fill;
+    bg.fillStyle(base, fillAlpha);
+    bg.fillRoundedRect(-w / 2, -h / 2 + (pressed ? 2 : 0), w, h, r);
+    bg.fillStyle(0xffffff, pressed ? 0 : 0.12);
+    bg.fillRoundedRect(-w / 2 + 3, -h / 2 + 2, w - 6, h * 0.45, { tl: r - 2, tr: r - 2, bl: 6, br: 6 });
+    bg.lineStyle(1, stroke, 0.18);
+    bg.strokeRoundedRect(-w / 2, -h / 2 + (pressed ? 2 : 0), w, h, r);
   };
   draw(false);
   onLang(scene, () => draw(down));

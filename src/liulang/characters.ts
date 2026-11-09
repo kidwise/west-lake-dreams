@@ -2,7 +2,7 @@
  * Mum, the black-naped oriole, and the kites — painted at 2× in picture-book
  * style with ink outlines (show the textures at scale 0.5).
  */
-import { type Ctx, INK, lin, rad, ell, inked, curve, blob } from './paint';
+import { type Ctx, INK, EDGE, lin, rad, ell, inked, curve, blob } from './paint';
 
 // ---- Mum --------------------------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ export function paintMom(ctx: Ctx, pose: 'stand' | 'kite'): void {
   // the tote bag on her left shoulder, hanging at her hip
   const bag = () => {
     curve(ctx, [80, 98, 66, 130, 70, 168], '#c8b48a', 3.2);
-    curve(ctx, [80, 98, 66, 130, 70, 168], INK, 0.6, 0.5);
+    curve(ctx, [80, 98, 66, 130, 70, 168], EDGE, 0.6, 0.5);
     ctx.beginPath();
     ctx.moveTo(56, 166);
     ctx.lineTo(86, 164);
@@ -96,7 +96,7 @@ export function paintMom(ctx: Ctx, pose: 'stand' | 'kite'): void {
   inked(ctx, lin(ctx, 0, 94, 0, 166, [[0, '#ffffff'], [1, '#e8e6ee']]), 1.1);
   for (let k = 0; k < 4; k++) {
     ell(ctx, 110, 112 + k * 13, 1.8, 1.8, '#fff4e8');
-    ctx.strokeStyle = INK;
+    ctx.strokeStyle = EDGE;
     ctx.lineWidth = 0.6;
     ctx.beginPath();
     ctx.arc(110, 112 + k * 13, 1.8, 0, Math.PI * 2);
@@ -136,7 +136,7 @@ export function paintMom(ctx: Ctx, pose: 'stand' | 'kite'): void {
     ctx.closePath();
     inked(ctx, lin(ctx, 68, 0, 88, 0, [[0, '#e2a0a0'], [1, '#f2bcb8']]), 1.3);
     ell(ctx, 75, 154, 5.4, 5.8, '#f4d0b8');
-    ctx.strokeStyle = INK;
+    ctx.strokeStyle = EDGE;
     ctx.lineWidth = 1.1;
     ctx.beginPath();
     ctx.ellipse(75, 154, 5.4, 5.8, 0, 0, Math.PI * 2);
@@ -423,7 +423,7 @@ export function paintKite(ctx: Ctx, kind: KiteKind): void {
       ell(ctx, 80, 80, 34, 34, rad(ctx, 72, 70, 4, 38, [[0, '#ffe08a'], [1, '#e0602a']]));
       ctx.beginPath();
       ctx.arc(80, 80, 34, 0, Math.PI * 2);
-      ctx.strokeStyle = INK;
+      ctx.strokeStyle = EDGE;
       ctx.lineWidth = 1.6;
       ctx.stroke();
       for (const s of [-1, 1]) {
@@ -505,7 +505,7 @@ export function paintKite(ctx: Ctx, kind: KiteKind): void {
         ell(ctx, 80 + s * 46, 46, 14, 10, '#d8502e', s * 0.5);
         ctx.beginPath();
         ctx.ellipse(80 + s * 46, 46, 14, 10, s * 0.5, 0, Math.PI * 2);
-        ctx.strokeStyle = INK;
+        ctx.strokeStyle = EDGE;
         ctx.lineWidth = 1.2;
         ctx.stroke();
       }
@@ -557,7 +557,7 @@ export function paintKite(ctx: Ctx, kind: KiteKind): void {
       }
       ctx.beginPath();
       ctx.arc(80, 80, 62, 0, Math.PI * 2);
-      ctx.strokeStyle = INK;
+      ctx.strokeStyle = EDGE;
       ctx.lineWidth = 1.6;
       ctx.stroke();
       curve(ctx, [40, 70, 60, 60, 74, 74], 'rgba(80,130,100,0.8)', 1.6);

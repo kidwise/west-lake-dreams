@@ -6,6 +6,7 @@ import type * as Phaser from 'phaser';
 
 type Ctx = CanvasRenderingContext2D;
 const INK = '#3a2a22';
+const EDGE = 'rgba(0,0,0,0.16)';
 
 function lin(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [number, string][]): CanvasGradient {
   const g = ctx.createLinearGradient(x0, y0, x1, y1);
@@ -16,7 +17,7 @@ function lin(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, stops: [n
 function inked(ctx: Ctx, fill: string | CanvasGradient, w = 2): void {
   ctx.fillStyle = fill;
   ctx.fill();
-  ctx.strokeStyle = INK;
+  ctx.strokeStyle = EDGE;
   ctx.lineWidth = w;
   ctx.lineJoin = 'round';
   ctx.stroke();

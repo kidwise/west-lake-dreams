@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { drawPanel } from '../ui/panel';
 import { W, H, FONT_SERIF, CSS } from '../core/config';
 import { t, toggleLang } from '../core/i18n';
 import { makeButton, type Button } from '../ui/Button';
@@ -25,35 +26,51 @@ export class UIScene extends Phaser.Scene {
   }
 
   create(): void {
+    // compact, icon-style controls in the corner
     makeButton(this, LANG_BTN.x, LANG_BTN.y, () => t('lang.toggle'), {
       width: LANG_BTN.w,
       height: LANG_BTN.h,
-      fontSize: 22,
-      fillAlpha: 0.85,
+      fontSize: 18,
+      fillAlpha: 0.82,
       depth: 200,
       onClick: () => {
         sfx.blip();
         toggleLang();
       },
     });
-    const musicBtn = makeButton(this, MUSIC_BTN.x, MUSIC_BTN.y, () => t(music.isMuted() ? 'music.off' : 'music.on'), {
+    const musicBtn = makeButton(this, MUSIC_BTN.x, MUSIC_BTN.y, () => '', {
       width: MUSIC_BTN.w,
       height: MUSIC_BTN.h,
-      fontSize: 20,
-      fillAlpha: 0.85,
+      fillAlpha: 0.82,
       depth: 200,
       onClick: () => {
         music.toggleMute();
-        musicBtn.refresh();
-        musicBtn.container.setAlpha(music.isMuted() ? 0.7 : 1);
+        drawNote();
       },
     });
-    musicBtn.container.setAlpha(music.isMuted() ? 0.7 : 1);
+    // a music note; struck through when muted
+    const note = this.add.graphics();
+    const drawNote = () => {
+      const muted = music.isMuted();
+      note.clear();
+      note.fillStyle(0x2f3b3a, muted ? 0.45 : 1);
+      note.fillEllipse(-6, 8, 10, 8);
+      note.fillEllipse(8, 5, 10, 8);
+      note.fillRect(-2, -10, 2.6, 18);
+      note.fillRect(12, -13, 2.6, 18);
+      note.fillPoints([new Phaser.Math.Vector2(-2, -10), new Phaser.Math.Vector2(14.6, -13), new Phaser.Math.Vector2(14.6, -8), new Phaser.Math.Vector2(-2, -5)], true);
+      if (muted) {
+        note.lineStyle(2.6, 0xc0392b, 1);
+        note.lineBetween(-12, 12, 14, -14);
+      }
+    };
+    drawNote();
+    musicBtn.container.add(note);
     // a little house icon instead of a word
     this.home = makeButton(this, HOME_BTN.x, HOME_BTN.y, () => '', {
       width: HOME_BTN.w,
       height: HOME_BTN.h,
-      fillAlpha: 0.85,
+      fillAlpha: 0.82,
       onClick: () => this.ask(),
     });
     const icon = this.add.graphics();
@@ -93,12 +110,7 @@ export class UIScene extends Phaser.Scene {
     const shade = this.add.rectangle(0, 0, W, H, 0x101418, 0.55).setOrigin(0).setInteractive();
     m.add(shade);
     const g = this.add.graphics();
-    g.fillStyle(0x000000, 0.2);
-    g.fillRoundedRect(W / 2 - 300 + 6, H / 2 - 150 + 10, 600, 300, 26);
-    g.fillStyle(0xf6f1e7, 0.98);
-    g.fillRoundedRect(W / 2 - 300, H / 2 - 150, 600, 300, 26);
-    g.lineStyle(2, 0x2f3b3a, 0.5);
-    g.strokeRoundedRect(W / 2 - 288, H / 2 - 138, 576, 276, 20);
+    drawPanel(g, W / 2 - 300, H / 2 - 150, 600, 300, 26, 0xfbf8f2, 0.98);
     m.add(g);
     m.add(i18nText(this, W / 2, H / 2 - 74, () => t('home.ask'), { fontFamily: FONT_SERIF, fontSize: '32px', color: CSS.ink }).setOrigin(0.5));
     m.add(

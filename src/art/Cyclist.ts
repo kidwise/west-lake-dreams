@@ -35,7 +35,17 @@ function joint(a: Pt, b: Pt, l1: number, l2: number, bendSign: number): Pt {
   return P(a.x + Math.cos(ang) * l1, a.y + Math.sin(ang) * l1);
 }
 
-const INK = 0x3a2a22;
+/**
+ * How the kids are outlined. The game uses 'soft': a faint, darker edge of each
+ * part's own colour, in the clean style of 曲院风荷 and 花港观鱼.
+ */
+export type OutlineMode = 'ink' | 'soft' | 'none';
+let OUTLINE: OutlineMode = 'soft';
+export function setOutlineMode(m: OutlineMode): void {
+  OUTLINE = m;
+}
+const inkC = () => (OUTLINE === 'ink' ? 0x3a2a22 : 0x000000);
+const inkA = (a: number) => (OUTLINE === 'ink' ? a : OUTLINE === 'soft' ? a * 0.16 : 0);
 
 /** Darker shade of a colour (for the shadowed side of clothes). */
 export function shade(c: number, amt = 16): number {
@@ -44,10 +54,10 @@ export function shade(c: number, amt = 16): number {
 
 function limb(g: G, a: Pt, j: Pt, b: Pt, width: number, color: number): void {
   // ink outline first, then the colour on top, like a picture book
-  g.lineStyle(width + 2.4, INK, 0.85);
+  g.lineStyle(width + 2.4, inkC(), inkA(0.85));
   g.lineBetween(a.x, a.y, j.x, j.y);
   g.lineBetween(j.x, j.y, b.x, b.y);
-  g.fillStyle(INK, 0.85);
+  g.fillStyle(inkC(), inkA(0.85));
   g.fillCircle(j.x, j.y, width / 2 + 1.2);
   g.fillCircle(b.x, b.y, width / 2 + 1.2);
   g.lineStyle(width, color, 1);
@@ -67,7 +77,7 @@ export function drawHead(g: G, cx: number, cy: number, look: Look, facing = 1): 
   const hairHi = 0x5a4a44;
   if (look.hair === 'ponytail') {
     // a ponytail with a pink band, swinging behind
-    g.fillStyle(INK, 0.85);
+    g.fillStyle(inkC(), inkA(0.85));
     g.fillEllipse(cx - 14 * f, cy + 7, 12.4, 24.4);
     g.fillStyle(HAIR, 1);
     g.fillEllipse(cx - 14 * f, cy + 7, 10, 22);
@@ -77,7 +87,7 @@ export function drawHead(g: G, cx: number, cy: number, look: Look, facing = 1): 
     g.fillRoundedRect(cx - 14 * f - 4, cy - 4, 8, 4, 2);
   }
   // face
-  g.fillStyle(INK, 0.85);
+  g.fillStyle(inkC(), inkA(0.85));
   g.fillCircle(cx, cy, 12.3);
   g.fillStyle(SKIN, 1);
   g.fillCircle(cx, cy, 11);
@@ -88,12 +98,12 @@ export function drawHead(g: G, cx: number, cy: number, look: Look, facing = 1): 
   g.fillStyle(SKIN, 1);
   g.fillCircle(cx + 1 * f, cy - 1.5, 10);
   // ear
-  g.fillStyle(INK, 0.85);
+  g.fillStyle(inkC(), inkA(0.85));
   g.fillCircle(cx - 3 * f, cy + 1, 3.6);
   g.fillStyle(0xf4c0a0, 1);
   g.fillCircle(cx - 3 * f, cy + 1, 2.6);
   // hair: a full cap of hair over the top and back, a fringe falling forward
-  g.fillStyle(INK, 0.85);
+  g.fillStyle(inkC(), inkA(0.85));
   g.slice(cx, cy, 12.6, Math.PI * 0.9, Math.PI * 2.08, false);
   g.fillPath();
   g.fillStyle(HAIR, 1);
@@ -113,7 +123,7 @@ export function drawHead(g: G, cx: number, cy: number, look: Look, facing = 1): 
   g.strokePath();
   if (look.hair === 'cap') {
     const cap = look.cap ?? 0xf4d03f;
-    g.fillStyle(INK, 0.85);
+    g.fillStyle(inkC(), inkA(0.85));
     g.slice(cx, cy - 1, 13.6, Math.PI, Math.PI * 2, false);
     g.fillPath();
     g.fillRoundedRect(f > 0 ? cx + 1 : cx - 20, cy - 4.2, 19, 5.6, 2.4);
@@ -255,7 +265,7 @@ export class Cyclist {
 
     // near leg
     limb(g, HIP, joint(HIP, p1, 29, 29, -1), p1, 10, L.pants);
-    g.fillStyle(INK, 1);
+    g.fillStyle(inkC(), inkA(1));
     g.fillRoundedRect(p1.x - 7, p1.y - 4, 15, 7, 3);
     g.fillStyle(0x4a4a52, 1);
     g.fillRoundedRect(p1.x - 6, p1.y - 3, 13, 5, 2);
@@ -274,9 +284,9 @@ export class Cyclist {
     }
 
     // torso: ink outline, the shirt, a shaded back and a collar
-    g.lineStyle(19.6, INK, 0.85);
+    g.lineStyle(19.6, inkC(), inkA(0.85));
     g.lineBetween(HIP.x, HIP.y, SH.x, SH.y);
-    g.fillStyle(INK, 0.85);
+    g.fillStyle(inkC(), inkA(0.85));
     g.fillCircle(SH.x, SH.y, 9.8);
     g.fillCircle(HIP.x, HIP.y, 9.8);
     g.lineStyle(17, L.shirt, 1);
@@ -326,14 +336,14 @@ export function drawPerson(g: G, look: Look, opts: { facing?: 1 | -1; armUp?: bo
   g.fillEllipse(0, 2, 46, 8);
   // legs: trousers with a crease, then shoes with white soles
   for (const [x0, x1] of [[-5, -7], [5, 7]] as const) {
-    g.lineStyle(12.4, INK, 0.85);
+    g.lineStyle(12.4, inkC(), inkA(0.85));
     g.lineBetween(x0, -58, x1, -5);
     g.lineStyle(10, x0 < 0 ? shade(look.pants, 10) : look.pants, 1);
     g.lineBetween(x0, -58, x1, -5);
   }
   for (const x of [-14, 1]) {
     const sx = x + (f > 0 ? 2 : -2);
-    g.fillStyle(INK, 1);
+    g.fillStyle(inkC(), inkA(1));
     g.fillRoundedRect(sx - 1, -8, 16, 9, 3);
     g.fillStyle(0x4a4a52, 1);
     g.fillRoundedRect(sx, -7, 14, 6, 2.5);
@@ -343,7 +353,7 @@ export function drawPerson(g: G, look: Look, opts: { facing?: 1 | -1; armUp?: bo
   // backpack, with a flap and a strap
   if (opts.backpack) {
     const bx = -f * 20 - 8;
-    g.fillStyle(INK, 0.85);
+    g.fillStyle(inkC(), inkA(0.85));
     g.fillRoundedRect(bx - 1.2, -99.2, 18.4, 34.4, 7);
     g.fillStyle(0x2e6f8e, 1);
     g.fillRoundedRect(bx, -98, 16, 32, 6);
@@ -353,7 +363,7 @@ export function drawPerson(g: G, look: Look, opts: { facing?: 1 | -1; armUp?: bo
     g.fillRect(bx + 6, -88, 4, 3);
   }
   // torso: shirt with a shaded side, a collar and a hem
-  g.fillStyle(INK, 0.85);
+  g.fillStyle(inkC(), inkA(0.85));
   g.fillRoundedRect(-15.2, -103.2, 30.4, 50.4, 10);
   g.fillStyle(look.shirt, 1);
   g.fillRoundedRect(-14, -102, 28, 48, 9);
@@ -365,7 +375,7 @@ export function drawPerson(g: G, look: Look, opts: { facing?: 1 | -1; armUp?: bo
   g.fillStyle(0xffffff, look.shirt === 0xf5f0e1 ? 0 : 0.85);
   g.fillTriangle(-7, -102, 0, -94, 0, -102);
   g.fillTriangle(7, -102, 0, -94, 0, -102);
-  g.lineStyle(1, INK, 0.5);
+  g.lineStyle(1, inkC(), inkA(0.5));
   g.lineBetween(-7, -102, 0, -94);
   g.lineBetween(7, -102, 0, -94);
   if (opts.backpack) {
@@ -373,18 +383,18 @@ export function drawPerson(g: G, look: Look, opts: { facing?: 1 | -1; armUp?: bo
     g.lineBetween(-f * 6, -100, f * 3, -66);
   }
   // arms
-  g.lineStyle(9.4, INK, 0.85);
+  g.lineStyle(9.4, inkC(), inkA(0.85));
   g.lineBetween(-12, -96, -16, -64);
   g.lineStyle(7, shade(look.shirt, 8), 1);
   g.lineBetween(-12, -96, -16, -64);
   const hx = opts.armUp ? (f > 0 ? 24 : -24) : 16;
   const hy = opts.armUp ? -126 : -62;
-  g.lineStyle(9.4, INK, 0.85);
+  g.lineStyle(9.4, inkC(), inkA(0.85));
   g.lineBetween(12, -96, hx, opts.armUp ? -124 : -64);
   g.lineStyle(7, look.shirt, 1);
   g.lineBetween(12, -96, hx, opts.armUp ? -124 : -64);
   for (const [x, y] of [[-16, -62], [hx, hy]]) {
-    g.fillStyle(INK, 0.85);
+    g.fillStyle(inkC(), inkA(0.85));
     g.fillCircle(x, y, 5.4);
     g.fillStyle(SKIN, 1);
     g.fillCircle(x, y, 4.4);

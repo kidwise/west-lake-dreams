@@ -29,8 +29,6 @@ export const zh = {
   'game.title': '西湖逍遥游',
   'game.subtitle': '十个梦，游遍西湖十景',
   'lang.toggle': 'EN',
-  'music.on': '♫ 音乐',
-  'music.off': '♫ 静音',
   'common.tapToContinue': '点击或按空格继续',
   'home.ask': '回到主页吗？',
   'home.note': '这个梦会从头开始。已经游览过的景点不受影响。',
@@ -43,10 +41,10 @@ export const zh = {
   'name.koko': 'KOKO',
 
   // ---- title screen ----
-  'title.start': '开始做梦',
-  'title.views': '西湖十景',
-  'title.play': '▶ 进入',
-  'title.visited': '已游览',
+  'title.progress': '已游览 {n} / 10',
+  'title.allDone': '十景都游遍了！',
+  'title.rank': '十景之{n}',
+  'title.next': '从这里开始',
 
   // ---- the ten scenes of West Lake ----
   'view.sudi': '苏堤春晓',
@@ -78,10 +76,12 @@ export const en: Record<StrKey, string> = {
   ...nanpingEn,
   ...liulangEn,
   'game.title': 'West Lake Dreams',
+  'title.progress': '{n} of 10 visited',
+  'title.allDone': 'All ten scenes visited!',
+  'title.rank': 'Scene {m}',
+  'title.next': 'Start here',
   'game.subtitle': 'Ten dreams of the Ten Scenes of West Lake',
   'lang.toggle': '中文',
-  'music.on': '♫ Music',
-  'music.off': '♫ Muted',
   'common.tapToContinue': 'Click or press Space to continue',
   'home.ask': 'Back to the main menu?',
   'home.note': 'This dream will start over next time. Scenes you have already visited stay visited.',
@@ -92,10 +92,6 @@ export const en: Record<StrKey, string> = {
   'name.gogo': 'GOGO',
   'name.koko': 'KOKO',
 
-  'title.start': 'Start dreaming',
-  'title.views': 'Ten Scenes of West Lake',
-  'title.play': '▶ Play',
-  'title.visited': 'Visited',
 
   'view.sudi': 'Spring Dawn at Su Causeway',
   'view.quyuan': 'Lotus in the Breeze at Quyuan',

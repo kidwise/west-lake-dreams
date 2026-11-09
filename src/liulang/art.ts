@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { type Ctx, lin, rad, ell, blob, curve, seeded, INK, inked } from './paint';
+import { type Ctx, lin, rad, ell, blob, curve, seeded, EDGE, inked } from './paint';
 import { paintMom, MOM_TEX, paintOriole, ORIOLE_TEX, paintKite, KITE_TEX, type KiteKind } from './characters';
 
 const W = 1280;
@@ -473,7 +473,7 @@ function paintTrunk(ctx: Ctx): void {
     const ex = cx + bx;
     const ey = by + bY + 10;
     curve(ctx, [top.x, top.y, (top.x + ex) / 2, top.y - 30, ex, ey], '#5a4636', 5);
-    curve(ctx, [top.x, top.y, (top.x + ex) / 2, top.y - 30, ex, ey], INK, 0.8, 0.5);
+    curve(ctx, [top.x, top.y, (top.x + ex) / 2, top.y - 30, ex, ey], EDGE, 0.8, 0.5);
   }
 }
 

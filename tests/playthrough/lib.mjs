@@ -34,8 +34,9 @@ export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
  * @param {string} o.out        folder for screenshots
  * @param {string[]} [o.visited] pretend these chapters were already dreamt (for order-dependent lines)
  * @param {'zh'|'en'} [o.lang]
+ * @param {boolean} [o.tenShown] whether the all-ten scroll has already been shown (false lets it open on the title)
  */
-export async function openPage({ url, out, visited = [], lang = 'zh' }) {
+export async function openPage({ url, out, visited = [], lang = 'zh', tenShown = true }) {
   mkdirSync(out, { recursive: true });
   const browser = await chromium.launch({
     executablePath: findChrome(),
@@ -50,15 +51,15 @@ export async function openPage({ url, out, visited = [], lang = 'zh' }) {
   });
   // start from a known save: only the chapters we were told about count as visited
   await page.addInitScript(
-    ({ visited, lang }) => {
+    ({ visited, lang, tenShown }) => {
       if (sessionStorage.getItem('pt-seeded')) return;
       sessionStorage.setItem('pt-seeded', '1');
       localStorage.clear();
       localStorage.setItem('wld.progress', JSON.stringify({ visited }));
-      localStorage.setItem('wld.tenShown', 'true');
+      localStorage.setItem('wld.tenShown', JSON.stringify(tenShown));
       localStorage.setItem('wld.lang', JSON.stringify(lang));
     },
-    { visited, lang },
+    { visited, lang, tenShown },
   );
   await page.goto(url);
   await page.waitForFunction(() => window.__game?.scene.isActive('Title'), null, { timeout: 30000 });
