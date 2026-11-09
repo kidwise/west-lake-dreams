@@ -355,9 +355,10 @@ export class DuanqiaoEndScene extends Phaser.Scene {
 
   private invitation(): void {
     sfx.chime();
-    const layer = this.add.container(0, 0).setDepth(300).setAlpha(0);
+    // sits below the top-right controls; content shifts down with the layer
+    const layer = this.add.container(0, 22).setDepth(300).setAlpha(0);
     const bg = this.add.graphics();
-    drawPanel(bg, 110, 40, W - 220, H - 80, 30, 0xfbf8f2, 0.98);
+    drawPanel(bg, 110, 54, W - 220, H - 108, 30, 0xfbf8f2, 0.98);
     layer.add(bg);
     layer.add(i18nText(this, W / 2, 100, () => t('dq.inviteTitle'), { fontFamily: FONT_SERIF, fontSize: '34px', color: CSS.me }).setOrigin(0.5));
     layer.add(

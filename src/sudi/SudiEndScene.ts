@@ -298,9 +298,10 @@ export class SudiEndScene extends Phaser.Scene {
 
   private invitation(): void {
     sfx.chime();
-    const layer = this.add.container(0, 0).setDepth(300).setAlpha(0);
+    // sits below the top-right controls; content shifts down with the layer
+    const layer = this.add.container(0, 26).setDepth(300).setAlpha(0);
     const bg = this.add.graphics();
-    drawPanel(bg, 110, 50, W - 220, H - 100, 30, 0xfbf8f2, 0.98);
+    drawPanel(bg, 110, 50, W - 220, H - 106, 30, 0xfbf8f2, 0.98);
     layer.add(bg);
     layer.add(i18nText(this, W / 2, 112, () => t('sudi.inviteTitle'), { fontFamily: FONT_SERIF, fontSize: '38px', color: CSS.me }).setOrigin(0.5));
     layer.add(
@@ -322,7 +323,7 @@ export class SudiEndScene extends Phaser.Scene {
       layer.add(dot);
       layer.add(i18nText(this, x + 20, y, () => `${t(v.name)}${done ? '  ✓' : ''}`, { fontSize: '20px', color: done ? CSS.ink : '#8d887f' }).setOrigin(0, 0.5));
     });
-    const again = makeButton(this, W / 2 - 160, H - 110, () => t('wake.again'), {
+    const again = makeButton(this, W / 2 - 160, H - 100, () => t('wake.again'), {
       width: 260,
       fill: 0xc0392b,
       stroke: 0x7b241c,
@@ -330,7 +331,7 @@ export class SudiEndScene extends Phaser.Scene {
       depth: 310,
       onClick: () => this.leave(true),
     });
-    const toTitle = makeButton(this, W / 2 + 160, H - 110, () => t('wake.toTitle'), { width: 260, depth: 310, onClick: () => this.leave(false) });
+    const toTitle = makeButton(this, W / 2 + 160, H - 100, () => t('wake.toTitle'), { width: 260, depth: 310, onClick: () => this.leave(false) });
     again.container.setAlpha(0);
     toTitle.container.setAlpha(0);
     this.tweens.add({ targets: [layer, again.container, toTitle.container], alpha: 1, duration: 800 });
