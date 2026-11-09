@@ -38,6 +38,11 @@ import { ShuangfengTowerScene } from './shuangfeng/ShuangfengTowerScene';
 import { ShuangfengHerdScene } from './shuangfeng/ShuangfengHerdScene';
 import { ShuangfengDigScene } from './shuangfeng/ShuangfengDigScene';
 import { ShuangfengEndScene } from './shuangfeng/ShuangfengEndScene';
+import { LeifengIntroScene } from './leifeng/LeifengIntroScene';
+import { LeifengStairsScene } from './leifeng/LeifengStairsScene';
+import { LeifengRuinsScene } from './leifeng/LeifengRuinsScene';
+import { LeifengTopScene } from './leifeng/LeifengTopScene';
+import { LeifengEndScene } from './leifeng/LeifengEndScene';
 
 unlockAudio();
 
@@ -105,6 +110,12 @@ const game = new Phaser.Game({
     ShuangfengHerdScene,
     ShuangfengDigScene,
     ShuangfengEndScene,
+    // Dream 8 · 雷峰夕照
+    LeifengIntroScene,
+    LeifengStairsScene,
+    LeifengRuinsScene,
+    LeifengTopScene,
+    LeifengEndScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -131,5 +142,8 @@ if (import.meta.env.DEV) {
   });
   void import('./shuangfeng/state').then(({ sfRun }) => {
     (window as unknown as { __sfRun: unknown }).__sfRun = sfRun;
+  });
+  void import('./leifeng/state').then(({ lfRun }) => {
+    (window as unknown as { __lfRun: unknown }).__lfRun = lfRun;
   });
 }

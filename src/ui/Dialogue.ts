@@ -6,7 +6,7 @@ import { makeButton, type Button } from './Button';
 import { overGlobalUI } from './overlay';
 import { sfx } from '../core/sfx';
 
-export type Speaker = 'me' | 'gogo' | 'koko' | 'elder' | 'yu' | 'mom' | 'lady' | 'rabbit' | 'cow' | 'porter' | null;
+export type Speaker = 'me' | 'gogo' | 'koko' | 'elder' | 'yu' | 'mom' | 'lady' | 'rabbit' | 'cow' | 'porter' | 'white' | 'fahai' | null;
 
 const SPEAKER_COLOR: Record<Exclude<Speaker, null>, string> = {
   me: CSS.me,
@@ -19,6 +19,8 @@ const SPEAKER_COLOR: Record<Exclude<Speaker, null>, string> = {
   rabbit: '#a07cc5',
   cow: '#b08968',
   porter: '#6a8aa0',
+  white: '#6fa88a',
+  fahai: '#b8402a',
 };
 
 export interface Choice<V extends string> {

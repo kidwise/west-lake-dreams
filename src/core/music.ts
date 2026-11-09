@@ -41,7 +41,12 @@ export type TrackName =
   | 'sfTower'
   | 'sfHerd'
   | 'sfDig'
-  | 'sfFinale';
+  | 'sfFinale'
+  | 'lfDusk'
+  | 'lfStairs'
+  | 'lfRuins'
+  | 'lfSunset'
+  | 'lfHome';
 
 interface Track {
   bpm: number;
@@ -127,6 +132,16 @@ const TRACKS: Record<TrackName, Track> = {
   sfDig: { bpm: 76, root: 63, bars: [0, -3, 5, -5], density: 0.36, slide: 0, echo: 0.46, voice: 'bell', arp: true, seed: 191 },
   // the cloud sea and the two pagodas: broad and bright (F 宫)
   sfFinale: { bpm: 84, root: 65, bars: [0, 5, -3, 2, 0, -3, 5, 0], density: 0.5, slide: 0.25, echo: 0.42, voice: 'dizi', arp: true, seed: 193 },
+  // 雷峰夕照 — dusk by the lake: warm pipa over guzheng broken chords (E♭ 宫, 羽 colour)
+  lfDusk: { bpm: 80, root: 63, bars: [-3, 0, 5, -3, -5, 0, 2, -3], density: 0.46, slide: 0.28, echo: 0.42, voice: 'pipa', arp: true, home: 4, seed: 197 },
+  // up the steps after 法海: quick and comic, woodblock (木鱼) on every beat (G 宫)
+  lfStairs: { bpm: 132, root: 67, bars: [0, -5, -3, -5, 0, 5, -3, 0], density: 0.66, slide: 0.12, echo: 0.18, voice: 'dizi', arp: true, woodblock: true, shaker: true, seed: 199 },
+  // under the pagoda: low, mysterious guzheng (D 宫, 羽 mode)
+  lfRuins: { bpm: 96, root: 62, bars: [-3, -5, -3, 0, -3, -5, 2, -3], density: 0.5, slide: 0.3, echo: 0.4, voice: 'zheng', arp: true, woodblock: true, home: 4, seed: 211 },
+  // the top at sunset: broad, glowing flute (F 宫)
+  lfSunset: { bpm: 72, root: 65, bars: [0, 5, -3, 2, 0, -3, 5, 0], density: 0.44, slide: 0.3, echo: 0.5, voice: 'dizi', arp: true, seed: 223 },
+  // dinner at home: cosy bells (C 宫)
+  lfHome: { bpm: 84, root: 60, bars: [0, -3, 5, -5, 0, 2, -3, 0], density: 0.4, slide: 0.1, echo: 0.36, voice: 'bell', arp: true, seed: 227 },
   dqXiao: { bpm: 56, root: 62, bars: [-3, 0, -5, -3], density: 0.26, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 139 },
 };
 

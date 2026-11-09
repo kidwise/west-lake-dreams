@@ -311,6 +311,60 @@ export const sfx = {
   brush(): void {
     noiseBurst(0.09, 2400, 0.08);
   },
+  /** A wooden fish (木鱼): a hollow, dry tock. */
+  tock(): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(620, t0);
+    o.frequency.exponentialRampToValueAtTime(380, t0 + 0.06);
+    const bp = a.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 600;
+    bp.Q.value = 4;
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.35, t0 + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.14);
+    o.connect(bp).connect(g).connect(a.destination);
+    o.start(t0);
+    o.stop(t0 + 0.16);
+    noiseBurst(0.02, 2500, 0.12);
+  },
+  /** A puff of smoke (a transformation). */
+  poof(): void {
+    noiseBurst(0.45, 700, 0.35);
+    tone(220, 0.25, 0.06, 'triangle');
+    tone(330, 0.3, 0.04, 'triangle', 0.08);
+  },
+  /** Little crab legs clattering. */
+  scuttle(): void {
+    for (let i = 0; i < 6; i++) setTimeout(() => noiseBurst(0.02, 4200, 0.08), i * 45);
+  },
+  /** A springy jump. */
+  boing(): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(260, t0);
+    o.frequency.exponentialRampToValueAtTime(720, t0 + 0.16);
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.08, t0 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
+    o.connect(g).connect(a.destination);
+    o.start(t0);
+    o.stop(t0 + 0.25);
+  },
+  /** A lift arriving: ding. */
+  ding(): void {
+    tone(1318, 1.2, 0.09, 'sine');
+    tone(2637, 0.6, 0.02, 'sine');
+  },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));
   },

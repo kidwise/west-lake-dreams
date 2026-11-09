@@ -9,6 +9,7 @@ import { huagangZh, huagangEn } from './huagangStrings';
 import { duanqiaoZh, duanqiaoEn } from './duanqiaoStrings';
 import { pinghuZh, pinghuEn } from './pinghuStrings';
 import { shuangfengZh, shuangfengEn } from './shuangfengStrings';
+import { leifengZh, leifengEn } from './leifengStrings';
 
 export const zh = {
   ...santanZh,
@@ -17,6 +18,7 @@ export const zh = {
   ...duanqiaoZh,
   ...pinghuZh,
   ...shuangfengZh,
+  ...leifengZh,
   // ---- general ----
   'game.title': '西湖逍遥游',
   'game.subtitle': '一场骑着单车的梦',
@@ -136,6 +138,7 @@ export const en: Record<StrKey, string> = {
   ...duanqiaoEn,
   ...pinghuEn,
   ...shuangfengEn,
+  ...leifengEn,
   'game.title': 'West Lake Wandering',
   'game.subtitle': 'A dream, on a bicycle',
   'lang.toggle': '中文',
