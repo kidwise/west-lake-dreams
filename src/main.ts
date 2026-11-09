@@ -27,6 +27,11 @@ import { DuanqiaoCrowdScene } from './duanqiao/DuanqiaoCrowdScene';
 import { DuanqiaoSnowmanScene } from './duanqiao/DuanqiaoSnowmanScene';
 import { DuanqiaoHillScene } from './duanqiao/DuanqiaoHillScene';
 import { DuanqiaoEndScene } from './duanqiao/DuanqiaoEndScene';
+import { PinghuIntroScene } from './pinghu/PinghuIntroScene';
+import { PinghuBridgeScene } from './pinghu/PinghuBridgeScene';
+import { PinghuCalmScene } from './pinghu/PinghuCalmScene';
+import { PinghuMoonScene } from './pinghu/PinghuMoonScene';
+import { PinghuEndScene } from './pinghu/PinghuEndScene';
 
 unlockAudio();
 
@@ -81,6 +86,12 @@ const game = new Phaser.Game({
     DuanqiaoSnowmanScene,
     DuanqiaoHillScene,
     DuanqiaoEndScene,
+    // Dream 6 · 平湖秋月
+    PinghuIntroScene,
+    PinghuBridgeScene,
+    PinghuCalmScene,
+    PinghuMoonScene,
+    PinghuEndScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -101,5 +112,8 @@ if (import.meta.env.DEV) {
   });
   void import('./duanqiao/state').then(({ dqRun }) => {
     (window as unknown as { __dqRun: unknown }).__dqRun = dqRun;
+  });
+  void import('./pinghu/state').then(({ phRun }) => {
+    (window as unknown as { __phRun: unknown }).__phRun = phRun;
   });
 }

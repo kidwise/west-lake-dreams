@@ -31,7 +31,11 @@ export type TrackName =
   | 'dqFight'
   | 'dqLady'
   | 'dqHill'
-  | 'dqXiao';
+  | 'dqXiao'
+  | 'phNight'
+  | 'phCalm'
+  | 'phMoon'
+  | 'phBoat';
 
 interface Track {
   bpm: number;
@@ -97,6 +101,14 @@ const TRACKS: Record<TrackName, Track> = {
   // the sun comes out over the bridge (D 宫)
   dqHill: { bpm: 92, root: 62, bars: [0, -3, 5, 0, -5, -3, 2, -5], density: 0.5, slide: 0.2, echo: 0.36, voice: 'zheng', arp: true, seed: 137 },
   // 湖心亭看雪 — almost silence: a low 箫 and long echoes (D 宫, 羽 colour)
+  // 平湖秋月 — a moonless Mid-Autumn night on the zig-zag bridges: quiet guzheng, 羽 mode (C 宫)
+  phNight: { bpm: 70, root: 60, bars: [-3, -5, 0, -3, 5, -3, -5, -3], density: 0.36, slide: 0.3, echo: 0.5, voice: 'zheng', arp: true, home: 4, seed: 149 },
+  // smoothing the water: sparse bells and a lot of space (C 宫)
+  phCalm: { bpm: 60, root: 60, bars: [0, -3, 5, -5], density: 0.24, slide: 0, echo: 0.6, voice: 'bell', home: 9, seed: 151 },
+  // the moon is back: bright, lilting, a little 广东音乐-like (D 宫)
+  phMoon: { bpm: 96, root: 62, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.6, slide: 0.25, echo: 0.36, voice: 'pipa', arp: true, shaker: true, seed: 157 },
+  // gliding out to the moon by boat (E♭ 宫)
+  phBoat: { bpm: 58, root: 63, bars: [0, -3, 5, 0], density: 0.34, slide: 0.2, echo: 0.6, voice: 'dizi', octave: -1, arp: true, seed: 163 },
   dqXiao: { bpm: 56, root: 62, bars: [-3, 0, -5, -3], density: 0.26, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 139 },
 };
 
@@ -516,6 +528,14 @@ class Music {
   noteFreq(degree: number): number {
     const root = TRACKS[this.current ?? 'lake'].root;
     return mtof(root + 12 + degreeToSemis(degree));
+  }
+
+  /** Fade the music out completely (for scenes that make their own music). */
+  stop(): void {
+    this.wanted = null;
+    this.player?.stop(0.8);
+    this.player = null;
+    this.current = null;
   }
 
   isMuted(): boolean {

@@ -225,6 +225,21 @@ export const sfx = {
   shimmer(): void {
     [1175, 1397, 1568, 1760, 2093, 2349].forEach((f, i) => tone(f, 1.2, 0.035, 'sine', i * 0.07));
   },
+  /** A stone chime (磬): a clear, ringing note with a stony attack. */
+  stone(freq: number): void {
+    tone(freq, 1.6, 0.11, 'sine');
+    tone(freq * 2.76, 0.5, 0.025, 'sine');
+    tone(freq * 5.4, 0.18, 0.012, 'sine');
+    noiseBurst(0.03, freq * 3, 0.08);
+  },
+  /** A soft woodblock tick for keeping time. */
+  tick(accent = false): void {
+    tone(accent ? 1000 : 820, 0.06, accent ? 0.05 : 0.03, 'sine');
+  },
+  /** A low plucked bass note. */
+  bassPluck(freq: number): void {
+    tone(freq, 0.9, 0.08, 'triangle');
+  },
   /** Summer cicadas: a buzzing, pulsing drone. */
   cicada(): void {
     for (let i = 0; i < 8; i++) setTimeout(() => noiseBurst(0.18, 5200, 0.06), i * 140);

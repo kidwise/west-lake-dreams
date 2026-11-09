@@ -14,7 +14,7 @@ export interface View {
 export const TEN_VIEWS: View[] = [
   { id: 'quyuan', name: 'view.quyuan', startScene: 'Intro' },
   { id: 'sudi', name: 'view.sudi', startScene: 'SudiIntro' },
-  { id: 'pinghu', name: 'view.pinghu' },
+  { id: 'pinghu', name: 'view.pinghu', startScene: 'PinghuIntro' },
   { id: 'duanqiao', name: 'view.duanqiao', startScene: 'DuanqiaoIntro' },
   { id: 'liulang', name: 'view.liulang' },
   { id: 'huagang', name: 'view.huagang', startScene: 'HuagangIntro' },
