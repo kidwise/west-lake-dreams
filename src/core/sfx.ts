@@ -244,6 +244,73 @@ export const sfx = {
   cicada(): void {
     for (let i = 0; i < 8; i++) setTimeout(() => noiseBurst(0.18, 5200, 0.06), i * 140);
   },
+  /** A cow's moo: a low, nasal glide that rises then sags. */
+  moo(): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(120, t0);
+    o.frequency.linearRampToValueAtTime(150, t0 + 0.25);
+    o.frequency.linearRampToValueAtTime(105, t0 + 1.0);
+    const f = a.createBiquadFilter();
+    f.type = 'bandpass';
+    f.Q.value = 3;
+    f.frequency.setValueAtTime(500, t0);
+    f.frequency.linearRampToValueAtTime(800, t0 + 0.3);
+    f.frequency.linearRampToValueAtTime(420, t0 + 1.0);
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.22, t0 + 0.12);
+    g.gain.setValueAtTime(0.22, t0 + 0.7);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.1);
+    o.connect(f).connect(g).connect(a.destination);
+    o.start(t0);
+    o.stop(t0 + 1.2);
+  },
+  /** A brass cowbell: a short, hollow clank. */
+  cowbell(): void {
+    tone(540, 0.35, 0.07, 'square');
+    tone(800, 0.25, 0.04, 'square');
+    noiseBurst(0.03, 3000, 0.06);
+  },
+  /** A two-finger whistle sliding upward. */
+  whistle(): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    for (const [start, end, at] of [[1500, 2600, 0], [2000, 2900, 0.32]] as const) {
+      const o = a.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(start, t0 + at);
+      o.frequency.exponentialRampToValueAtTime(end, t0 + at + 0.25);
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.0001, t0 + at);
+      g.gain.exponentialRampToValueAtTime(0.06, t0 + at + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 0.28);
+      o.connect(g).connect(a.destination);
+      o.start(t0 + at);
+      o.stop(t0 + at + 0.3);
+    }
+  },
+  /** A big sneeze: a breath in, then a burst. */
+  sneeze(): void {
+    noiseBurst(0.25, 900, 0.08);
+    setTimeout(() => {
+      noiseBurst(0.3, 1600, 0.4);
+      tone(300, 0.15, 0.06, 'triangle');
+    }, 280);
+  },
+  /** A little cough. */
+  cough(): void {
+    noiseBurst(0.08, 700, 0.3);
+    setTimeout(() => noiseBurst(0.08, 650, 0.25), 160);
+  },
+  /** A soft brush sweeping earth. */
+  brush(): void {
+    noiseBurst(0.09, 2400, 0.08);
+  },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));
   },

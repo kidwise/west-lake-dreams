@@ -32,6 +32,12 @@ import { PinghuBridgeScene } from './pinghu/PinghuBridgeScene';
 import { PinghuCalmScene } from './pinghu/PinghuCalmScene';
 import { PinghuMoonScene } from './pinghu/PinghuMoonScene';
 import { PinghuEndScene } from './pinghu/PinghuEndScene';
+import { ShuangfengIntroScene } from './shuangfeng/ShuangfengIntroScene';
+import { ShuangfengClimbScene } from './shuangfeng/ShuangfengClimbScene';
+import { ShuangfengTowerScene } from './shuangfeng/ShuangfengTowerScene';
+import { ShuangfengHerdScene } from './shuangfeng/ShuangfengHerdScene';
+import { ShuangfengDigScene } from './shuangfeng/ShuangfengDigScene';
+import { ShuangfengEndScene } from './shuangfeng/ShuangfengEndScene';
 
 unlockAudio();
 
@@ -92,6 +98,13 @@ const game = new Phaser.Game({
     PinghuCalmScene,
     PinghuMoonScene,
     PinghuEndScene,
+    // Dream 7 · 双峰插云
+    ShuangfengIntroScene,
+    ShuangfengClimbScene,
+    ShuangfengTowerScene,
+    ShuangfengHerdScene,
+    ShuangfengDigScene,
+    ShuangfengEndScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -115,5 +128,8 @@ if (import.meta.env.DEV) {
   });
   void import('./pinghu/state').then(({ phRun }) => {
     (window as unknown as { __phRun: unknown }).__phRun = phRun;
+  });
+  void import('./shuangfeng/state').then(({ sfRun }) => {
+    (window as unknown as { __sfRun: unknown }).__sfRun = sfRun;
   });
 }

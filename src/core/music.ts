@@ -35,7 +35,13 @@ export type TrackName =
   | 'phNight'
   | 'phCalm'
   | 'phMoon'
-  | 'phBoat';
+  | 'phBoat'
+  | 'sfMist'
+  | 'sfClimb'
+  | 'sfTower'
+  | 'sfHerd'
+  | 'sfDig'
+  | 'sfFinale';
 
 interface Track {
   bpm: number;
@@ -109,6 +115,18 @@ const TRACKS: Record<TrackName, Track> = {
   phMoon: { bpm: 96, root: 62, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.6, slide: 0.25, echo: 0.36, voice: 'pipa', arp: true, shaker: true, seed: 157 },
   // gliding out to the moon by boat (E♭ 宫)
   phBoat: { bpm: 58, root: 63, bars: [0, -3, 5, 0], density: 0.34, slide: 0.2, echo: 0.6, voice: 'dizi', octave: -1, arp: true, seed: 163 },
+  // 双峰插云 — the dream at the foot of the bare peaks: misty flute over slow chords (F 宫, 羽 colour)
+  sfMist: { bpm: 68, root: 65, bars: [-3, 0, -5, -3, 5, 0, -5, -3], density: 0.34, slide: 0.3, echo: 0.5, voice: 'dizi', arp: true, home: 4, seed: 167 },
+  // up the thirty-six bends: a brisk walking tune with woodblock steps (A 宫)
+  sfClimb: { bpm: 118, root: 69, bars: [0, -3, 5, -5, 0, 2, -3, -5], density: 0.62, slide: 0.15, echo: 0.22, voice: 'dizi', arp: true, woodblock: true, seed: 173 },
+  // stacking the pagoda: deliberate guzheng, a little suspense (D 宫)
+  sfTower: { bpm: 90, root: 62, bars: [0, -5, -3, -5, 0, 5, -3, 0], density: 0.48, slide: 0.22, echo: 0.34, voice: 'zheng', arp: true, seed: 179 },
+  // flying over the tea terraces: pastoral, lilting pipa with a shaker (G 宫)
+  sfHerd: { bpm: 108, root: 67, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.6, slide: 0.2, echo: 0.28, voice: 'pipa', arp: true, shaker: true, woodblock: true, seed: 181 },
+  // brushing away the earth: quiet bells (E♭ 宫)
+  sfDig: { bpm: 76, root: 63, bars: [0, -3, 5, -5], density: 0.36, slide: 0, echo: 0.46, voice: 'bell', arp: true, seed: 191 },
+  // the cloud sea and the two pagodas: broad and bright (F 宫)
+  sfFinale: { bpm: 84, root: 65, bars: [0, 5, -3, 2, 0, -3, 5, 0], density: 0.5, slide: 0.25, echo: 0.42, voice: 'dizi', arp: true, seed: 193 },
   dqXiao: { bpm: 56, root: 62, bars: [-3, 0, -5, -3], density: 0.26, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 139 },
 };
 
