@@ -331,3 +331,22 @@ export function generateHandTexture(scene: Phaser.Scene): void {
     g.fillEllipse(160, 60, 120, 50);
   });
 }
+
+/**
+ * 魚 with its bottom (the font's four dots) cut away, as a plain image.
+ * Text.setCrop is applied upside down to canvas text in Phaser 4 (it kept the bottom
+ * and lost the top), so the glyph is drawn into its own texture instead.
+ */
+export function yuWithoutDots(scene: Phaser.Scene, x: number, y: number, style: Phaser.Types.GameObjects.Text.TextStyle, keep = 0.74): Phaser.GameObjects.Image {
+  const txt = scene.add.text(0, 0, '魚', style);
+  const src = txt.canvas;
+  const key = `yuTop-${style.fontSize}`;
+  if (!scene.textures.exists(key)) {
+    const tex = scene.textures.createCanvas(key, src.width, src.height)!;
+    tex.context.drawImage(src, 0, 0, src.width, Math.round(src.height * keep), 0, 0, src.width, Math.round(src.height * keep));
+    tex.refresh();
+  }
+  const img = scene.add.image(x, y, key).setDisplaySize(txt.width, txt.height);
+  txt.destroy();
+  return img;
+}

@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { yuWithoutDots } from './art';
 import { drawPanel } from '../ui/panel';
 import { music } from '../core/music';
 import { W, H, FONT_SERIF, CSS } from '../core/config';
@@ -182,8 +183,7 @@ export class HuagangEndScene extends Phaser.Scene {
     card.add(g);
     const st = baseStyle({ fontFamily: FONT_SERIF, fontSize: '84px', color: '#2a2224', fontStyle: 'bold' });
     ['花', '港', '觀'].forEach((ch, i) => card.add(this.add.text(0, -160 + i * 100, ch, st).setOrigin(0.5)));
-    const yu = this.add.text(0, 140, '魚', st).setOrigin(0.5);
-    yu.setCrop(0, 0, yu.width, yu.height * 0.74);
+    const yu = yuWithoutDots(this, 0, 140, st);
     card.add(yu);
     const dots = this.add.graphics();
     dots.fillStyle(0x2a2224, 1);

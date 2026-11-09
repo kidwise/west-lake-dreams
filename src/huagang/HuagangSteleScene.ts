@@ -10,7 +10,7 @@ import { paintBackdrop, type Backdrop } from '../art/backdrop';
 import { drawPerson, LOOKS } from '../art/Cyclist';
 import { rng } from '../art/paint';
 import { KoiBody, inkFishTexture, koiSideTexture } from './koi';
-import { drawPeony, PEONY } from './art';
+import { drawPeony, PEONY, yuWithoutDots } from './art';
 
 const GROUND = 600;
 const WORLD_W = 1900;
@@ -18,13 +18,13 @@ const STELE_X = 470;
 const POND_X = 1120; // where the pond begins
 const WATER_Y = 572;
 /** Centre of each character on the tablet (vertical, top to bottom). */
-const CHAR_Y = [252, 326, 400, 474];
+const CHAR_Y = [244, 316, 388, 460];
 
 /** 御碑亭: the legend of the three dots, and 魚 swimming off the tablet. */
 export class HuagangSteleScene extends Phaser.Scene {
   private backdrop!: Backdrop;
   private kids: Record<'me' | 'gogo' | 'koko', Phaser.GameObjects.Graphics> = {} as never;
-  private yu!: Phaser.GameObjects.Text;
+  private yu!: Phaser.GameObjects.Image;
   private dots!: Phaser.GameObjects.Graphics;
   private pondFish: { body: KoiBody; x: number; dir: number; y: number; w: number }[] = [];
   private ripples!: Phaser.GameObjects.TileSprite;
@@ -145,8 +145,7 @@ export class HuagangSteleScene extends Phaser.Scene {
     const style = baseStyle({ fontFamily: FONT_SERIF, fontSize: '62px', color: '#2a2224', fontStyle: 'bold' });
     ['花', '港', '觀'].forEach((ch, i) => this.add.text(cx, CHAR_Y[i], ch, style).setOrigin(0.5).setDepth(15));
     // 魚 with only three dots: the font's four dots are cropped off and three are brushed in
-    this.yu = this.add.text(cx, CHAR_Y[3], '魚', style).setOrigin(0.5).setDepth(15);
-    this.yu.setCrop(0, 0, this.yu.width, this.yu.height * 0.74);
+    this.yu = yuWithoutDots(this, cx, CHAR_Y[3], style).setDepth(15);
     this.dots = this.add.graphics().setDepth(15).setPosition(cx, CHAR_Y[3]);
     this.dots.fillStyle(0x2a2224, 1);
     for (const dx of [-17, 0, 17]) {
