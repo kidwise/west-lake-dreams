@@ -13,7 +13,7 @@
 import { audioContext, isAudioUnlocked, onAudioUnlocked } from './sfx';
 import { load, save } from './storage';
 
-export type TrackName = 'lake' | 'dream' | 'flight' | 'morning' | 'moonlake' | 'moonrise';
+export type TrackName = 'lake' | 'dream' | 'flight' | 'morning' | 'moonlake' | 'moonrise' | 'sudiDawn' | 'sudiRide' | 'sudiSunrise';
 
 interface Track {
   bpm: number;
@@ -27,9 +27,13 @@ interface Track {
   slide: number;
   /** Echo (delay) mix, 0..1. */
   echo: number;
-  voice: 'zheng' | 'bell';
+  voice: 'zheng' | 'bell' | 'dizi';
   /** Soft woodblock (木鱼) on each beat. */
   woodblock?: boolean;
+  /** Plucked guzheng broken chords on the off-beats under the melody. */
+  arp?: boolean;
+  /** A light brushed shaker on the off-beats (lively tracks). */
+  shaker?: boolean;
   /** Scale degree phrases resolve to (5 = 宫; 4 or 9 = 羽 for a minor, wistful feel). */
   home?: number;
   seed: number;
@@ -48,6 +52,12 @@ const TRACKS: Record<TrackName, Track> = {
   moonlake: { bpm: 70, root: 62, bars: [-3, -5, 0, -3, -3, 2, -5, -3], density: 0.46, slide: 0.32, echo: 0.4, voice: 'zheng', home: 4, seed: 67 },
   // moonrise over the lit pagodas — slow, shimmering bells (E♭ 宫)
   moonrise: { bpm: 58, root: 63, bars: [0, -3, 5, 0], density: 0.4, slide: 0, echo: 0.55, voice: 'bell', home: 9, seed: 79 },
+  // 苏堤春晓 — before dawn: mist, a soft flute over slow broken chords (E♭ 宫, 羽 colour)
+  sudiDawn: { bpm: 66, root: 63, bars: [-3, -5, 0, -3, 5, 0, -5, -3], density: 0.32, slide: 0.3, echo: 0.48, voice: 'dizi', arp: true, home: 4, seed: 83 },
+  // riding the six bridges in the half-light — lively flute, plucked chords, woodblock (F 宫)
+  sudiRide: { bpm: 112, root: 65, bars: [0, -3, 5, -5, 0, -3, 2, -5], density: 0.6, slide: 0.2, echo: 0.24, voice: 'dizi', arp: true, woodblock: true, seed: 91 },
+  // the sun is up — bright, full and joyful (G 宫)
+  sudiSunrise: { bpm: 120, root: 67, bars: [0, 5, -3, 2, 0, 5, -5, 0], density: 0.66, slide: 0.18, echo: 0.22, voice: 'dizi', arp: true, woodblock: true, shaker: true, seed: 97 },
 };
 
 const PENTA = [0, 2, 4, 7, 9]; // 宫 商 角 徵 羽
@@ -161,12 +171,24 @@ class TrackPlayer {
       this.bass(mtof(bassRoot + 7), t);
     }
     if (tr.woodblock && step % 2 === 0) this.woodblock(t, inBar === 0);
+    if (tr.shaker && step % 2 === 1) this.shaker(t);
+    if (tr.arp && step % 2 === 1) {
+      // broken chord: root, 5th, octave, 5th — an octave above the bass
+      const pattern = [0, 7, 12, 7];
+      this.pluck(mtof(bassRoot + 24 + pattern[(inBar >> 1) % 4]), t);
+    }
 
     const note = this.melody[step % this.melody.length];
     if (note) {
-      const f = mtof(tr.root + degreeToSemis(note.degree) - 12 + (tr.voice === 'bell' ? 12 : 0));
+      const up = tr.voice === 'zheng' ? 0 : 12;
+      const f = mtof(tr.root + degreeToSemis(note.degree) - 12 + up);
       if (tr.voice === 'zheng') this.zheng(f, t, note.slide);
-      else this.bell(f, t);
+      else if (tr.voice === 'dizi') {
+        // hold until the next note (up to a bar), for a singing line
+        let len = 1;
+        while (len < 8 && !this.melody[(step + len) % this.melody.length]) len++;
+        this.dizi(f, t, Math.min(len, 4) * this.stepDur * 0.95, note.slide, step);
+      } else this.bell(f, t);
     }
   }
 
@@ -258,6 +280,100 @@ class TrackPlayer {
       o.start(t);
       o.stop(t + len * 1.1);
     }
+  }
+
+  /**
+   * Bamboo flute (笛子): breathy attack, gentle vibrato, slides (滑音) and an
+   * occasional quick grace note (倚音) from above.
+   */
+  private dizi(f: number, t: number, dur: number, slide: boolean, step: number): void {
+    const c = this.ctx;
+    const end = t + Math.max(0.12, dur);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.085, t + 0.045);
+    g.gain.setValueAtTime(0.085, end - 0.06);
+    g.gain.exponentialRampToValueAtTime(0.0001, end + 0.12);
+    const tone = c.createBiquadFilter();
+    tone.type = 'lowpass';
+    tone.frequency.value = Math.min(9000, f * 6);
+    tone.connect(g).connect(this.bus);
+
+    const grace = !slide && step % 7 === 3;
+    for (const [mult, type, level] of [[1, 'sine', 1], [2, 'triangle', 0.18], [3, 'sine', 0.06]] as const) {
+      const o = c.createOscillator();
+      o.type = type;
+      const fm = f * mult;
+      if (slide) {
+        o.frequency.setValueAtTime(fm * 0.94, t);
+        o.frequency.exponentialRampToValueAtTime(fm, t + 0.09);
+      } else if (grace) {
+        o.frequency.setValueAtTime(fm * 1.122, t);
+        o.frequency.setValueAtTime(fm, t + 0.06);
+      } else {
+        o.frequency.setValueAtTime(fm, t);
+      }
+      const lfo = c.createOscillator();
+      lfo.frequency.value = 5.6;
+      const depth = c.createGain();
+      depth.gain.setValueAtTime(0, t);
+      depth.gain.linearRampToValueAtTime(fm * 0.006, t + Math.min(0.35, dur));
+      lfo.connect(depth).connect(o.frequency);
+      const lv = c.createGain();
+      lv.gain.value = level;
+      o.connect(lv).connect(tone);
+      o.start(t);
+      lfo.start(t);
+      o.stop(end + 0.2);
+      lfo.stop(end + 0.2);
+    }
+    // breath noise at the start of the note
+    const len = Math.floor(c.sampleRate * 0.12);
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const n = c.createBufferSource();
+    n.buffer = buf;
+    const bp = c.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = f * 2;
+    bp.Q.value = 3;
+    const ng = c.createGain();
+    ng.gain.value = 0.05;
+    n.connect(bp).connect(ng).connect(this.bus);
+    n.start(t);
+  }
+
+  /** A soft, short guzheng pluck for broken chords. */
+  private pluck(f: number, t: number): void {
+    const o = this.ctx.createOscillator();
+    o.type = 'triangle';
+    o.frequency.value = f;
+    const lp = this.ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(f * 6, t);
+    lp.frequency.exponentialRampToValueAtTime(f * 1.5, t + 0.3);
+    const g = this.env(t, 0.045, 0.7, 0.003);
+    o.connect(lp).connect(g).connect(this.bus);
+    o.start(t);
+    o.stop(t + 0.8);
+  }
+
+  private shaker(t: number): void {
+    const c = this.ctx;
+    const len = Math.floor(c.sampleRate * 0.05);
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 2;
+    const n = c.createBufferSource();
+    n.buffer = buf;
+    const hp = c.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 6000;
+    const g = c.createGain();
+    g.gain.value = 0.035;
+    n.connect(hp).connect(g).connect(this.bus);
+    n.start(t);
   }
 
   private woodblock(t: number, accent: boolean): void {

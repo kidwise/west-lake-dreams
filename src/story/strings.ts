@@ -4,9 +4,11 @@
  * To rename characters or tweak the story wording, edit this file only.
  */
 import { santanZh, santanEn } from './santanStrings';
+import { sudiZh, sudiEn } from './sudiStrings';
 
 export const zh = {
   ...santanZh,
+  ...sudiZh,
   // ---- general ----
   'game.title': '西湖逍遥游',
   'game.subtitle': '一场骑着单车的梦',
@@ -75,11 +77,10 @@ export const zh = {
   'pav.photosFew': '才拍了{n}张呀？待会儿再多拍几张。',
   'pav.photosNone': '你一路举着相机，结果一张荷花都没拍到？哈哈！',
   'pav.gogo1': '接下来往哪儿骑？',
-  'pav.koko1': '走苏堤吧！六座桥一座连着一座。',
-  'pav.gogo2': '杨公堤也有六座桥，坡更陡，冲起来更过瘾！',
+  'pav.koko1': '苏堤？苏堤要天不亮的时候去才好看，留到下一个梦吧！',
+  'pav.gogo2': '那就杨公堤！也是六座桥，坡更陡，冲起来更过瘾！',
   'pav.me1': '冲上桥顶，再飞下来……就像坐过山车一样！',
-  'pav.choose': '先骑哪条堤？',
-  'pav.optSu': '苏堤 · 六桥烟柳',
+  'pav.choose': '出发去哪儿？',
   'pav.optYang': '杨公堤 · 六桥冲坡',
   'pav.me2': '（我闭上眼睛，脑补着冲坡过桥的感受……）',
   'pav.me3': '哈哈，光是想想就要飞起来了！',
@@ -122,6 +123,7 @@ export type StrKey = keyof typeof zh;
 
 export const en: Record<StrKey, string> = {
   ...santanEn,
+  ...sudiEn,
   'game.title': 'West Lake Wandering',
   'game.subtitle': 'A dream, on a bicycle',
   'lang.toggle': '中文',
@@ -189,11 +191,10 @@ export const en: Record<StrKey, string> = {
   'pav.photosFew': 'Only {n}? Take some more later.',
   'pav.photosNone': 'You held that camera up the whole way and didn’t get a single lotus? Ha!',
   'pav.gogo1': 'So, where to next?',
-  'pav.koko1': 'Su Causeway! Six bridges, one after another.',
-  'pav.gogo2': 'Yanggong Causeway has six bridges too — steeper, way more fun!',
+  'pav.koko1': 'Su Causeway? That one’s best before dawn — let’s save it for another dream!',
+  'pav.gogo2': 'Then Yanggong Causeway! Six bridges too — steeper, way more fun!',
   'pav.me1': 'Race up to the top and fly down the other side… like a roller coaster!',
-  'pav.choose': 'Which causeway first?',
-  'pav.optSu': 'Su Causeway · six bridges and willows',
+  'pav.choose': 'Where to?',
   'pav.optYang': 'Yanggong Causeway · six steep bridges',
   'pav.me2': '(I closed my eyes and imagined flying over the bridges…)',
   'pav.me3': 'Ha! Just thinking about it makes me feel like I’m flying!',

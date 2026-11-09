@@ -10,7 +10,6 @@ import { TEN_VIEWS } from '../story/chapters';
 import { rng } from '../art/paint';
 import { sfx } from '../core/sfx';
 import { PAGODA_H, PAGODA_HOLES, PAGODA_W } from './art';
-import { resetSantan } from './state';
 import { OBJECTS, FOCAL, ridge, project, bearingX, elevY, VIEW_W, type Pose } from './world';
 
 const deg = Math.PI / 180;
@@ -205,7 +204,7 @@ export class SantanMoonScene extends Phaser.Scene {
   private leave(replay: boolean): void {
     this.cameras.main.fadeOut(700, 20, 30, 40);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-      resetSantan(this.textures);
+      // photos are cleared by SantanIntroScene when the chapter is played again
       this.scene.start(replay ? 'SantanIntro' : 'Title');
     });
   }

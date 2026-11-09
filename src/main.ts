@@ -13,6 +13,9 @@ import { SantanIntroScene } from './santan/SantanIntroScene';
 import { SantanBoatScene } from './santan/SantanBoatScene';
 import { SantanPuzzleScene } from './santan/SantanPuzzleScene';
 import { SantanMoonScene } from './santan/SantanMoonScene';
+import { SudiIntroScene } from './sudi/SudiIntroScene';
+import { SudiRideScene } from './sudi/SudiRideScene';
+import { SudiEndScene } from './sudi/SudiEndScene';
 
 unlockAudio();
 
@@ -50,6 +53,10 @@ const game = new Phaser.Game({
     SantanBoatScene,
     SantanPuzzleScene,
     SantanMoonScene,
+    // Dream 3 · 苏堤春晓
+    SudiIntroScene,
+    SudiRideScene,
+    SudiEndScene,
     // overlay last so it renders on top
     UIScene,
   ],

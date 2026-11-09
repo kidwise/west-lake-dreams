@@ -7,7 +7,7 @@ export type Route = 'su' | 'yang';
 export const run = {
   /** Texture keys of photos taken during the ride. */
   photoKeys: [] as string[],
-  route: 'su' as Route,
+  route: 'yang' as Route,
   flights: 0,
 };
 
@@ -16,7 +16,7 @@ let photoSeq = 0;
 export function resetRun(textures: Phaser.Textures.TextureManager): void {
   for (const key of run.photoKeys) if (textures.exists(key)) textures.remove(key);
   run.photoKeys = [];
-  run.route = 'su';
+  run.route = 'yang';
   run.flights = 0;
 }
 

@@ -111,7 +111,7 @@ export class PavilionScene extends Phaser.Scene {
   }
 
   private async speak(who: Speaker, key: StrKey, params?: Record<string, string | number>): Promise<void> {
-    if (who) {
+    if (who && who !== 'elder') {
       const g = this.people[who];
       this.tweens.add({ targets: g, y: FLOOR - 8, yoyo: true, duration: 140, repeat: 1 });
     }
@@ -127,10 +127,8 @@ export class PavilionScene extends Phaser.Scene {
     await this.speak('koko', 'pav.koko1');
     await this.speak('gogo', 'pav.gogo2');
     await this.speak('me', 'pav.me1');
-    const route = await this.dlg.choose<Route>('pav.choose', [
-      { key: 'pav.optSu', value: 'su' },
-      { key: 'pav.optYang', value: 'yang' },
-    ]);
+    // 苏堤 is saved for its own dream (苏堤春晓); here we ride 杨公堤
+    const route = await this.dlg.choose<Route>('pav.choose', [{ key: 'pav.optYang', value: 'yang' }]);
     run.route = route;
     await this.speak('me', 'pav.me2');
     this.dlg.hide();

@@ -113,6 +113,73 @@ export const sfx = {
     osc.start(t0);
     osc.stop(t0 + 0.5);
   },
+  /** A bird call: a few quick upward chirps (spring morning). */
+  bird(): void {
+    const a = ac();
+    if (!a) return;
+    const base = 2200 + Math.random() * 1600;
+    const n = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n; i++) {
+      const t0 = a.currentTime + i * 0.11;
+      const o = a.createOscillator();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(base, t0);
+      o.frequency.exponentialRampToValueAtTime(base * 1.6, t0 + 0.06);
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.03, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.08);
+      o.connect(g).connect(a.destination);
+      o.start(t0);
+      o.stop(t0 + 0.1);
+    }
+  },
+  /** A gust of wind. */
+  wind(): void {
+    const a = ac();
+    if (!a) return;
+    const dur = 1.6;
+    const len = Math.floor(a.sampleRate * dur);
+    const buf = a.createBuffer(1, len, a.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.sin((Math.PI * i) / len);
+    const src = a.createBufferSource();
+    src.buffer = buf;
+    const bp = a.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.Q.value = 0.8;
+    bp.frequency.setValueAtTime(300, a.currentTime);
+    bp.frequency.linearRampToValueAtTime(900, a.currentTime + dur * 0.5);
+    bp.frequency.linearRampToValueAtTime(400, a.currentTime + dur);
+    const g = a.createGain();
+    g.gain.value = 0.25;
+    src.connect(bp).connect(g).connect(a.destination);
+    src.start();
+  },
+  /** A seal being pressed onto paper (盖章). */
+  stamp(): void {
+    tone(140, 0.18, 0.18, 'sine');
+    noiseBurst(0.08, 900, 0.35);
+  },
+  /** Catching a petal: a tiny pentatonic sparkle, rising with the combo. */
+  petal(combo = 0): void {
+    const scale = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21];
+    const f = 1046 * Math.pow(2, scale[combo % scale.length] / 12);
+    tone(f, 0.18, 0.035, 'sine');
+  },
+  /** A shovel of mud. */
+  dig(): void {
+    noiseBurst(0.12, 400, 0.4);
+    tone(90, 0.12, 0.08, 'sine');
+  },
+  splash(): void {
+    noiseBurst(0.25, 1800, 0.25);
+  },
+  /** The two-tone chime before a public announcement. */
+  announce(): void {
+    tone(784, 0.5, 0.08, 'sine');
+    tone(659, 0.7, 0.08, 'sine', 0.42);
+  },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));
   },

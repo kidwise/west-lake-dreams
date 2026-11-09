@@ -74,6 +74,8 @@ export class Cyclist {
   crank = 0;
   cameraUp = false;
   withRider = true;
+  /** Crouched low over the handlebars (against the wind). */
+  tuck = false;
 
   constructor(scene: Phaser.Scene, look: Look, scale = 1) {
     this.look = look;
@@ -105,9 +107,9 @@ export class Cyclist {
     const p1 = P(BB.x + Math.cos(this.crank) * crankLen, BB.y + Math.sin(this.crank) * crankLen);
     const p2 = P(BB.x - Math.cos(this.crank) * crankLen, BB.y - Math.sin(this.crank) * crankLen);
 
-    const HIP = P(-14, -76);
-    const SH = P(4, -108);
-    const HEAD = P(12, -123);
+    const HIP = this.tuck ? P(-12, -73) : P(-14, -76);
+    const SH = this.tuck ? P(14, -95) : P(4, -108);
+    const HEAD = this.tuck ? P(26, -103) : P(12, -123);
     const pantsFar = Phaser.Display.Color.IntegerToColor(L.pants).darken(18).color;
     const shirtFar = Phaser.Display.Color.IntegerToColor(L.shirt).darken(14).color;
 
@@ -172,10 +174,13 @@ export class Cyclist {
 
     // backpack
     if (L.backpack) {
+      // sits on the back, between hip and shoulder
+      const bx = (HIP.x + SH.x) / 2 - 14;
+      const by = (HIP.y + SH.y) / 2 - 16;
       g.fillStyle(0x2e6f8e, 1);
-      g.fillRoundedRect(-22, -110, 16, 30, 6);
+      g.fillRoundedRect(bx, by, 16, 30, 6);
       g.fillStyle(0x245a74, 1);
-      g.fillRoundedRect(-22, -94, 14, 12, 4);
+      g.fillRoundedRect(bx, by + 16, 14, 12, 4);
     }
 
     // torso
