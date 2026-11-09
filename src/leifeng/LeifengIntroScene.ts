@@ -9,6 +9,7 @@ import { drawPerson, LOOKS } from '../art/Cyclist';
 import { drawHill, drawWillow } from './art';
 import { Sunset } from './Sunset';
 import { resetLeifeng } from './state';
+import { getProgress } from '../core/state';
 
 const GROUND = 520;
 type Kid = 'me' | 'gogo' | 'koko';
@@ -98,8 +99,10 @@ export class LeifengIntroScene extends Phaser.Scene {
     sfx.shimmer();
     await tweenP(this, { targets: lady, x: 960, duration: 2600, ease: 'Sine.easeOut' });
     for (const who of ['me', 'gogo', 'koko'] as Kid[]) drawPerson(this.kids[who]!, LOOKS[who], { facing: 1, backpack: who === 'me' });
-    await this.speak(dlg, 'me', 'lf.i.m1');
-    await this.speak(dlg, 'white', 'lf.i.w1');
+    // only say "we've met before" if we really have, on the Broken Bridge
+    const met = getProgress().visited.includes('duanqiao');
+    await this.speak(dlg, 'me', met ? 'lf.i.m1' : 'lf.i.m1b');
+    await this.speak(dlg, 'white', met ? 'lf.i.w1' : 'lf.i.w1b');
     await this.speak(dlg, 'koko', 'lf.i.k2');
     await this.speak(dlg, 'white', 'lf.i.w2');
     await this.speak(dlg, 'koko', 'lf.i.k3');

@@ -43,6 +43,11 @@ import { LeifengStairsScene } from './leifeng/LeifengStairsScene';
 import { LeifengRuinsScene } from './leifeng/LeifengRuinsScene';
 import { LeifengTopScene } from './leifeng/LeifengTopScene';
 import { LeifengEndScene } from './leifeng/LeifengEndScene';
+import { NanpingIntroScene } from './nanping/NanpingIntroScene';
+import { NanpingWellScene } from './nanping/NanpingWellScene';
+import { NanpingEchoScene } from './nanping/NanpingEchoScene';
+import { NanpingBellScene } from './nanping/NanpingBellScene';
+import { NanpingEndScene } from './nanping/NanpingEndScene';
 
 unlockAudio();
 
@@ -116,6 +121,12 @@ const game = new Phaser.Game({
     LeifengRuinsScene,
     LeifengTopScene,
     LeifengEndScene,
+    // Dream 9 · 南屏晚钟
+    NanpingIntroScene,
+    NanpingWellScene,
+    NanpingEchoScene,
+    NanpingBellScene,
+    NanpingEndScene,
     // overlay last so it renders on top
     UIScene,
   ],
@@ -145,5 +156,8 @@ if (import.meta.env.DEV) {
   });
   void import('./leifeng/state').then(({ lfRun }) => {
     (window as unknown as { __lfRun: unknown }).__lfRun = lfRun;
+  });
+  void import('./nanping/state').then(({ npRun }) => {
+    (window as unknown as { __npRun: unknown }).__npRun = npRun;
   });
 }

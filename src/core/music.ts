@@ -46,7 +46,11 @@ export type TrackName =
   | 'lfStairs'
   | 'lfRuins'
   | 'lfSunset'
-  | 'lfHome';
+  | 'lfHome'
+  | 'npDusk'
+  | 'npWell'
+  | 'npBell'
+  | 'npNewYear';
 
 interface Track {
   bpm: number;
@@ -142,6 +146,14 @@ const TRACKS: Record<TrackName, Track> = {
   lfSunset: { bpm: 72, root: 65, bars: [0, 5, -3, 2, 0, -3, 5, 0], density: 0.44, slide: 0.3, echo: 0.5, voice: 'dizi', arp: true, seed: 223 },
   // dinner at home: cosy bells (C 宫)
   lfHome: { bpm: 84, root: 60, bars: [0, -3, 5, -5, 0, 2, -3, 0], density: 0.4, slide: 0.1, echo: 0.36, voice: 'bell', arp: true, seed: 227 },
+  // 南屏晚钟 — dusk in the temple: quiet guzheng, slow bells beneath (C 宫, 羽 colour)
+  npDusk: { bpm: 66, root: 60, bars: [-3, 0, -5, -3, 5, 0, -5, -3], density: 0.34, slide: 0.32, echo: 0.55, voice: 'zheng', arp: true, home: 4, seed: 229 },
+  // fishing logs out of the well: a cheeky pipa and woodblock (A 宫)
+  npWell: { bpm: 112, root: 69, bars: [0, -3, 5, -5, 0, 2, -3, -5], density: 0.56, slide: 0.18, echo: 0.24, voice: 'pipa', arp: true, woodblock: true, seed: 233 },
+  // in the bell tower: a low 箫 and a lot of space for the bell (D 宫)
+  npBell: { bpm: 54, root: 62, bars: [0, -3, -5, 0], density: 0.22, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 239 },
+  // New Year's Eve: festive and bright (G 宫)
+  npNewYear: { bpm: 126, root: 67, bars: [0, 5, -3, 2, 0, -3, -5, 0], density: 0.7, slide: 0.15, echo: 0.2, voice: 'dizi', arp: true, woodblock: true, shaker: true, seed: 241 },
   dqXiao: { bpm: 56, root: 62, bars: [-3, 0, -5, -3], density: 0.26, slide: 0.35, echo: 0.6, voice: 'dizi', octave: -1, home: 4, seed: 139 },
 };
 

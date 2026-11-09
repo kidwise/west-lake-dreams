@@ -365,6 +365,89 @@ export const sfx = {
     tone(1318, 1.2, 0.09, 'sine');
     tone(2637, 0.6, 0.02, 'sine');
   },
+  /**
+   * The great temple bell: a deep strike with long, slowly beating partials.
+   * 'dull' is a soft thud; 'harsh' rattles and buzzes.
+   */
+  templeBell(kind: 'good' | 'dull' | 'harsh' = 'good'): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const f = 98;
+    const out = a.createGain();
+    out.gain.value = kind === 'dull' ? 0.5 : 1;
+    let dest: AudioNode = a.destination;
+    if (kind === 'dull') {
+      const lp = a.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 500;
+      lp.connect(a.destination);
+      dest = lp;
+    }
+    out.connect(dest);
+    const len = kind === 'good' ? 7 : kind === 'dull' ? 1.6 : 3;
+    // partials of a large bell: hum, prime, tierce, quint, nominal…
+    for (const [m, lv, dec] of [[0.5, 0.12, 1], [1, 0.16, 0.9], [1.19, 0.07, 0.7], [1.5, 0.05, 0.6], [2, 0.08, 0.55], [2.52, 0.035, 0.4], [3.01, 0.025, 0.3], [4.17, 0.015, 0.2]]) {
+      const o = a.createOscillator();
+      o.type = 'sine';
+      o.frequency.value = f * m;
+      // a slight detuned twin makes the slow "wah-wah" beating of a real bell
+      const o2 = a.createOscillator();
+      o2.type = 'sine';
+      o2.frequency.value = f * m * 1.004;
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(lv, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + len * dec);
+      o.connect(g);
+      o2.connect(g);
+      g.connect(out);
+      o.start(t0);
+      o2.start(t0);
+      o.stop(t0 + len * dec + 0.1);
+      o2.stop(t0 + len * dec + 0.1);
+    }
+    if (kind === 'harsh') {
+      // a buzzing rattle on top
+      const o = a.createOscillator();
+      o.type = 'sawtooth';
+      o.frequency.value = f * 3.7;
+      const am = a.createOscillator();
+      am.frequency.value = 23;
+      const amg = a.createGain();
+      amg.gain.value = 0.04;
+      const g = a.createGain();
+      g.gain.setValueAtTime(0.04, t0);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.4);
+      am.connect(amg).connect(g.gain);
+      o.connect(g).connect(out);
+      o.start(t0);
+      am.start(t0);
+      o.stop(t0 + 1.5);
+      am.stop(t0 + 1.5);
+    }
+    noiseBurst(0.05, kind === 'dull' ? 300 : 900, kind === 'dull' ? 0.25 : 0.15);
+  },
+  /** A comic hiccup. */
+  burp(): void {
+    const a = ac();
+    if (!a) return;
+    const t0 = a.currentTime;
+    const o = a.createOscillator();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(180, t0);
+    o.frequency.exponentialRampToValueAtTime(90, t0 + 0.25);
+    const lp = a.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 700;
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.3);
+    o.connect(lp).connect(g).connect(a.destination);
+    o.start(t0);
+    o.stop(t0 + 0.32);
+  },
   chime(): void {
     [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.9, 0.06, 'sine', i * 0.12));
   },
